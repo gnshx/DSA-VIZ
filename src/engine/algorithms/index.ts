@@ -3,7 +3,7 @@ import { bubbleSortAlgorithm } from "./sorting";
 import { binarySearchAlgorithm, twoPointersAlgorithm, slidingWindowAlgorithm } from "./searching";
 import { reverseLinkedListAlgorithm } from "./linkedList";
 import { validParenthesesAlgorithm } from "./stackQueue";
-import { bstSearchAlgorithm } from "./trees";
+import { bstSearchAlgorithm, invertTreeAlgorithm } from "./trees";
 import { bfsAlgorithm, dijkstraAlgorithm } from "./graphs";
 import { minHeapAlgorithm } from "./heaps";
 import { uniquePathsAlgorithm } from "./dp";
@@ -16,6 +16,7 @@ export const ALL_ALGORITHMS: AlgorithmDefinition[] = [
   reverseLinkedListAlgorithm,
   validParenthesesAlgorithm,
   bstSearchAlgorithm,
+  invertTreeAlgorithm,
   bfsAlgorithm,
   dijkstraAlgorithm,
   minHeapAlgorithm,
@@ -307,6 +308,54 @@ export const ALL_PROBLEMS: ProblemDefinition[] = [
         }
     }
     return dp[m - 1][n - 1];
+}`
+    }
+  },
+  {
+    id: "lc-226",
+    title: "226. Invert Binary Tree",
+    difficulty: "Easy",
+    category: "trees",
+    algorithmId: "invert_binary_tree",
+    statement:
+      "Given the root of a binary tree, invert the tree, and return its root (mirror image).",
+    examples: [
+      { input: "root = [4,2,7,1,3,6,9]", output: "[4,7,2,9,6,3,1]", explanation: "Every left and right subtree is swapped" },
+      { input: "root = [2,1,3]", output: "[2,3,1]" }
+    ],
+    constraints: ["The number of nodes in the tree is in the range [0, 100].", "-100 <= Node.val <= 100"],
+    starterCode: {
+      python: `def invert_tree(root):
+    if not root:
+        return None
+    root.left, root.right = root.right, root.left
+    invert_tree(root.left)
+    invert_tree(root.right)
+    return root`,
+      javascript: `function invertTree(root) {
+    if (!root) return null;
+    const temp = root.left;
+    root.left = root.right;
+    root.right = temp;
+    invertTree(root.left);
+    invertTree(root.right);
+    return root;
+}`,
+      cpp: `TreeNode* invertTree(TreeNode* root) {
+    if (!root) return nullptr;
+    std::swap(root->left, root->right);
+    invertTree(root->left);
+    invertTree(root->right);
+    return root;
+}`,
+      java: `public TreeNode invertTree(TreeNode root) {
+    if (root == null) return null;
+    TreeNode temp = root.left;
+    root.left = root.right;
+    root.right = temp;
+    invertTree(root.left);
+    invertTree(root.right);
+    return root;
 }`
     }
   }
