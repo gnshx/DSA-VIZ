@@ -1,6 +1,6 @@
 import { AlgorithmDefinition, ConceptNode, ProblemDefinition } from "../../types/algorithm";
 import { bubbleSortAlgorithm } from "./sorting";
-import { binarySearchAlgorithm, twoPointersAlgorithm } from "./searching";
+import { binarySearchAlgorithm, twoPointersAlgorithm, slidingWindowAlgorithm } from "./searching";
 import { reverseLinkedListAlgorithm } from "./linkedList";
 import { validParenthesesAlgorithm } from "./stackQueue";
 import { bstSearchAlgorithm } from "./trees";
@@ -12,6 +12,7 @@ export const ALL_ALGORITHMS: AlgorithmDefinition[] = [
   bubbleSortAlgorithm,
   binarySearchAlgorithm,
   twoPointersAlgorithm,
+  slidingWindowAlgorithm,
   reverseLinkedListAlgorithm,
   validParenthesesAlgorithm,
   bstSearchAlgorithm,

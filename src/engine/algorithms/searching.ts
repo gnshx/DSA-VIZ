@@ -483,3 +483,223 @@ export const twoPointersAlgorithm: AlgorithmDefinition = {
     };
   }
 };
+
+export const slidingWindowAlgorithm: AlgorithmDefinition = {
+  id: "sliding_window",
+  name: "Sliding Window (Max Sum Subarray)",
+  category: "sliding_window",
+  structureType: "array",
+  difficulty: "Medium",
+  description:
+    "Finds the maximum sum of any contiguous subarray of fixed size k. Instead of recalculating the sum from scratch in O(k) each time, slides the window forward in O(1) by adding the new incoming element and subtracting the outgoing element.",
+  timeComplexity: "O(n)",
+  spaceComplexity: "O(1)",
+  mentalModel: [
+    "A physical magnifying window of size k sliding along a conveyor belt.",
+    "When moving one step to the right: subtract the element falling out of the left, add the element entering from the right.",
+    "Reuses work from the overlapping subsegment."
+  ],
+  invariants: [
+    "At index i >= k, window_sum strictly equals the sum of subarray arr[i - k + 1 .. i].",
+    "max_sum maintains the maximum subarray sum observed so far."
+  ],
+  commonMistakes: [
+    "Recalculating sum using a nested loop, degrading performance to O(n * k).",
+    "Off-by-one errors when subtracting arr[i - k]."
+  ],
+  defaultInput: { array: [2, 1, 5, 1, 3, 2, 7, 4], k: 3 },
+  code: {
+    python: `def max_sub_array_of_size_k(arr, k):
+    max_sum = 0
+    window_sum = 0
+    
+    for i in range(len(arr)):
+        window_sum += arr[i]
+        
+        if i >= k - 1:
+            max_sum = max(max_sum, window_sum)
+            window_sum -= arr[i - k + 1]
+            
+    return max_sum`,
+    javascript: `function maxSubArrayOfSizeK(arr, k) {
+    let maxSum = 0;
+    let windowSum = 0;
+    
+    for (let i = 0; i < arr.length; i++) {
+        windowSum += arr[i];
+        
+        if (i >= k - 1) {
+            maxSum = Math.max(maxSum, windowSum);
+            windowSum -= arr[i - k + 1];
+        }
+    }
+    return maxSum;
+}`,
+    cpp: `int maxSubArrayOfSizeK(const std::vector<int>& arr, int k) {
+    int max_sum = 0;
+    int window_sum = 0;
+    
+    for (int i = 0; i < arr.size(); i++) {
+        window_sum += arr[i];
+        
+        if (i >= k - 1) {
+            max_sum = std::max(max_sum, window_sum);
+            window_sum -= arr[i - k + 1];
+        }
+    }
+    return max_sum;
+}`,
+    java: `public static int maxSubArrayOfSizeK(int[] arr, int k) {
+    int maxSum = 0;
+    int windowSum = 0;
+    
+    for (int i = 0; i < arr.length; i++) {
+        windowSum += arr[i];
+        
+        if (i >= k - 1) {
+            maxSum = Math.max(maxSum, windowSum);
+            windowSum -= arr[i - k + 1];
+        }
+    }
+    return maxSum;
+}`
+  },
+  generateTrace: (input = { array: [2, 1, 5, 1, 3, 2, 7, 4], k: 3 }): ExecutionTrace => {
+    const arr: number[] = input.array || [2, 1, 5, 1, 3, 2, 7, 4];
+    const k: number = input.k ?? 3;
+    const events: ExecutionEvent[] = [];
+    let step = 0;
+
+    let maxSum = 0;
+    let windowSum = 0;
+    let windowStart = 0;
+
+    events.push({
+      step: ++step,
+      type: "LINE",
+      sourceLine: 2,
+      codeSnippet: "max_sum = 0, window_sum = 0",
+      explanation: `Initialize Sliding Window of fixed size k = ${k}. Array size = ${arr.length}.`,
+      variables: { k, max_sum: 0, window_sum: 0 },
+      pointers: {},
+      callStack: [{ id: "main", name: "max_sub_array_of_size_k", args: { k }, line: 2 }],
+      structureType: "array",
+      structureState: [...arr]
+    });
+
+    for (let i = 0; i < arr.length; i++) {
+      windowSum += arr[i];
+
+      events.push({
+        step: ++step,
+        type: "WRITE",
+        sourceLine: 6,
+        codeSnippet: `window_sum += arr[i] (arr[${i}] = ${arr[i]})`,
+        explanation: `Expanding window right boundary to index ${i} (${arr[i]}). New accumulated sum = ${windowSum}.`,
+        expressionEvaluation: {
+          rawExpression: "window_sum += arr[i]",
+          substitutedExpression: `${windowSum - arr[i]} + ${arr[i]}`,
+          result: windowSum,
+          effectDescription: `Element ${arr[i]} absorbed into current sliding window`
+        },
+        variables: { i, window_start: windowStart, window_sum: windowSum, max_sum: maxSum },
+        pointers: { right: i, left: windowStart },
+        callStack: [{ id: "main", name: "max_sub_array_of_size_k", args: { i, windowSum }, line: 6 }],
+        structureType: "array",
+        structureState: [...arr],
+        highlightedIndices: [i],
+        windowRange: [windowStart, i]
+      });
+
+      if (i >= k - 1) {
+        const oldMax = maxSum;
+        maxSum = Math.max(maxSum, windowSum);
+
+        events.push({
+          step: ++step,
+          type: "COMPARE",
+          sourceLine: 9,
+          codeSnippet: "max_sum = max(max_sum, window_sum)",
+          explanation: `Full window of size ${k} reached [${windowStart} .. ${i}]. Comparing window_sum (${windowSum}) with max_sum (${oldMax}). ${
+            windowSum > oldMax ? `New maximum found: ${windowSum}!` : `Max remains ${maxSum}.`
+          }`,
+          expressionEvaluation: {
+            rawExpression: "max(max_sum, window_sum)",
+            substitutedExpression: `max(${oldMax}, ${windowSum})`,
+            result: maxSum,
+            effectDescription:
+              windowSum > oldMax
+                ? `Updated peak subarray sum to ${maxSum}`
+                : `Current window sum (${windowSum}) <= previous maximum (${maxSum})`
+          },
+          variables: { window_start: windowStart, right: i, window_sum: windowSum, max_sum: maxSum },
+          pointers: { left: windowStart, right: i },
+          callStack: [{ id: "main", name: "max_sub_array_of_size_k", args: { maxSum }, line: 9 }],
+          structureType: "array",
+          structureState: [...arr],
+          highlightedIndices: Array.from({ length: k }, (_, idx) => windowStart + idx),
+          windowRange: [windowStart, i],
+          prediction: (i === k - 1) ? {
+            question: `First full window [0..${k - 1}] has sum = ${windowSum}. What happens next as window slides right?`,
+            options: [
+              {
+                id: "slide",
+                text: `Subtract arr[0] (${arr[0]}) from window_sum and increment left pointer`,
+                isCorrect: true,
+                explanation: `Correct! In O(1), sliding drops the outgoing element arr[0] and moves left forward.`
+              },
+              {
+                id: "recalculate",
+                text: `Recalculate sum from scratch`,
+                isCorrect: false,
+                explanation: `Incorrect: Sliding window reuses existing sum in O(1) time.`
+              }
+            ]
+          } : undefined
+        });
+
+        // Slide window: subtract outgoing element
+        const outgoing = arr[windowStart];
+        windowSum -= outgoing;
+
+        events.push({
+          step: ++step,
+          type: "POINTER_MOVE",
+          sourceLine: 10,
+          codeSnippet: `window_sum -= arr[i - k + 1] (arr[${windowStart}] = ${outgoing})`,
+          explanation: `Sliding window forward: subtracted outgoing element arr[${windowStart}] (${outgoing}). Remaining window sum = ${windowSum}.`,
+          variables: { outgoing, window_sum: windowSum, max_sum: maxSum },
+          pointers: { left: windowStart + 1, right: i },
+          callStack: [{ id: "main", name: "max_sub_array_of_size_k", args: { outgoing }, line: 10 }],
+          structureType: "array",
+          structureState: [...arr],
+          windowRange: [windowStart + 1, i]
+        });
+
+        windowStart++;
+      }
+    }
+
+    events.push({
+      step: ++step,
+      type: "COMPLETE",
+      sourceLine: 12,
+      codeSnippet: "return max_sum",
+      explanation: `Sliding window traversal complete! Maximum sum of any subarray of size ${k} is ${maxSum}.`,
+      variables: { result: maxSum },
+      pointers: {},
+      callStack: [{ id: "main", name: "max_sub_array_of_size_k", args: {}, line: 12 }],
+      structureType: "array",
+      structureState: [...arr]
+    });
+
+    return {
+      id: "sliding_window_trace",
+      algorithmId: "sliding_window",
+      title: "Sliding Window Execution Trace",
+      structureType: "array",
+      totalSteps: events.length,
+      events
+    };
+  }
+};
