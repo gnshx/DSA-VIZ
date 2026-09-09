@@ -4,7 +4,7 @@ import { binarySearchAlgorithm, twoPointersAlgorithm } from "./searching";
 import { reverseLinkedListAlgorithm } from "./linkedList";
 import { validParenthesesAlgorithm } from "./stackQueue";
 import { bstSearchAlgorithm } from "./trees";
-import { bfsAlgorithm } from "./graphs";
+import { bfsAlgorithm, dijkstraAlgorithm } from "./graphs";
 import { minHeapAlgorithm } from "./heaps";
 import { uniquePathsAlgorithm } from "./dp";
 
@@ -16,6 +16,7 @@ export const ALL_ALGORITHMS: AlgorithmDefinition[] = [
   validParenthesesAlgorithm,
   bstSearchAlgorithm,
   bfsAlgorithm,
+  dijkstraAlgorithm,
   minHeapAlgorithm,
   uniquePathsAlgorithm
 ];

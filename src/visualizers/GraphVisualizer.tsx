@@ -72,18 +72,46 @@ export const GraphVisualizer: React.FC<GraphVisualizerProps> = ({ event }) => {
           const isEdgeActive =
             activeEdge && activeEdge[0] === edge.u && activeEdge[1] === edge.v;
 
+          const midX = (uNode.x + vNode.x) / 2;
+          const midY = (uNode.y + vNode.y) / 2;
+
           return (
-            <line
-              key={`${edge.u}-${edge.v}`}
-              x1={uNode.x}
-              y1={uNode.y}
-              x2={vNode.x}
-              y2={vNode.y}
-              stroke={isEdgeActive ? "var(--cyan-400)" : "rgba(255, 255, 255, 0.15)"}
-              strokeWidth={isEdgeActive ? "3.5" : "1.5"}
-              markerEnd={isEdgeActive ? "url(#arrowhead-active)" : "url(#arrowhead)"}
-              style={{ transition: "all var(--transition-normal)" }}
-            />
+            <g key={`${edge.u}-${edge.v}`}>
+              <line
+                x1={uNode.x}
+                y1={uNode.y}
+                x2={vNode.x}
+                y2={vNode.y}
+                stroke={isEdgeActive ? "var(--cyan-400)" : "rgba(255, 255, 255, 0.15)"}
+                strokeWidth={isEdgeActive ? "3.5" : "1.5"}
+                markerEnd={isEdgeActive ? "url(#arrowhead-active)" : "url(#arrowhead)"}
+                style={{ transition: "all var(--transition-normal)" }}
+              />
+              {edge.weight !== undefined && (
+                <g>
+                  <rect
+                    x={midX - 10}
+                    y={midY - 9}
+                    width="20"
+                    height="16"
+                    rx="4"
+                    fill="rgba(11, 16, 28, 0.9)"
+                    stroke="var(--border-subtle)"
+                  />
+                  <text
+                    x={midX}
+                    y={midY + 3}
+                    textAnchor="middle"
+                    fill={isEdgeActive ? "var(--cyan-400)" : "var(--amber-400)"}
+                    fontSize="10"
+                    fontWeight="700"
+                    fontFamily="var(--font-mono)"
+                  >
+                    {edge.weight}
+                  </text>
+                </g>
+              )}
+            </g>
           );
         })}
 
