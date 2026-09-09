@@ -24,7 +24,8 @@ export type StructureType =
   | "linked_list"
   | "tree"
   | "graph"
-  | "heap";
+  | "heap"
+  | "grid";
 
 export interface CallStackFrame {
   id: string;

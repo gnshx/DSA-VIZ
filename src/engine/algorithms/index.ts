@@ -6,6 +6,7 @@ import { validParenthesesAlgorithm } from "./stackQueue";
 import { bstSearchAlgorithm } from "./trees";
 import { bfsAlgorithm } from "./graphs";
 import { minHeapAlgorithm } from "./heaps";
+import { uniquePathsAlgorithm } from "./dp";
 
 export const ALL_ALGORITHMS: AlgorithmDefinition[] = [
   bubbleSortAlgorithm,
@@ -15,7 +16,8 @@ export const ALL_ALGORITHMS: AlgorithmDefinition[] = [
   validParenthesesAlgorithm,
   bstSearchAlgorithm,
   bfsAlgorithm,
-  minHeapAlgorithm
+  minHeapAlgorithm,
+  uniquePathsAlgorithm
 ];
 
 export const ALL_PROBLEMS: ProblemDefinition[] = [
@@ -254,6 +256,57 @@ export const ALL_PROBLEMS: ProblemDefinition[] = [
     return -1;
 }`
     }
+  },
+  {
+    id: "lc-62",
+    title: "62. Unique Paths (2D DP Grid)",
+    difficulty: "Medium",
+    category: "sliding_window",
+    algorithmId: "unique_paths",
+    statement:
+      "There is a robot on an m x n grid. The robot is initially located at the top-left corner (i.e., grid[0][0]). The robot tries to move to the bottom-right corner (i.e., grid[m - 1][n - 1]). The robot can only move either down or right at any point in time. Given the two integers m and n, return the number of possible unique paths that the robot can take to reach the bottom-right corner.",
+    examples: [
+      { input: "m = 3, n = 4", output: "10", explanation: "Paths to reach grid[2][3]" },
+      { input: "m = 3, n = 2", output: "3", explanation: "From (0,0): Right->Down->Down, Down->Down->Right, Down->Right->Down" }
+    ],
+    constraints: ["1 <= m, n <= 100"],
+    starterCode: {
+      python: `def unique_paths(m, n):
+    dp = [[1] * n for _ in range(m)]
+    for i in range(1, m):
+        for j in range(1, n):
+            dp[i][j] = dp[i - 1][j] + dp[i][j - 1]
+    return dp[m - 1][n - 1]`,
+      javascript: `function uniquePaths(m, n) {
+    const dp = Array.from({ length: m }, () => Array(n).fill(1));
+    for (let i = 1; i < m; i++) {
+        for (let j = 1; j < n; j++) {
+            dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+        }
+    }
+    return dp[m - 1][n - 1];
+}`,
+      cpp: `int uniquePaths(int m, int n) {
+    vector<vector<int>> dp(m, vector<int>(n, 1));
+    for (int i = 1; i < m; i++) {
+        for (int j = 1; j < n; j++) {
+            dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+        }
+    }
+    return dp[m - 1][n - 1];
+}`,
+      java: `public int uniquePaths(int m, int n) {
+    int[][] dp = new int[m][n];
+    for (int i = 0; i < m; i++) dp[i][0] = 1;
+    for (int j = 0; j < n; j++) dp[0][j] = 1;
+    for (int i = 1; i < m; i++) {
+        for (int j = 1; j < n; j++) {
+            dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+        }
+    }
+    return dp[m - 1][n - 1];
+}`
+    }
   }
 ];
 
@@ -345,5 +398,16 @@ export const CS_KNOWLEDGE_GRAPH: ConceptNode[] = [
     level: 4,
     x: 460,
     y: 360
+  },
+  {
+    id: "dp",
+    label: "Dynamic Programming",
+    category: "sliding_window",
+    description: "Optimal substructure, overlapping subproblems, and state memoization tables.",
+    prerequisites: ["arrays", "trees"],
+    relatedAlgorithms: ["unique_paths"],
+    level: 4,
+    x: 280,
+    y: 220
   }
 ];

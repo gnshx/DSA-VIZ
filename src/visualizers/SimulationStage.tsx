@@ -6,7 +6,8 @@ import { LinkedListVisualizer } from "./LinkedListVisualizer";
 import { TreeVisualizer } from "./TreeVisualizer";
 import { GraphVisualizer } from "./GraphVisualizer";
 import { HeapVisualizer } from "./HeapVisualizer";
-import { Maximize2, RotateCcw, Sparkles } from "lucide-react";
+import { GridVisualizer } from "./GridVisualizer";
+import { RotateCcw, Sparkles } from "lucide-react";
 
 interface SimulationStageProps {
   event: ExecutionEvent;
@@ -30,6 +31,8 @@ export const SimulationStage: React.FC<SimulationStageProps> = ({ event, title, 
         return <GraphVisualizer event={event} />;
       case "heap":
         return <HeapVisualizer event={event} />;
+      case "grid":
+        return <GridVisualizer event={event} />;
       default:
         return <ArrayVisualizer event={event} />;
     }
