@@ -4,15 +4,28 @@ import { StructureType, ExecutionTrace } from "./trace";
 export type SupportedLanguage = "python" | "javascript" | "cpp" | "java";
 
 export type AlgorithmCategory =
-  | "sorting"
-  | "searching"
+  | "arrays"
+  | "hashing"
   | "two_pointers"
   | "sliding_window"
-  | "linked_list"
+  | "searching"
+  | "sorting"
   | "stack_queue"
+  | "linked_list"
+  | "recursion"
+  | "backtracking"
   | "trees"
+  | "heaps"
+  | "greedy"
+  | "intervals"
   | "graphs"
-  | "heaps";
+  | "topological_sort"
+  | "union_find"
+  | "shortest_paths"
+  | "dp"
+  | "trie"
+  | "bit_manipulation"
+  | "range_queries";
 
 export interface CodeImplementation {
   code: string;
@@ -23,6 +36,8 @@ export interface AlgorithmDefinition {
   id: string;
   name: string;
   category: AlgorithmCategory;
+  patternFamily?: string;
+  subPatternId?: string;
   structureType: StructureType;
   difficulty: "Easy" | "Medium" | "Hard";
   description: string;
