@@ -7,12 +7,7 @@ import { ComputerVisionHUD } from "../components/ComputerVisionHUD";
 import { CodeEditorPanel } from "../components/CodeEditorPanel";
 import {
   AlertTriangle,
-  Award,
-  BookOpen,
-  CheckCircle,
   Clock,
-  Code2,
-  Database,
   Lightbulb
 } from "lucide-react";
 
@@ -68,27 +63,35 @@ export const LearnView: React.FC<LearnViewProps> = ({ language, onSelectLanguage
           </p>
         </div>
 
-        {/* Algorithm Tabs */}
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", maxWidth: "600px" }}>
-          {ALL_ALGORITHMS.map((algo) => {
-            const isSelected = selectedAlgo.id === algo.id;
-            return (
-              <button
-                key={algo.id}
-                onClick={() => handleSelectAlgo(algo)}
-                className="btn"
-                style={{
-                  padding: "0.4rem 0.8rem",
-                  fontSize: "0.78rem",
-                  background: isSelected ? "var(--indigo-500)" : "rgba(255, 255, 255, 0.04)",
-                  color: isSelected ? "#ffffff" : "var(--text-secondary)",
-                  border: isSelected ? "1px solid var(--indigo-400)" : "1px solid var(--border-subtle)"
-                }}
-              >
+        {/* Algorithm Dropdown Selector */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem", minWidth: "280px" }}>
+          <span style={{ fontSize: "0.75rem", color: "var(--text-muted)", fontWeight: 600 }}>
+            SELECT ALGORITHM / PATTERN:
+          </span>
+          <select
+            value={selectedAlgo.id}
+            onChange={(e) => {
+              const found = ALL_ALGORITHMS.find((a) => a.id === e.target.value);
+              if (found) handleSelectAlgo(found);
+            }}
+            style={{
+              background: "var(--bg-tertiary)",
+              color: "var(--text-primary)",
+              border: "1px solid var(--border-medium)",
+              borderRadius: "8px",
+              padding: "0.55rem 0.9rem",
+              fontSize: "0.85rem",
+              fontWeight: 600,
+              outline: "none",
+              cursor: "pointer"
+            }}
+          >
+            {ALL_ALGORITHMS.map((algo) => (
+              <option key={algo.id} value={algo.id}>
                 {algo.name}
-              </button>
-            );
-          })}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 

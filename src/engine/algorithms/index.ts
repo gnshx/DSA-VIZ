@@ -7,20 +7,132 @@ import { bstSearchAlgorithm, invertTreeAlgorithm } from "./trees";
 import { bfsAlgorithm, dijkstraAlgorithm } from "./graphs";
 import { minHeapAlgorithm } from "./heaps";
 import { uniquePathsAlgorithm } from "./dp";
+import {
+  twoPointersOppositeEndsAlgorithm,
+  twoPointersBothAtEndAlgorithm,
+  twoPointersOneFixedTwoShiftingAlgorithm,
+  twoPointersFastSlowAlgorithm,
+  twoPointersReadWriteAlgorithm,
+  twoPointersTwoArraysAlgorithm
+} from "./twoPointersSubcases";
+import {
+  slidingWindowFixedAlgorithm,
+  slidingWindowDynamicAlgorithm
+} from "./slidingWindowSubcases";
+import {
+  binarySearchFirstOccurrenceAlgorithm,
+  binarySearchRotatedAlgorithm
+} from "./binarySearchSubcases";
+import { dutchNationalFlagAlgorithm } from "./partitionSubcases";
+import { monotonicStackDailyTemperaturesAlgorithm } from "./stackSubcases";
+import { mergeIntervalsAlgorithm } from "./intervalsSubcases";
+
+import {
+  prefixSum1DAlgorithm,
+  prefixSumHashMapAlgorithm,
+  differenceArrayAlgorithm
+} from "./prefixSumSubcases";
+import {
+  hashTableTwoSumAlgorithm,
+  hashSetConsecutiveSequenceAlgorithm
+} from "./hashingSubcases";
+import { binarySearchOnAnswerAlgorithm } from "./searchOnAnswerSubcases";
+import {
+  backtrackingSubsetsAlgorithm,
+  backtrackingCombinationSumAlgorithm
+} from "./backtrackingSubcases";
+import { greedyJumpGameAlgorithm } from "./greedySubcases";
+import { topologicalSortKahnAlgorithm } from "./topologicalSortSubcases";
+import { unionFindDsuAlgorithm } from "./unionFindSubcases";
+import { triePrefixTreeAlgorithm } from "./trieSubcases";
+import {
+  bitManipulationXorSingleNumberAlgorithm,
+  bitManipulationKernighanAlgorithm
+} from "./bitManipulationSubcases";
+import {
+  knapsack01Algorithm,
+  lcsStringDpAlgorithm
+} from "./advancedDpSubcases";
 
 export const ALL_ALGORITHMS: AlgorithmDefinition[] = [
-  bubbleSortAlgorithm,
+  // Arrays & Prefix Techniques
+  prefixSum1DAlgorithm,
+  differenceArrayAlgorithm,
+
+  // Hashing
+  hashTableTwoSumAlgorithm,
+  prefixSumHashMapAlgorithm,
+  hashSetConsecutiveSequenceAlgorithm,
+
+  // Two Pointers Subcases
+  twoPointersOppositeEndsAlgorithm,
+  twoPointersBothAtEndAlgorithm,
+  twoPointersOneFixedTwoShiftingAlgorithm,
+  twoPointersFastSlowAlgorithm,
+  twoPointersReadWriteAlgorithm,
+  twoPointersTwoArraysAlgorithm,
+
+  // Sliding Window Subcases
+  slidingWindowFixedAlgorithm,
+  slidingWindowDynamicAlgorithm,
+
+  // Binary Search Subcases
   binarySearchAlgorithm,
-  twoPointersAlgorithm,
-  slidingWindowAlgorithm,
-  reverseLinkedListAlgorithm,
+  binarySearchFirstOccurrenceAlgorithm,
+  binarySearchRotatedAlgorithm,
+  binarySearchOnAnswerAlgorithm,
+
+  // Partitioning & Sorting
+  dutchNationalFlagAlgorithm,
+  bubbleSortAlgorithm,
+
+  // Stacks & Monotonic Stacks
+  monotonicStackDailyTemperaturesAlgorithm,
   validParenthesesAlgorithm,
-  bstSearchAlgorithm,
+
+  // Recursion & Backtracking
+  backtrackingSubsetsAlgorithm,
+  backtrackingCombinationSumAlgorithm,
+
+  // Linked Lists
+  reverseLinkedListAlgorithm,
+
+  // Trees & BST
   invertTreeAlgorithm,
+  bstSearchAlgorithm,
+
+  // Heaps & Top-K
+  minHeapAlgorithm,
+
+  // Greedy
+  greedyJumpGameAlgorithm,
+
+  // Intervals
+  mergeIntervalsAlgorithm,
+
+  // Graphs & Topological Sort
   bfsAlgorithm,
   dijkstraAlgorithm,
-  minHeapAlgorithm,
-  uniquePathsAlgorithm
+  topologicalSortKahnAlgorithm,
+
+  // Union-Find / DSU
+  unionFindDsuAlgorithm,
+
+  // Dynamic Programming
+  uniquePathsAlgorithm,
+  knapsack01Algorithm,
+  lcsStringDpAlgorithm,
+
+  // Trie
+  triePrefixTreeAlgorithm,
+
+  // Bit Manipulation
+  bitManipulationXorSingleNumberAlgorithm,
+  bitManipulationKernighanAlgorithm,
+
+  // Legacy mappings for backwards compatibility
+  twoPointersAlgorithm,
+  slidingWindowAlgorithm
 ];
 
 export const ALL_PROBLEMS: ProblemDefinition[] = [
@@ -462,3 +574,35 @@ export const CS_KNOWLEDGE_GRAPH: ConceptNode[] = [
     y: 220
   }
 ];
+
+export {
+  twoPointersOppositeEndsAlgorithm,
+  twoPointersBothAtEndAlgorithm,
+  twoPointersOneFixedTwoShiftingAlgorithm,
+  twoPointersFastSlowAlgorithm,
+  twoPointersReadWriteAlgorithm,
+  twoPointersTwoArraysAlgorithm,
+  slidingWindowFixedAlgorithm,
+  slidingWindowDynamicAlgorithm,
+  binarySearchFirstOccurrenceAlgorithm,
+  binarySearchRotatedAlgorithm,
+  binarySearchOnAnswerAlgorithm,
+  dutchNationalFlagAlgorithm,
+  monotonicStackDailyTemperaturesAlgorithm,
+  mergeIntervalsAlgorithm,
+  prefixSum1DAlgorithm,
+  prefixSumHashMapAlgorithm,
+  differenceArrayAlgorithm,
+  hashTableTwoSumAlgorithm,
+  hashSetConsecutiveSequenceAlgorithm,
+  backtrackingSubsetsAlgorithm,
+  backtrackingCombinationSumAlgorithm,
+  greedyJumpGameAlgorithm,
+  topologicalSortKahnAlgorithm,
+  unionFindDsuAlgorithm,
+  triePrefixTreeAlgorithm,
+  bitManipulationXorSingleNumberAlgorithm,
+  bitManipulationKernighanAlgorithm,
+  knapsack01Algorithm,
+  lcsStringDpAlgorithm
+};

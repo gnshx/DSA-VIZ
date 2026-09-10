@@ -1,16 +1,12 @@
 import React, { useState } from "react";
 import { KnowledgeGraph } from "../components/KnowledgeGraph";
+import { PatternNavigator } from "../components/PatternNavigator";
 import {
   AlertTriangle,
   ArrowRight,
-  BookOpen,
-  Brain,
-  CheckCircle2,
-  Code2,
   Compass,
   FileText,
-  Lightbulb,
-  Zap
+  Layers
 } from "lucide-react";
 
 interface ReviseViewProps {
@@ -28,95 +24,143 @@ interface PatternCard {
 }
 
 export const ReviseView: React.FC<ReviseViewProps> = ({ onSelectAlgorithm }) => {
-  const [activeTab, setActiveTab] = useState<"graph" | "patterns">("graph");
+  const [activeTab, setActiveTab] = useState<"patterns" | "graph" | "cheatsheet">("patterns");
 
   const patterns: PatternCard[] = [
     {
       id: "p1",
-      title: "Two Pointers (Inward Convergence)",
-      category: "Arrays & Sorting",
+      title: "Two Pointers: Converging (Start & End)",
+      category: "Two Pointers",
       recognitionSignals: [
         "Sorted array input",
-        "Searching for pairs or triplets matching target sum",
+        "Searching for pairs matching target sum or condition",
         "Need O(n) time and O(1) space instead of O(n²) brute-force nested loops"
       ],
       templateHint: "left = 0, right = n - 1; while left < right: if sum == target return; elif sum < target left++ else right--",
       commonMistake: "Applying to unsorted array or moving both pointers simultaneously without checking conditions.",
-      algoId: "two_pointers"
+      algoId: "two_pointers_opposite_ends"
     },
     {
       id: "p2",
-      title: "Binary Search Boundary Invariant",
+      title: "Two Pointers: Both at End (Backward Merge)",
+      category: "Two Pointers",
+      recognitionSignals: [
+        "Two sorted arrays, merging into the first array with trailing buffer",
+        "Writing from front would overwrite unprocessed elements",
+        "Need in-place O(1) extra space"
+      ],
+      templateHint: "p1 = m - 1, p2 = n - 1, write = m + n - 1; while p2 >= 0: if p1 >= 0 and nums1[p1] > nums2[p2]: nums1[write--] = nums1[p1--] else: nums1[write--] = nums2[p2--]",
+      commonMistake: "Stopping when p1 < 0 instead of checking p2 >= 0.",
+      algoId: "two_pointers_both_at_end"
+    },
+    {
+      id: "p3",
+      title: "Two Pointers: One Fixed, Two Shifting (3Sum)",
+      category: "Two Pointers",
+      recognitionSignals: [
+        "Triplet search: a + b + c = target",
+        "Reduces O(n³) brute force down to O(n²)",
+        "Pre-sorting enables skipping duplicate triplets"
+      ],
+      templateHint: "for i in range(n - 2): if i > 0 and nums[i] == nums[i-1] continue; left = i + 1, right = n - 1; while left < right: ...",
+      commonMistake: "Forgetting to skip duplicates after finding a match, producing duplicate triplet outputs.",
+      algoId: "two_pointers_one_fixed_two_shifting"
+    },
+    {
+      id: "p4",
+      title: "Two Pointers: Fast & Slow (Tortoise & Hare)",
+      category: "Two Pointers",
+      recognitionSignals: [
+        "Cycle detection in linked list or array reference chains",
+        "Finding middle element in single pass",
+        "Happy numbers or state transitions"
+      ],
+      templateHint: "slow = head, fast = head; while fast and fast.next: slow = slow.next; fast = fast.next.next; if slow == fast: cycle found",
+      commonMistake: "Calling fast.next.next without verifying fast and fast.next are non-null.",
+      algoId: "two_pointers_fast_slow"
+    },
+    {
+      id: "p5",
+      title: "Two Pointers: Read & Write Compaction",
+      category: "Two Pointers",
+      recognitionSignals: [
+        "In-place array modification (e.g. Move Zeroes, Remove Duplicates)",
+        "Write pointer anchors clean partition; read pointer scans ahead",
+        "O(n) time and strictly O(1) auxiliary memory"
+      ],
+      templateHint: "write = 0; for read in range(n): if condition(arr[read]): arr[write] = arr[read]; write += 1",
+      commonMistake: "Using array.splice() or slice() inside loop which causes O(n²) shifts.",
+      algoId: "two_pointers_read_write"
+    },
+    {
+      id: "p6",
+      title: "Sliding Window (Fixed vs Variable)",
+      category: "Sliding Window",
+      recognitionSignals: [
+        "Continuous subarrays or substrings meeting a sum, length, or uniqueness criteria",
+        "Fixed width k: slide right in O(1) via: sum += arr[i] - arr[i - k]",
+        "Variable width: expand right, shrink left until valid"
+      ],
+      templateHint: "for right in range(n): add(arr[right]); while invalid(): remove(arr[left]); left += 1; update_best()",
+      commonMistake: "Resetting left to 0 instead of incrementally advancing left, degrading to O(n²).",
+      algoId: "sliding_window_dynamic"
+    },
+    {
+      id: "p7",
+      title: "Binary Search & Lower Bound",
       category: "Searching",
       recognitionSignals: [
         "Monotonic condition f(x) (e.g. false, false, ..., true, true)",
         "Search in logarithmic O(log n) time",
         "Finding first occurrence, last occurrence, or minimum capacity"
       ],
-      templateHint: "while left <= right: mid = left + (right - left) // 2; if target <= arr[mid]: right = mid - 1; else: left = mid + 1",
-      commonMistake: "Integer overflow in (left + right) / 2 and infinite loops from mid updates left = mid.",
-      algoId: "binary_search"
+      templateHint: "while left <= right: mid = left + (right - left) // 2; if target <= arr[mid]: ans = mid; right = mid - 1; else: left = mid + 1",
+      commonMistake: "Integer overflow in (left + right) / 2 and infinite loops from updates left = mid.",
+      algoId: "binary_search_first_occurrence"
     },
     {
-      id: "p3",
-      title: "LIFO Stack Matching",
-      category: "Stacks & Parsing",
+      id: "p8",
+      title: "Monotonic Stack (Next Greater Element)",
+      category: "Stacks",
       recognitionSignals: [
-        "Nested structures (parentheses, HTML tags, function call frames)",
-        "Nearest previous greater or smaller element",
-        "Reversible history / undo mechanisms"
+        "Nearest previous or next greater/smaller element in sequence",
+        "Span calculations (e.g. Daily Temperatures, Stock Span)",
+        "Every element pushed and popped at most once (O(n) total)"
       ],
-      templateHint: "for char in s: if char in open_brackets: stack.push(char) else: top = stack.pop(); match(top, char)",
-      commonMistake: "Popping from an empty stack or forgetting to check if stack is empty at end of string.",
-      algoId: "valid_parentheses"
+      templateHint: "for i in range(n): while stack and arr[i] > arr[stack[-1]]: top = stack.pop(); ans[top] = i - top; stack.append(i)",
+      commonMistake: "Storing values instead of indices on stack, preventing distance calculations.",
+      algoId: "monotonic_stack_temperatures"
     },
     {
-      id: "p4",
-      title: "Breadth-First Level Traversal",
-      category: "Graphs & BFS",
+      id: "p9",
+      title: "Dutch National Flag (3-Way Partition)",
+      category: "Sorting",
       recognitionSignals: [
-        "Unweighted graph shortest path guarantee",
-        "Level-by-level distance exploration",
-        "Minimum number of moves or transitions"
+        "Classifying array into three segments in a single pass",
+        "Pointers: low (0s boundary), mid (scanner), high (2s boundary)",
+        "Strictly O(n) time and O(1) space"
       ],
-      templateHint: "queue = [start], visited = {start}; while queue: node = queue.pop(0); for nbr in adj[node]: if nbr not in visited: visited.add(nbr); queue.push(nbr)",
-      commonMistake: "Marking visited upon pop instead of push, causing duplicate additions and exponential queue bloat.",
-      algoId: "bfs_traversal"
-    },
-    {
-      id: "p5",
-      title: "Heap Priority Invariant",
-      category: "Heaps",
-      recognitionSignals: [
-        "Finding top K largest or smallest elements in streaming data",
-        "Repeatedly needing minimum or maximum with dynamic insertions in O(log n)",
-        "Continuous sorting maintenance"
-      ],
-      templateHint: "parent(i) = (i - 1) // 2; left(i) = 2*i + 1; sift_up by swapping child with parent while child < parent",
-      commonMistake: "Using 1-based indexing formulas on 0-indexed arrays or confusing min-heap with max-heap comparisons.",
-      algoId: "min_heap"
+      templateHint: "while mid <= high: if arr[mid] == 0: swap(low++, mid++); elif arr[mid] == 1: mid++; else: swap(mid, high--)",
+      commonMistake: "Advancing mid after swapping with high, missing unclassified elements.",
+      algoId: "dutch_national_flag"
     }
   ];
 
   return (
-    <div style={{ maxWidth: "1600px", margin: "0 auto", padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-      {/* Tab Selector: Knowledge Graph vs Pattern Cheat Sheets */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "0.75rem", flexWrap: "wrap", gap: "1rem" }}>
+    <div style={{ maxWidth: "1800px", margin: "0 auto", padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+      {/* Tab Selector */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          borderBottom: "1px solid var(--border-subtle)",
+          paddingBottom: "0.75rem",
+          flexWrap: "wrap",
+          gap: "1rem"
+        }}
+      >
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-          <button
-            onClick={() => setActiveTab("graph")}
-            className="btn"
-            style={{
-              background: activeTab === "graph" ? "var(--indigo-500)" : "transparent",
-              color: activeTab === "graph" ? "#ffffff" : "var(--text-secondary)",
-              border: activeTab === "graph" ? "1px solid var(--indigo-400)" : "none",
-              fontSize: "0.85rem"
-            }}
-          >
-            <Compass size={16} />
-            <span>Interactive Concept Graph</span>
-          </button>
-
           <button
             onClick={() => setActiveTab("patterns")}
             className="btn"
@@ -124,20 +168,57 @@ export const ReviseView: React.FC<ReviseViewProps> = ({ onSelectAlgorithm }) => 
               background: activeTab === "patterns" ? "var(--indigo-500)" : "transparent",
               color: activeTab === "patterns" ? "#ffffff" : "var(--text-secondary)",
               border: activeTab === "patterns" ? "1px solid var(--indigo-400)" : "none",
-              fontSize: "0.85rem"
+              fontSize: "0.85rem",
+              fontWeight: activeTab === "patterns" ? 700 : 500
+            }}
+          >
+            <Layers size={16} />
+            <span>All Patterns & Subcases Matrix</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab("graph")}
+            className="btn"
+            style={{
+              background: activeTab === "graph" ? "var(--indigo-500)" : "transparent",
+              color: activeTab === "graph" ? "#ffffff" : "var(--text-secondary)",
+              border: activeTab === "graph" ? "1px solid var(--indigo-400)" : "none",
+              fontSize: "0.85rem",
+              fontWeight: activeTab === "graph" ? 700 : 500
+            }}
+          >
+            <Compass size={16} />
+            <span>Concept Graph</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab("cheatsheet")}
+            className="btn"
+            style={{
+              background: activeTab === "cheatsheet" ? "var(--indigo-500)" : "transparent",
+              color: activeTab === "cheatsheet" ? "#ffffff" : "var(--text-secondary)",
+              border: activeTab === "cheatsheet" ? "1px solid var(--indigo-400)" : "none",
+              fontSize: "0.85rem",
+              fontWeight: activeTab === "cheatsheet" ? 700 : 500
             }}
           >
             <FileText size={16} />
-            <span>Pattern Recognition Cheat Sheet</span>
+            <span>Recognition Signals & Traps</span>
           </button>
         </div>
 
-        <span className="badge badge-cyan">CONTINUOUS KNOWLEDGE ENGINE</span>
+        <span className="badge badge-cyan">CONTINUOUS KNOWLEDGE REPOSITORY</span>
       </div>
 
-      {activeTab === "graph" ? (
+      {activeTab === "patterns" && (
+        <PatternNavigator onSelectSubcase={onSelectAlgorithm} />
+      )}
+
+      {activeTab === "graph" && (
         <KnowledgeGraph onSelectAlgorithm={onSelectAlgorithm} />
-      ) : (
+      )}
+
+      {activeTab === "cheatsheet" && (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(360px, 1fr))", gap: "1.25rem" }}>
           {patterns.map((pat) => (
             <div
@@ -161,12 +242,22 @@ export const ReviseView: React.FC<ReviseViewProps> = ({ onSelectAlgorithm }) => 
 
               {/* Signals */}
               <div>
-                <div style={{ fontSize: "0.72rem", color: "var(--text-dim)", textTransform: "uppercase", fontWeight: 700, marginBottom: "0.3rem" }}>
-                  Pattern Signals
+                <div
+                  style={{
+                    fontSize: "0.72rem",
+                    color: "var(--text-dim)",
+                    textTransform: "uppercase",
+                    fontWeight: 700,
+                    marginBottom: "0.3rem"
+                  }}
+                >
+                  Pattern Recognition Signals
                 </div>
                 <ul style={{ paddingLeft: "1.2rem", fontSize: "0.8rem", color: "var(--text-secondary)", margin: 0 }}>
                   {pat.recognitionSignals.map((sig, i) => (
-                    <li key={i} style={{ marginBottom: "0.2rem" }}>{sig}</li>
+                    <li key={i} style={{ marginBottom: "0.2rem" }}>
+                      {sig}
+                    </li>
                   ))}
                 </ul>
               </div>
@@ -189,7 +280,9 @@ export const ReviseView: React.FC<ReviseViewProps> = ({ onSelectAlgorithm }) => 
               {/* Common Pitfall */}
               <div style={{ fontSize: "0.78rem", color: "var(--rose-400)", display: "flex", alignItems: "flex-start", gap: "0.4rem" }}>
                 <AlertTriangle size={15} style={{ flexShrink: 0, marginTop: "2px" }} />
-                <span><strong>Trap:</strong> {pat.commonMistake}</span>
+                <span>
+                  <strong>Trap:</strong> {pat.commonMistake}
+                </span>
               </div>
 
               {/* Simulate Button */}

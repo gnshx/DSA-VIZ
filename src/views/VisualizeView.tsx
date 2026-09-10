@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ALL_ALGORITHMS } from "../engine/algorithms";
+import { ALL_PATTERN_FAMILIES } from "../engine/patterns";
 import { AlgorithmDefinition, SupportedLanguage } from "../types/algorithm";
 import { parseUserInput } from "../engine/codeTracer";
 import { SimulationStage } from "../visualizers/SimulationStage";
@@ -8,7 +9,13 @@ import { ComputerVisionHUD } from "../components/ComputerVisionHUD";
 import { MemoryInspector } from "../components/MemoryInspector";
 import { CallStackPanel } from "../components/CallStackPanel";
 import { CodeEditorPanel } from "../components/CodeEditorPanel";
-import { Play, RotateCcw, SlidersHorizontal, Sparkles } from "lucide-react";
+import { PatternNavigator } from "../components/PatternNavigator";
+import {
+  Compass,
+  ChevronDown,
+  ChevronUp,
+  Tag
+} from "lucide-react";
 
 interface VisualizeViewProps {
   language: SupportedLanguage;
@@ -29,6 +36,7 @@ export const VisualizeView: React.FC<VisualizeViewProps> = ({
   const [currentStep, setCurrentStep] = useState(1);
   const [isPlaying, setIsPlaying] = useState(false);
   const [speed, setSpeed] = useState(1);
+  const [showPatternDirectory, setShowPatternDirectory] = useState(false);
 
   // Sync if initialAlgorithmId prop updates
   useEffect(() => {
@@ -41,6 +49,14 @@ export const VisualizeView: React.FC<VisualizeViewProps> = ({
       }
     }
   }, [initialAlgorithmId]);
+
+  // Find active pattern family and subcase metadata
+  const currentFamily = ALL_PATTERN_FAMILIES.find((fam) =>
+    fam.subcases.some((sub) => sub.algorithmId === selectedAlgo.id)
+  );
+  const currentSubcase = currentFamily?.subcases.find(
+    (sub) => sub.algorithmId === selectedAlgo.id
+  );
 
   // Generate trace based on custom or default input
   const parsedInput = customInputText
@@ -78,13 +94,85 @@ export const VisualizeView: React.FC<VisualizeViewProps> = ({
     }
   };
 
+  const handleSelectFromNavigator = (algoId: string) => {
+    handleAlgoChange(algoId);
+    setShowPatternDirectory(false);
+  };
+
   const handleApplyCustomInput = () => {
     setCurrentStep(1);
     setIsPlaying(false);
   };
 
   return (
-    <div style={{ maxWidth: "1800px", margin: "0 auto", padding: "1.25rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
+    <div
+      style={{
+        maxWidth: "1800px",
+        margin: "0 auto",
+        padding: "1.25rem",
+        display: "flex",
+        flexDirection: "column",
+        gap: "1rem"
+      }}
+    >
+      {/* Pattern Catalog Collapsible Toggle Banner */}
+      <div
+        className="glass-panel"
+        style={{
+          padding: "0.6rem 1rem",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: "0.75rem",
+          background: showPatternDirectory
+            ? "rgba(99, 102, 241, 0.15)"
+            : "rgba(255, 255, 255, 0.02)",
+          border: showPatternDirectory
+            ? "1px solid var(--indigo-400)"
+            : "1px solid var(--border-subtle)",
+          borderRadius: "10px"
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
+          <Compass size={18} color="var(--cyan-400)" />
+          <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--text-primary)" }}>
+            DSA Pattern Master Directory & Subcases
+          </span>
+          <span className="badge badge-cyan" style={{ fontSize: "0.68rem" }}>
+            11 PATTERNS • 23 SUB-VARIANTS
+          </span>
+        </div>
+
+        <button
+          onClick={() => setShowPatternDirectory(!showPatternDirectory)}
+          className="btn btn-secondary"
+          style={{ padding: "0.35rem 0.8rem", fontSize: "0.78rem" }}
+        >
+          {showPatternDirectory ? (
+            <>
+              <span>Close Directory</span>
+              <ChevronUp size={14} />
+            </>
+          ) : (
+            <>
+              <span>Explore All Patterns & Subcases</span>
+              <ChevronDown size={14} />
+            </>
+          )}
+        </button>
+      </div>
+
+      {/* Collapsible Pattern Directory */}
+      {showPatternDirectory && (
+        <div style={{ marginBottom: "0.5rem" }}>
+          <PatternNavigator
+            onSelectSubcase={handleSelectFromNavigator}
+            selectedAlgorithmId={selectedAlgo.id}
+          />
+        </div>
+      )}
+
       {/* Top Toolbar: Algorithm Selector & Custom Input Bar */}
       <div
         className="glass-panel"
@@ -98,10 +186,10 @@ export const VisualizeView: React.FC<VisualizeViewProps> = ({
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "1rem", flexWrap: "wrap" }}>
-          {/* Algorithm Picker */}
+          {/* Algorithm Dropdown */}
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
             <span style={{ fontSize: "0.8rem", color: "var(--text-muted)", fontWeight: 600 }}>
-              ALGORITHM:
+              ALGORITHM / SUBCASE:
             </span>
             <select
               value={selectedAlgo.id}
@@ -115,12 +203,13 @@ export const VisualizeView: React.FC<VisualizeViewProps> = ({
                 fontSize: "0.85rem",
                 fontWeight: 600,
                 outline: "none",
-                cursor: "pointer"
+                cursor: "pointer",
+                maxWidth: "340px"
               }}
             >
               {ALL_ALGORITHMS.map((algo) => (
                 <option key={algo.id} value={algo.id}>
-                  {algo.name} ({algo.structureType.toUpperCase()})
+                  {algo.name}
                 </option>
               ))}
             </select>
@@ -135,8 +224,8 @@ export const VisualizeView: React.FC<VisualizeViewProps> = ({
               type="text"
               placeholder={
                 selectedAlgo.structureType === "stack"
-                  ? "e.g. ({[]})"
-                  : "e.g. 7, 2, 9, 1, 5"
+                  ? "e.g. 70, 72, 69, 75"
+                  : "e.g. 1, 4, 6, 9, 12"
               }
               value={customInputText}
               onChange={(e) => setCustomInputText(e.target.value)}
@@ -148,7 +237,7 @@ export const VisualizeView: React.FC<VisualizeViewProps> = ({
                 padding: "0.4rem 0.75rem",
                 fontSize: "0.825rem",
                 fontFamily: "var(--font-mono)",
-                width: "220px",
+                width: "200px",
                 outline: "none"
               }}
             />
@@ -166,11 +255,93 @@ export const VisualizeView: React.FC<VisualizeViewProps> = ({
         <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
           <span className="badge badge-cyan">{selectedAlgo.timeComplexity}</span>
           <span className="badge badge-emerald">{selectedAlgo.spaceComplexity}</span>
-          <span className="badge badge-indigo">
-            {trace.totalSteps} TRACE STEPS
-          </span>
+          <span className="badge badge-indigo">{trace.totalSteps} STEPS</span>
         </div>
       </div>
+
+      {/* Subcase Quick Switcher Chips (when active algorithm belongs to a pattern family) */}
+      {currentFamily && (
+        <div
+          className="glass-panel"
+          style={{
+            padding: "0.6rem 1rem",
+            display: "flex",
+            alignItems: "center",
+            gap: "0.6rem",
+            flexWrap: "wrap",
+            background: "rgba(15, 23, 42, 0.6)"
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", marginRight: "0.4rem" }}>
+            <Tag size={14} color="var(--indigo-400)" />
+            <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase" }}>
+              {currentFamily.name} Subcases:
+            </span>
+          </div>
+
+          <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap", flex: 1 }}>
+            {currentFamily.subcases.map((sub) => {
+              const isActive = sub.algorithmId === selectedAlgo.id;
+              return (
+                <button
+                  key={sub.id}
+                  onClick={() => handleAlgoChange(sub.algorithmId)}
+                  className="btn"
+                  style={{
+                    padding: "0.3rem 0.65rem",
+                    fontSize: "0.75rem",
+                    fontWeight: isActive ? 700 : 500,
+                    borderRadius: "6px",
+                    background: isActive ? "var(--indigo-500)" : "rgba(255, 255, 255, 0.04)",
+                    color: isActive ? "#ffffff" : "var(--text-secondary)",
+                    border: isActive ? "1px solid var(--indigo-400)" : "1px solid var(--border-subtle)",
+                    boxShadow: isActive ? "0 2px 8px rgba(99, 102, 241, 0.35)" : "none"
+                  }}
+                >
+                  {sub.subcaseTitle}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Pointer Topology & Roles HUD (if active subcase defines pointer roles) */}
+      {currentSubcase && (
+        <div
+          style={{
+            padding: "0.5rem 1rem",
+            borderRadius: "8px",
+            background: "rgba(6, 182, 212, 0.06)",
+            border: "1px solid rgba(6, 182, 212, 0.2)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+            gap: "0.5rem",
+            fontSize: "0.78rem"
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flexWrap: "wrap" }}>
+            <span style={{ color: "var(--cyan-400)", fontWeight: 700 }}>
+              TOPOLOGY: {currentSubcase.visualSummary}
+            </span>
+            <span style={{ color: "var(--border-medium)" }}>|</span>
+            <span style={{ color: "var(--text-muted)" }}>
+              {currentSubcase.coreMechanism}
+            </span>
+          </div>
+
+          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap" }}>
+            {Object.entries(currentSubcase.pointerRoles).map(([ptr, role]) => (
+              <span key={ptr} style={{ fontSize: "0.72rem" }}>
+                <strong style={{ color: "var(--indigo-300)" }}>{ptr}</strong>:{" "}
+                <span style={{ color: "var(--text-dim)" }}>{role}</span>
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Main 3-Pane Workbench */}
       <div
