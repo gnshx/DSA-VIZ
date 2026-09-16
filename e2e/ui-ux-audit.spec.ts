@@ -95,18 +95,17 @@ test.describe('DSA-VIZ Exhaustive UI/UX & Interactive Quality Audit', () => {
 
     for (const algoId of sampleAlgos) {
       await algoSelect.selectOption(algoId);
-      await page.waitForTimeout(300);
+      await page.waitForTimeout(250);
 
       // Verify stage visualizer is visible
       const stage = page.locator('main');
       await expect(stage).toBeVisible();
 
-      // Check step playback scrubber
-      const playBtn = page.locator('button:has-text("Play")').first();
+      // Check step playback scrubber play/pause button
+      const playBtn = page.locator('button[title*="Play / Pause"]').first();
       if (await playBtn.isVisible()) {
         await playBtn.click();
-        await page.waitForTimeout(400);
-        // Pause
+        await page.waitForTimeout(200);
         await playBtn.click();
       }
 
