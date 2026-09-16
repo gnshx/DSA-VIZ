@@ -6,7 +6,11 @@ import {
   Layers,
   Play,
   Search,
-  Puzzle
+  Puzzle,
+  Code,
+  Sparkles,
+  Zap,
+  BookOpen
 } from "lucide-react";
 
 interface PatternNavigatorProps {
@@ -21,14 +25,11 @@ export const PatternNavigator: React.FC<PatternNavigatorProps> = ({
   const [activeTab, setActiveTab] = useState<"catalog" | "combinations">("catalog");
   const [activeFamilyId, setActiveFamilyId] = useState<string>("two_pointers");
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedTier, setSelectedTier] = useState<string>("all");
+  const [selectedDifficulty, setSelectedDifficulty] = useState<string>("all");
 
   // Filtered families by search query
   const filteredFamilies = useMemo(() => {
-    if (!searchQuery.trim()) {
-      if (selectedTier === "all") return ALL_PATTERN_FAMILIES;
-      return ALL_PATTERN_FAMILIES.filter((f) => f.tier === selectedTier);
-    }
+    if (!searchQuery.trim()) return ALL_PATTERN_FAMILIES;
     const q = searchQuery.toLowerCase();
     return ALL_PATTERN_FAMILIES.filter((fam) => {
       const matchFam = fam.name.toLowerCase().includes(q) || fam.description.toLowerCase().includes(q);
@@ -38,10 +39,9 @@ export const PatternNavigator: React.FC<PatternNavigatorProps> = ({
           sub.coreMechanism.toLowerCase().includes(q) ||
           sub.classicProblems.some((p) => p.title.toLowerCase().includes(q))
       );
-      const matchTier = selectedTier === "all" || fam.tier === selectedTier;
-      return (matchFam || matchSub) && matchTier;
+      return matchFam || matchSub;
     });
-  }, [searchQuery, selectedTier]);
+  }, [searchQuery]);
 
   const activeFamily =
     filteredFamilies.find((f) => f.id === activeFamilyId) ||
@@ -65,103 +65,140 @@ export const PatternNavigator: React.FC<PatternNavigatorProps> = ({
     return ALL_PATTERN_FAMILIES.reduce((acc, f) => acc + f.subcases.length, 0);
   }, []);
 
+  const getDifficultyBadge = (diff: string) => {
+    switch (diff.toLowerCase()) {
+      case "easy":
+        return {
+          bg: "rgba(0, 184, 163, 0.15)",
+          color: "#00b8a3",
+          border: "1px solid rgba(0, 184, 163, 0.3)"
+        };
+      case "hard":
+        return {
+          bg: "rgba(255, 55, 95, 0.15)",
+          color: "#ff375f",
+          border: "1px solid rgba(255, 55, 95, 0.3)"
+        };
+      default:
+        return {
+          bg: "rgba(255, 192, 30, 0.15)",
+          color: "#ffc01e",
+          border: "1px solid rgba(255, 192, 30, 0.3)"
+        };
+    }
+  };
+
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem", width: "100%" }}>
-      {/* Header Banner */}
+    <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem", width: "100%" }}>
+      {/* LeetCode Explore Banner */}
       <div
         className="glass-panel"
         style={{
-          padding: "1.5rem",
+          padding: "1.75rem 2rem",
           background: "linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(6, 182, 212, 0.08))",
           border: "1px solid rgba(99, 102, 241, 0.25)",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
           flexWrap: "wrap",
-          gap: "1rem"
+          gap: "1.5rem",
+          borderRadius: "16px"
         }}
       >
         <div>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <span className="badge badge-indigo">COMPLETE DSA PATTERN MAP</span>
-            <span className="badge badge-cyan">{ALL_PATTERN_FAMILIES.length} FAMILIES • {totalSubcases} SUB-VARIANTS</span>
-            <span className="badge badge-emerald">{ALL_PATTERN_COMBINATIONS.length} COMBINATIONS</span>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flexWrap: "wrap" }}>
+            <span className="badge badge-indigo" style={{ padding: "0.25rem 0.65rem", fontSize: "0.72rem" }}>
+              LEETCODE DSA PATTERN EXPLORE
+            </span>
+            <span className="badge badge-cyan" style={{ padding: "0.25rem 0.65rem", fontSize: "0.72rem" }}>
+              {ALL_PATTERN_FAMILIES.length} TOPIC FAMILIES • {totalSubcases} SUB-PATTERNS
+            </span>
+            <span className="badge badge-emerald" style={{ padding: "0.25rem 0.65rem", fontSize: "0.72rem" }}>
+              {ALL_PATTERN_COMBINATIONS.length} MULTI-PATTERN SYNERGIES
+            </span>
           </div>
-          <h2 style={{ fontSize: "1.5rem", fontWeight: 800, marginTop: "0.4rem", letterSpacing: "-0.01em" }}>
-            Master DSA Pattern & Subcase Architecture
+
+          <h2 style={{ fontSize: "1.65rem", fontWeight: 800, marginTop: "0.5rem", letterSpacing: "-0.015em", color: "var(--text-primary)" }}>
+            DSA Algorithmic Patterns & Visual Execution Engine
           </h2>
-          <p style={{ color: "var(--text-secondary)", fontSize: "0.85rem", marginTop: "0.3rem", maxWidth: "820px" }}>
-            Organized strictly by <strong>Pattern → Operational Subcases → Representative Problems</strong>.
-            Recognize core mechanics, identify multi-pattern synergies (e.g. HashMap + Prefix Sum), and launch interactive state traces.
+
+          <p style={{ color: "var(--text-secondary)", fontSize: "0.875rem", marginTop: "0.4rem", maxWidth: "860px", lineHeight: 1.55 }}>
+            Master technical interview patterns organized by <strong>Category → Operational Sub-Variants → LeetCode Problems</strong>.
+            Select any pattern subcase to launch deterministic, step-by-step state visualization.
           </p>
         </div>
 
-        {/* Top Level View Mode Tabs */}
-        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+        {/* View Mode Tabs */}
+        <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
           <button
             onClick={() => setActiveTab("catalog")}
             className="btn"
             style={{
-              padding: "0.5rem 0.9rem",
-              fontSize: "0.8rem",
+              padding: "0.6rem 1.1rem",
+              fontSize: "0.85rem",
               fontWeight: 700,
-              background: activeTab === "catalog" ? "var(--indigo-500)" : "var(--chip-inactive-bg)",
+              background: activeTab === "catalog" ? "linear-gradient(135deg, var(--indigo-500), #4f46e5)" : "var(--chip-inactive-bg)",
               color: activeTab === "catalog" ? "#ffffff" : "var(--chip-inactive-text)",
               border: activeTab === "catalog" ? "1px solid var(--indigo-400)" : "1px solid var(--border-subtle)",
               display: "flex",
               alignItems: "center",
-              gap: "0.4rem"
+              gap: "0.5rem",
+              borderRadius: "10px",
+              boxShadow: activeTab === "catalog" ? "0 4px 12px rgba(99, 102, 241, 0.3)" : "none"
             }}
           >
-            <Layers size={15} />
-            <span>All Patterns ({ALL_PATTERN_FAMILIES.length})</span>
+            <Layers size={16} />
+            <span>Pattern Showcase ({ALL_PATTERN_FAMILIES.length})</span>
           </button>
 
           <button
             onClick={() => setActiveTab("combinations")}
             className="btn"
             style={{
-              padding: "0.5rem 0.9rem",
-              fontSize: "0.8rem",
+              padding: "0.6rem 1.1rem",
+              fontSize: "0.85rem",
               fontWeight: 700,
-              background: activeTab === "combinations" ? "var(--cyan-500)" : "var(--chip-inactive-bg)",
+              background: activeTab === "combinations" ? "linear-gradient(135deg, var(--cyan-500), #0284c7)" : "var(--chip-inactive-bg)",
               color: activeTab === "combinations" ? "#ffffff" : "var(--chip-inactive-text)",
               border: activeTab === "combinations" ? "1px solid var(--cyan-400)" : "1px solid var(--border-subtle)",
               display: "flex",
               alignItems: "center",
-              gap: "0.4rem"
+              gap: "0.5rem",
+              borderRadius: "10px",
+              boxShadow: activeTab === "combinations" ? "0 4px 12px rgba(6, 182, 212, 0.3)" : "none"
             }}
           >
-            <Puzzle size={15} />
-            <span>Pattern Combinations Layer ({ALL_PATTERN_COMBINATIONS.length})</span>
+            <Puzzle size={16} />
+            <span>Synergy Combinations ({ALL_PATTERN_COMBINATIONS.length})</span>
           </button>
         </div>
       </div>
 
-      {/* Search & Tier Filter Bar */}
+      {/* LeetCode Search & Filter Bar */}
       <div
         className="glass-panel"
         style={{
-          padding: "0.75rem 1rem",
+          padding: "1rem 1.25rem",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
           flexWrap: "wrap",
-          gap: "0.75rem"
+          gap: "1rem",
+          borderRadius: "14px"
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flex: 1, minWidth: "260px" }}>
-          <Search size={16} color="var(--text-muted)" />
+        <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flex: 1, minWidth: "280px" }}>
+          <Search size={18} color="var(--cyan-400)" />
           <input
             type="text"
-            placeholder="Filter by keyword or problem (e.g. 560, koko, dsu, cycle, trie, sliding, greedy)..."
+            placeholder="Search LeetCode problem or pattern (e.g., 167, Two Sum, Koko Bananas, Sliding Window, DP)..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             style={{
               background: "transparent",
               border: "none",
               color: "var(--text-primary)",
-              fontSize: "0.85rem",
+              fontSize: "0.9rem",
               outline: "none",
               width: "100%"
             }}
@@ -169,52 +206,24 @@ export const PatternNavigator: React.FC<PatternNavigatorProps> = ({
           {searchQuery && (
             <button
               onClick={() => setSearchQuery("")}
-              style={{ background: "transparent", border: "none", color: "var(--text-muted)", cursor: "pointer", fontSize: "0.75rem" }}
+              style={{ background: "transparent", border: "none", color: "var(--text-muted)", cursor: "pointer", fontSize: "0.8rem", fontWeight: 600 }}
             >
               Clear
             </button>
           )}
         </div>
-
-        {activeTab === "catalog" && (
-          <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-            <span style={{ fontSize: "0.72rem", color: "var(--text-muted)", fontWeight: 600 }}>TIER:</span>
-            {[
-              { id: "all", label: "All Tiers" },
-              { id: "tier1_core", label: "Tier 1: Core" },
-              { id: "tier2_advanced", label: "Tier 2: Advanced" }
-            ].map((t) => (
-              <button
-                key={t.id}
-                onClick={() => setSelectedTier(t.id)}
-                style={{
-                  padding: "0.25rem 0.6rem",
-                  fontSize: "0.72rem",
-                  borderRadius: "6px",
-                  border: "none",
-                  cursor: "pointer",
-                  background: selectedTier === t.id ? "rgba(99, 102, 241, 0.25)" : "transparent",
-                  color: selectedTier === t.id ? "var(--indigo-300)" : "var(--text-muted)",
-                  fontWeight: selectedTier === t.id ? 700 : 500
-                }}
-              >
-                {t.label}
-              </button>
-            ))}
-          </div>
-        )}
       </div>
 
       {/* TAB 1: ALL PATTERNS CATALOG */}
       {activeTab === "catalog" && (
         <>
-          {/* Pattern Family Tabs */}
+          {/* LeetCode Category Pills Bar */}
           <div
             style={{
               display: "flex",
-              gap: "0.4rem",
+              gap: "0.5rem",
               overflowX: "auto",
-              paddingBottom: "0.4rem",
+              paddingBottom: "0.5rem",
               scrollbarWidth: "thin"
             }}
           >
@@ -226,30 +235,31 @@ export const PatternNavigator: React.FC<PatternNavigatorProps> = ({
                   onClick={() => setActiveFamilyId(fam.id)}
                   className="btn"
                   style={{
-                    padding: "0.5rem 0.85rem",
-                    fontSize: "0.8rem",
+                    padding: "0.55rem 1rem",
+                    fontSize: "0.85rem",
                     fontWeight: isSelected ? 700 : 500,
                     whiteSpace: "nowrap",
                     background: isSelected
                       ? "linear-gradient(135deg, var(--indigo-600), var(--indigo-500))"
-                      : "rgba(255, 255, 255, 0.04)",
+                      : "var(--chip-inactive-bg)",
                     color: isSelected ? "#ffffff" : "var(--text-secondary)",
                     border: isSelected ? "1px solid var(--indigo-400)" : "1px solid var(--border-subtle)",
                     boxShadow: isSelected ? "0 4px 14px rgba(99, 102, 241, 0.35)" : "none",
                     display: "flex",
                     alignItems: "center",
-                    gap: "0.4rem",
-                    borderRadius: "8px"
+                    gap: "0.5rem",
+                    borderRadius: "10px"
                   }}
                 >
                   <span>{fam.name}</span>
                   <span
                     style={{
-                      fontSize: "0.68rem",
-                      padding: "0.1rem 0.35rem",
+                      fontSize: "0.7rem",
+                      padding: "0.15rem 0.45rem",
                       borderRadius: "999px",
                       background: isSelected ? "rgba(255, 255, 255, 0.25)" : "rgba(255, 255, 255, 0.08)",
-                      color: isSelected ? "#ffffff" : "var(--text-dim)"
+                      color: isSelected ? "#ffffff" : "var(--text-dim)",
+                      fontWeight: 700
                     }}
                   >
                     {fam.subcases.length}
@@ -259,33 +269,41 @@ export const PatternNavigator: React.FC<PatternNavigatorProps> = ({
             })}
           </div>
 
-          {/* Active Family Overview */}
+          {/* Active Pattern Family Spotlight */}
           {activeFamily && (
-            <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+              {/* Pattern Overview Card */}
               <div
+                className="glass-panel"
                 style={{
-                  padding: "0.75rem 1.25rem",
-                  background: "rgba(255, 255, 255, 0.02)",
-                  borderRadius: "8px",
+                  padding: "1.25rem 1.5rem",
+                  background: "var(--bg-tertiary)",
+                  borderRadius: "14px",
                   border: "1px solid var(--border-subtle)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
                   flexWrap: "wrap",
-                  gap: "0.5rem"
+                  gap: "1rem"
                 }}
               >
                 <div>
-                  <span style={{ fontSize: "0.72rem", color: "var(--cyan-400)", fontWeight: 700, textTransform: "uppercase" }}>
-                    Pattern Family Overview
-                  </span>
-                  <div style={{ fontSize: "0.9rem", color: "var(--text-secondary)", marginTop: "0.2rem" }}>
-                    {activeFamily.description}
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                    <span className="badge badge-indigo" style={{ fontSize: "0.7rem" }}>TOPIC ARCHITECTURE</span>
+                    <span className="badge badge-cyan" style={{ fontSize: "0.7rem" }}>{activeFamily.subcases.length} SUB-VARIANTS</span>
                   </div>
+                  <h3 style={{ fontSize: "1.25rem", fontWeight: 800, marginTop: "0.3rem", color: "var(--text-primary)" }}>
+                    {activeFamily.name}
+                  </h3>
+                  <p style={{ fontSize: "0.875rem", color: "var(--text-secondary)", marginTop: "0.25rem", lineHeight: 1.5, maxWidth: "900px" }}>
+                    {activeFamily.description}
+                  </p>
                 </div>
+
                 <div style={{ display: "flex", gap: "0.5rem" }}>
-                  <span className={`badge ${activeFamily.badgeColor}`}>{activeFamily.name.toUpperCase()}</span>
-                  <span className="badge badge-cyan">{activeFamily.subcases.length} SUB-VARIANTS</span>
+                  <span className={`badge ${activeFamily.badgeColor}`} style={{ fontSize: "0.75rem", padding: "0.3rem 0.75rem" }}>
+                    {activeFamily.name.toUpperCase()}
+                  </span>
                 </div>
               </div>
 
@@ -293,8 +311,8 @@ export const PatternNavigator: React.FC<PatternNavigatorProps> = ({
               <div
                 style={{
                   display: "grid",
-                  gridTemplateColumns: "repeat(auto-fill, minmax(420px, 1fr))",
-                  gap: "1.25rem"
+                  gridTemplateColumns: "repeat(auto-fill, minmax(440px, 1fr))",
+                  gap: "1.5rem"
                 }}
               >
                 {activeFamily.subcases.map((subcase: SubcaseDefinition) => {
@@ -304,48 +322,48 @@ export const PatternNavigator: React.FC<PatternNavigatorProps> = ({
                       key={subcase.id}
                       className="glass-panel"
                       style={{
-                        padding: "1.25rem",
+                        padding: "1.5rem",
                         display: "flex",
                         flexDirection: "column",
                         justifyContent: "space-between",
-                        gap: "1rem",
+                        gap: "1.25rem",
                         border: isCurrentlyVisualizing
                           ? "2px solid var(--cyan-400)"
                           : "1px solid var(--border-medium)",
                         background: isCurrentlyVisualizing
                           ? "linear-gradient(145deg, rgba(6, 182, 212, 0.08), rgba(99, 102, 241, 0.06))"
                           : "var(--bg-card)",
-                        borderRadius: "12px"
+                        borderRadius: "14px",
+                        boxShadow: isCurrentlyVisualizing ? "var(--shadow-glow-cyan)" : "var(--shadow-sm)"
                       }}
                     >
-                      <div>
-                        {/* Header: Title & Complexity */}
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "0.5rem" }}>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}>
+                        {/* Title & Complexity Badges */}
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "0.75rem" }}>
                           <div>
-                            <span className="badge badge-indigo" style={{ fontSize: "0.65rem" }}>
+                            <span className="badge badge-indigo" style={{ fontSize: "0.68rem" }}>
                               SUBCASE TOPOLOGY
                             </span>
-                            <h3 style={{ fontSize: "1.05rem", fontWeight: 700, marginTop: "0.3rem", color: "var(--text-primary)" }}>
+                            <h4 style={{ fontSize: "1.15rem", fontWeight: 800, marginTop: "0.35rem", color: "var(--text-primary)" }}>
                               {subcase.subcaseTitle}
-                            </h3>
+                            </h4>
                           </div>
 
                           <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
-                            <span className="badge badge-cyan" style={{ fontSize: "0.7rem" }}>
-                              {subcase.timeComplexity}
+                            <span className="badge badge-cyan" style={{ fontSize: "0.72rem" }}>
+                              Time: {subcase.timeComplexity}
                             </span>
-                            <span className="badge badge-emerald" style={{ fontSize: "0.7rem" }}>
-                              {subcase.spaceComplexity}
+                            <span className="badge badge-emerald" style={{ fontSize: "0.72rem" }}>
+                              Space: {subcase.spaceComplexity}
                             </span>
                           </div>
                         </div>
 
-                        {/* Visual Topology Diagram */}
+                        {/* Visual Summary Mechanism Box */}
                         <div
                           style={{
-                            marginTop: "0.75rem",
-                            padding: "0.6rem 0.85rem",
-                            borderRadius: "8px",
+                            padding: "0.7rem 0.9rem",
+                            borderRadius: "10px",
                             background: "var(--box-bg)",
                             border: "1px solid var(--border-subtle)",
                             display: "flex",
@@ -354,14 +372,14 @@ export const PatternNavigator: React.FC<PatternNavigatorProps> = ({
                             gap: "0.5rem"
                           }}
                         >
-                          <span style={{ fontSize: "0.72rem", color: "var(--text-muted)", fontWeight: 600 }}>
-                            MECHANISM / TOPOLOGY:
+                          <span style={{ fontSize: "0.75rem", color: "var(--text-muted)", fontWeight: 700 }}>
+                            STATE TOPOLOGY:
                           </span>
                           <span
                             style={{
                               fontFamily: "var(--font-mono)",
-                              fontSize: "0.825rem",
-                              color: "var(--cyan-300)",
+                              fontSize: "0.85rem",
+                              color: "var(--cyan-400)",
                               fontWeight: 700
                             }}
                           >
@@ -369,15 +387,15 @@ export const PatternNavigator: React.FC<PatternNavigatorProps> = ({
                           </span>
                         </div>
 
-                        {/* Core Mechanism */}
-                        <p style={{ fontSize: "0.825rem", color: "var(--text-secondary)", marginTop: "0.75rem", lineHeight: 1.45 }}>
+                        {/* Core Mechanism Description */}
+                        <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)", lineHeight: 1.5, margin: 0 }}>
                           {subcase.coreMechanism}
                         </p>
 
                         {/* Pointer & State Roles */}
-                        <div style={{ marginTop: "0.75rem", display: "flex", flexDirection: "column", gap: "0.35rem" }}>
+                        <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
                           <span style={{ fontSize: "0.72rem", fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase" }}>
-                            Pointer & State Roles:
+                            Pointer & State Invariants:
                           </span>
                           {Object.entries(subcase.pointerRoles).map(([ptr, role]) => (
                             <div
@@ -385,63 +403,84 @@ export const PatternNavigator: React.FC<PatternNavigatorProps> = ({
                               style={{
                                 display: "flex",
                                 alignItems: "center",
-                                gap: "0.45rem",
-                                fontSize: "0.78rem",
+                                gap: "0.5rem",
+                                fontSize: "0.8rem",
                                 fontFamily: "var(--font-mono)",
                                 background: "rgba(255, 255, 255, 0.02)",
-                                padding: "0.25rem 0.5rem",
-                                borderRadius: "6px"
+                                padding: "0.3rem 0.6rem",
+                                borderRadius: "6px",
+                                border: "1px solid var(--border-subtle)"
                               }}
                             >
                               <span style={{ color: "var(--indigo-400)", fontWeight: 700 }}>{ptr}:</span>
-                              <span style={{ color: "var(--text-muted)" }}>{role}</span>
+                              <span style={{ color: "var(--text-secondary)" }}>{role}</span>
                             </div>
                           ))}
                         </div>
 
-                        {/* Representative LeetCode Problems */}
-                        <div style={{ marginTop: "0.75rem" }}>
+                        {/* LeetCode Representative Problems */}
+                        <div>
                           <span style={{ fontSize: "0.72rem", fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase" }}>
-                            Representative LeetCode Problems:
+                            LeetCode Problem Patterns:
                           </span>
-                          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem", marginTop: "0.3rem" }}>
-                            {subcase.classicProblems.map((prob, idx) => (
-                              <span
-                                key={idx}
-                                style={{
-                                  fontSize: "0.72rem",
-                                  padding: "0.2rem 0.5rem",
-                                  background: "rgba(255, 255, 255, 0.03)",
-                                  borderRadius: "4px",
-                                  border: "1px solid var(--border-subtle)",
-                                  color: "var(--text-secondary)"
-                                }}
-                              >
-                                {prob.title}
-                              </span>
-                            ))}
+                          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", marginTop: "0.4rem" }}>
+                            {subcase.classicProblems.map((prob, idx) => {
+                              const badgeStyle = getDifficultyBadge(prob.difficulty);
+                              return (
+                                <div
+                                  key={idx}
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: "0.4rem",
+                                    fontSize: "0.75rem",
+                                    padding: "0.25rem 0.6rem",
+                                    background: "var(--box-bg)",
+                                    borderRadius: "6px",
+                                    border: "1px solid var(--border-subtle)"
+                                  }}
+                                >
+                                  <span style={{ color: "var(--text-primary)", fontWeight: 600 }}>{prob.title}</span>
+                                  <span
+                                    style={{
+                                      fontSize: "0.65rem",
+                                      fontWeight: 700,
+                                      padding: "0.1rem 0.35rem",
+                                      borderRadius: "4px",
+                                      background: badgeStyle.bg,
+                                      color: badgeStyle.color,
+                                      border: badgeStyle.border
+                                    }}
+                                  >
+                                    {prob.difficulty}
+                                  </span>
+                                </div>
+                              );
+                            })}
                           </div>
                         </div>
                       </div>
 
-                      {/* Launch Simulation Button */}
+                      {/* Action Trigger */}
                       <button
                         onClick={() => onSelectSubcase(subcase.algorithmId)}
                         className={`btn ${isCurrentlyVisualizing ? "btn-secondary" : "btn-primary"}`}
                         style={{
                           width: "100%",
-                          padding: "0.6rem 1rem",
-                          fontSize: "0.85rem",
+                          padding: "0.7rem 1.25rem",
+                          fontSize: "0.875rem",
+                          fontWeight: 700,
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
-                          gap: "0.5rem",
-                          marginTop: "0.5rem"
+                          gap: "0.6rem",
+                          marginTop: "0.5rem",
+                          borderRadius: "10px"
                         }}
                       >
-                        <Play size={15} />
-                        <span>{isCurrentlyVisualizing ? "Currently Visualizing" : "Visualize This Subcase"}</span>
-                        <ArrowRight size={15} />
+                        <Play size={16} />
+                        <span>{isCurrentlyVisualizing ? "Currently Visualizing" : "Visualize State Trace"}</span>
+                        <ArrowRight size={16} />
                       </button>
                     </div>
                   );
@@ -452,34 +491,34 @@ export const PatternNavigator: React.FC<PatternNavigatorProps> = ({
         </>
       )}
 
-      {/* TAB 2: PATTERN COMBINATIONS LAYER */}
+      {/* TAB 2: MULTI-PATTERN SYNERGIES */}
       {activeTab === "combinations" && (
-        <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
           <div
+            className="glass-panel"
             style={{
-              padding: "0.85rem 1.25rem",
+              padding: "1.25rem 1.5rem",
               background: "rgba(6, 182, 212, 0.08)",
-              borderRadius: "10px",
+              borderRadius: "14px",
               border: "1px solid rgba(6, 182, 212, 0.25)"
             }}
           >
-            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              <Puzzle size={18} color="var(--cyan-400)" />
-              <span style={{ fontSize: "0.9rem", fontWeight: 700, color: "var(--text-primary)" }}>
-                The Synergy Recognition Layer: Multi-Pattern Combinations
-              </span>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
+              <Puzzle size={20} color="var(--cyan-400)" />
+              <h3 style={{ fontSize: "1.1rem", fontWeight: 800, color: "var(--text-primary)", margin: 0 }}>
+                Multi-Pattern Synergy & Recognition Layer
+              </h3>
             </div>
-            <p style={{ fontSize: "0.825rem", color: "var(--text-secondary)", marginTop: "0.3rem" }}>
-              Top FAANG interview problems rarely test one isolated pattern. Real mastery lies in recognizing the
-              <strong> combination of two complementary patterns</strong> (e.g. why <code>HashMap + Prefix Sum</code> solves Subarray Sum Equals K, or why <code>Binary Search + Greedy</code> solves Koko Eating Bananas).
+            <p style={{ fontSize: "0.875rem", color: "var(--text-secondary)", marginTop: "0.4rem", lineHeight: 1.5 }}>
+              FAANG and top tech interviews focus heavily on multi-pattern compositions (e.g. <code>HashMap + Prefix Sum</code>, <code>Binary Search + Greedy</code>). Recognize key problem cues and master the mathematical synergy.
             </p>
           </div>
 
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(460px, 1fr))",
-              gap: "1.25rem"
+              gridTemplateColumns: "repeat(auto-fill, minmax(480px, 1fr))",
+              gap: "1.5rem"
             }}
           >
             {filteredCombinations.map((combo: PatternCombination) => (
@@ -487,12 +526,12 @@ export const PatternNavigator: React.FC<PatternNavigatorProps> = ({
                 key={combo.id}
                 className="glass-panel"
                 style={{
-                  padding: "1.25rem",
+                  padding: "1.5rem",
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-between",
-                  gap: "0.85rem",
-                  borderRadius: "12px",
+                  gap: "1rem",
+                  borderRadius: "14px",
                   border: "1px solid var(--border-medium)"
                 }}
               >
@@ -503,36 +542,36 @@ export const PatternNavigator: React.FC<PatternNavigatorProps> = ({
                     <span className="badge badge-cyan">{combo.secondaryPattern}</span>
                   </div>
 
-                  <h3 style={{ fontSize: "1.1rem", fontWeight: 800, marginTop: "0.4rem" }}>
+                  <h3 style={{ fontSize: "1.2rem", fontWeight: 800, marginTop: "0.5rem" }}>
                     {combo.name}
                   </h3>
 
-                  <p style={{ fontSize: "0.825rem", color: "var(--text-secondary)", marginTop: "0.4rem", lineHeight: 1.45 }}>
+                  <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginTop: "0.4rem", lineHeight: 1.5 }}>
                     {combo.whyItWorks}
                   </p>
 
                   {/* Recognition Signals */}
-                  <div style={{ marginTop: "0.75rem" }}>
+                  <div style={{ marginTop: "0.85rem" }}>
                     <span style={{ fontSize: "0.72rem", fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase" }}>
-                      Recognition Cues:
+                      Recognition Cues & Problem Signals:
                     </span>
-                    <ul style={{ paddingLeft: "1.2rem", margin: "0.3rem 0 0 0", fontSize: "0.78rem", color: "var(--text-secondary)" }}>
+                    <ul style={{ paddingLeft: "1.2rem", margin: "0.4rem 0 0 0", fontSize: "0.8rem", color: "var(--text-secondary)", lineHeight: 1.45 }}>
                       {combo.recognitionSignals.map((sig, i) => (
-                        <li key={i} style={{ marginBottom: "0.2rem" }}>
+                        <li key={i} style={{ marginBottom: "0.25rem" }}>
                           {sig}
                         </li>
                       ))}
                     </ul>
                   </div>
 
-                  {/* Snippet */}
+                  {/* Code Snippet Box */}
                   <div
                     style={{
-                      marginTop: "0.75rem",
+                      marginTop: "0.85rem",
                       background: "var(--box-bg)",
-                      padding: "0.6rem 0.75rem",
-                      borderRadius: "6px",
-                      fontSize: "0.75rem",
+                      padding: "0.75rem 0.9rem",
+                      borderRadius: "8px",
+                      fontSize: "0.78rem",
                       fontFamily: "var(--font-mono)",
                       color: "var(--cyan-400)",
                       border: "1px solid var(--border-subtle)",
@@ -542,27 +581,45 @@ export const PatternNavigator: React.FC<PatternNavigatorProps> = ({
                     {combo.exampleSnippet}
                   </div>
 
-                  {/* Problems */}
-                  <div style={{ marginTop: "0.75rem" }}>
+                  {/* Representative Problems */}
+                  <div style={{ marginTop: "0.85rem" }}>
                     <span style={{ fontSize: "0.72rem", fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase" }}>
                       Representative LeetCode Problems:
                     </span>
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: "0.35rem", marginTop: "0.3rem" }}>
-                      {combo.representativeProblems.map((prob, i) => (
-                        <span
-                          key={i}
-                          style={{
-                            fontSize: "0.72rem",
-                            padding: "0.2rem 0.5rem",
-                            background: "rgba(255, 255, 255, 0.03)",
-                            borderRadius: "4px",
-                            border: "1px solid var(--border-subtle)",
-                            color: "var(--text-secondary)"
-                          }}
-                        >
-                          {prob.title}
-                        </span>
-                      ))}
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", marginTop: "0.4rem" }}>
+                      {combo.representativeProblems.map((prob, i) => {
+                        const badgeStyle = getDifficultyBadge(prob.difficulty);
+                        return (
+                          <div
+                            key={i}
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "0.4rem",
+                              fontSize: "0.75rem",
+                              padding: "0.25rem 0.6rem",
+                              background: "var(--box-bg)",
+                              borderRadius: "6px",
+                              border: "1px solid var(--border-subtle)"
+                            }}
+                          >
+                            <span style={{ color: "var(--text-primary)", fontWeight: 600 }}>{prob.title}</span>
+                            <span
+                              style={{
+                                fontSize: "0.65rem",
+                                fontWeight: 700,
+                                padding: "0.1rem 0.35rem",
+                                borderRadius: "4px",
+                                background: badgeStyle.bg,
+                                color: badgeStyle.color,
+                                border: badgeStyle.border
+                              }}
+                            >
+                              {prob.difficulty}
+                            </span>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
@@ -574,3 +631,4 @@ export const PatternNavigator: React.FC<PatternNavigatorProps> = ({
     </div>
   );
 };
+

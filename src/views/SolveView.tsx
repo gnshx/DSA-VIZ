@@ -4,7 +4,7 @@ import { ProblemDefinition, SupportedLanguage } from "../types/algorithm";
 import { CodeEditorPanel } from "../components/CodeEditorPanel";
 import { SimulationStage } from "../visualizers/SimulationStage";
 import { UniversalTimeline } from "../components/UniversalTimeline";
-import { CheckCircle2, Play, Terminal, Zap } from "lucide-react";
+import { CheckCircle2, Code2, Play, Terminal, Zap, FileCode2 } from "lucide-react";
 
 interface SolveViewProps {
   language: SupportedLanguage;
@@ -50,54 +50,122 @@ export const SolveView: React.FC<SolveViewProps> = ({ language, onSelectLanguage
     setIsPlaying(false);
   };
 
+  const getDifficultyStyle = (diff: string) => {
+    switch (diff.toLowerCase()) {
+      case "easy":
+        return { bg: "rgba(0, 184, 163, 0.15)", color: "#00b8a3", border: "1px solid rgba(0, 184, 163, 0.3)" };
+      case "hard":
+        return { bg: "rgba(255, 55, 95, 0.15)", color: "#ff375f", border: "1px solid rgba(255, 55, 95, 0.3)" };
+      default:
+        return { bg: "rgba(255, 192, 30, 0.15)", color: "#ffc01e", border: "1px solid rgba(255, 192, 30, 0.3)" };
+    }
+  };
+
+  const diffStyle = getDifficultyStyle(selectedProblem.difficulty);
+
   return (
-    <div className="page-container">
-      {/* Problem Selection Pills */}
-      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", overflowX: "auto", paddingBottom: "0.5rem" }}>
-        {ALL_PROBLEMS.map((prob) => {
-          const isSelected = selectedProblem.id === prob.id;
-          return (
-            <button
-              key={prob.id}
-              onClick={() => handleSelectProblem(prob)}
-              className="btn"
-              style={{
-                background: isSelected ? "linear-gradient(135deg, var(--indigo-500), #4f46e5)" : "var(--chip-inactive-bg)",
-                color: isSelected ? "#ffffff" : "var(--chip-inactive-text)",
-                border: isSelected ? "1px solid var(--indigo-400)" : "1px solid var(--border-subtle)",
-                fontSize: "0.825rem",
-                padding: "0.45rem 0.9rem",
-                whiteSpace: "nowrap"
-              }}
-            >
-              <CheckCircle2 size={14} color={isSelected ? "var(--cyan-400)" : "var(--text-muted)"} />
-              <span>{prob.title}</span>
-            </button>
-          );
-        })}
+    <div className="page-container" style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+      {/* LeetCode Problem Selection Bar */}
+      <div
+        className="glass-panel"
+        style={{
+          padding: "1rem 1.25rem",
+          display: "flex",
+          flexDirection: "column",
+          gap: "0.75rem",
+          borderRadius: "14px"
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <FileCode2 size={18} color="var(--cyan-400)" />
+            <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--text-primary)" }}>
+              LEETCODE PROBLEMSET SELECTION
+            </span>
+          </div>
+          <span style={{ fontSize: "0.75rem", color: "var(--text-muted)", fontWeight: 600 }}>
+            {ALL_PROBLEMS.length} PROBLEMS AVAILABLE
+          </span>
+        </div>
+
+        <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", overflowX: "auto", paddingBottom: "0.25rem", scrollbarWidth: "thin" }}>
+          {ALL_PROBLEMS.map((prob) => {
+            const isSelected = selectedProblem.id === prob.id;
+            const probDiff = getDifficultyStyle(prob.difficulty);
+            return (
+              <button
+                key={prob.id}
+                onClick={() => handleSelectProblem(prob)}
+                className="btn"
+                style={{
+                  background: isSelected ? "linear-gradient(135deg, var(--indigo-600), var(--indigo-500))" : "var(--chip-inactive-bg)",
+                  color: isSelected ? "#ffffff" : "var(--text-secondary)",
+                  border: isSelected ? "1px solid var(--indigo-400)" : "1px solid var(--border-subtle)",
+                  fontSize: "0.825rem",
+                  padding: "0.5rem 0.95rem",
+                  whiteSpace: "nowrap",
+                  borderRadius: "10px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.5rem",
+                  boxShadow: isSelected ? "0 4px 12px rgba(99, 102, 241, 0.3)" : "none"
+                }}
+              >
+                <span>{prob.title}</span>
+                <span
+                  style={{
+                    fontSize: "0.65rem",
+                    fontWeight: 700,
+                    padding: "0.1rem 0.35rem",
+                    borderRadius: "4px",
+                    background: probDiff.bg,
+                    color: probDiff.color,
+                    border: probDiff.border
+                  }}
+                >
+                  {prob.difficulty}
+                </span>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* Main Split Grid */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "1.25rem", minHeight: "620px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))", gap: "1.5rem", minHeight: "640px" }}>
         {/* Left Column: Problem Statement & Starter Code */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-          {/* Problem Statement Card */}
-          <div className="glass-panel" style={{ padding: "1.25rem", display: "flex", flexDirection: "column", gap: "0.75rem", maxHeight: "320px", overflowY: "auto" }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <h2 style={{ fontSize: "1.15rem", margin: 0 }}>{selectedProblem.title}</h2>
-              <span className="badge badge-emerald">{selectedProblem.difficulty}</span>
+        <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+          {/* LeetCode Problem Description Card */}
+          <div className="glass-panel" style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1rem", borderRadius: "14px" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "0.5rem" }}>
+              <h2 style={{ fontSize: "1.3rem", fontWeight: 800, margin: 0, color: "var(--text-primary)" }}>
+                {selectedProblem.title}
+              </h2>
+              <span
+                style={{
+                  fontSize: "0.75rem",
+                  fontWeight: 700,
+                  padding: "0.25rem 0.65rem",
+                  borderRadius: "6px",
+                  background: diffStyle.bg,
+                  color: diffStyle.color,
+                  border: diffStyle.border
+                }}
+              >
+                {selectedProblem.difficulty}
+              </span>
             </div>
 
-            <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)", lineHeight: 1.5 }}>
+            <p style={{ fontSize: "0.9rem", color: "var(--text-secondary)", lineHeight: 1.6, margin: 0 }}>
               {selectedProblem.statement}
             </p>
 
-            {/* Test Case Selection */}
-            <div>
-              <div style={{ fontSize: "0.75rem", color: "var(--text-dim)", textTransform: "uppercase", fontWeight: 700, marginBottom: "0.4rem" }}>
-                Test Cases
+            {/* Test Cases Selector */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+              <div style={{ fontSize: "0.75rem", color: "var(--text-dim)", textTransform: "uppercase", fontWeight: 700 }}>
+                Test Cases & Target Assertions:
               </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
                 {selectedProblem.examples.map((ex, idx) => (
                   <div
                     key={idx}
@@ -106,19 +174,21 @@ export const SolveView: React.FC<SolveViewProps> = ({ language, onSelectLanguage
                       setCurrentStep(1);
                     }}
                     style={{
-                      padding: "0.5rem 0.75rem",
-                      borderRadius: "6px",
+                      padding: "0.65rem 0.9rem",
+                      borderRadius: "8px",
                       background: selectedTestIndex === idx ? "var(--indigo-glow)" : "var(--box-bg)",
-                      border: selectedTestIndex === idx ? "1px solid var(--indigo-400)" : "1px solid var(--border-subtle)",
+                      border: selectedTestIndex === idx ? "2px solid var(--indigo-400)" : "1px solid var(--border-subtle)",
                       cursor: "pointer",
-                      fontSize: "0.775rem",
+                      fontSize: "0.825rem",
                       fontFamily: "var(--font-mono)",
                       display: "flex",
-                      justifyContent: "space-between"
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      transition: "all var(--transition-fast)"
                     }}
                   >
-                    <span style={{ color: "var(--cyan-400)" }}>{ex.input}</span>
-                    <span style={{ color: "var(--emerald-400)" }}>Expected: {ex.output}</span>
+                    <span style={{ color: "var(--cyan-400)", fontWeight: 600 }}>Input: {ex.input}</span>
+                    <span style={{ color: "var(--emerald-400)", fontWeight: 600 }}>Expected: {ex.output}</span>
                   </div>
                 ))}
               </div>
@@ -126,7 +196,7 @@ export const SolveView: React.FC<SolveViewProps> = ({ language, onSelectLanguage
           </div>
 
           {/* Starter Code Editor */}
-          <div style={{ flex: 1, minHeight: "260px" }}>
+          <div style={{ flex: 1, minHeight: "300px" }}>
             <CodeEditorPanel
               code={selectedProblem.starterCode[language]}
               language={language}
@@ -137,7 +207,7 @@ export const SolveView: React.FC<SolveViewProps> = ({ language, onSelectLanguage
         </div>
 
         {/* Right Column: Visual Test Runner Simulation */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
           <div style={{ flex: 1 }}>
             <SimulationStage
               event={currentEvent}
@@ -163,3 +233,4 @@ export const SolveView: React.FC<SolveViewProps> = ({ language, onSelectLanguage
     </div>
   );
 };
+
