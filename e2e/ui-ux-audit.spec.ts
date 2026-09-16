@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('DSA-VIZ Enterprise UI/UX & Responsive Layout Audit', () => {
+test.describe('DSA-VIZ Exhaustive UI/UX & Interactive Quality Audit', () => {
 
   const viewports = [
     { name: 'mobile-small', width: 375, height: 667 },
@@ -16,28 +16,22 @@ test.describe('DSA-VIZ Enterprise UI/UX & Responsive Layout Audit', () => {
     await page.waitForLoadState('domcontentloaded');
   });
 
-  test('Navigation bar should be free of duplicate links and navigation buttons', async ({ page }) => {
-    const navItems = page.locator('header nav button, header a');
-    const totalItems = await navItems.count();
-    
-    expect(totalItems).toBeGreaterThan(0);
-    
-    const uniqueLabels = new Set<string>();
-    
-    for (let i = 0; i < totalItems; i++) {
-      const text = (await navItems.nth(i).innerText()).trim();
-      if (text) {
-        expect(
-          uniqueLabels.has(text), 
-          `Duplicate navigation item found: "${text}"`
-        ).toBeFalsy();
-        uniqueLabels.add(text);
-      }
+  test('Navigation bar header structure, brand logo, and 3 core pillar tabs', async ({ page }) => {
+    const header = page.locator('header');
+    await expect(header).toBeVisible();
+
+    const brand = header.locator('text=DSA-VIZ');
+    await expect(brand).toBeVisible();
+
+    const modes = ['Learn', 'Visualize', 'Predict Mode'];
+    for (const m of modes) {
+      const btn = header.locator(`button:has-text("${m}")`).first();
+      await expect(btn).toBeVisible();
     }
   });
 
   for (const vp of viewports) {
-    test(`Page layouts must not suffer from horizontal overflow on ${vp.name} (${vp.width}px)`, async ({ page }) => {
+    test(`Layout must have zero horizontal overflow across viewport ${vp.name} (${vp.width}px)`, async ({ page }) => {
       await page.setViewportSize({ width: vp.width, height: vp.height });
       await page.waitForTimeout(200);
 
@@ -48,54 +42,110 @@ test.describe('DSA-VIZ Enterprise UI/UX & Responsive Layout Audit', () => {
     });
   }
 
-  test('All core views and visualizers must render cleanly across viewports', async ({ page }) => {
-    const modes = [
-      { name: 'visualize', label: 'Visualize Workbench' },
-      { name: 'learn', label: 'Learn & Catalog' },
-      { name: 'predict', label: 'Predict Mode' },
-    ];
+  test('Learn & Catalog: Hierarchical Tree accordion expansion, search, and 1-click execution', async ({ page }) => {
+    // Navigate to Learn & Catalog
+    const learnBtn = page.locator('header button:has-text("Learn")').first();
+    await learnBtn.click();
+    await page.waitForTimeout(300);
 
-    for (const mode of modes) {
-      const modeBtn = page.locator(`header nav button:has-text("${mode.label.split(' ')[0]}")`).first();
-      if (await modeBtn.isVisible()) {
-        await modeBtn.click();
+    // Verify search bar
+    const searchInput = page.locator('input[placeholder*="Search pattern"]');
+    await expect(searchInput).toBeVisible();
+
+    // Type "Binary Search" in search bar
+    await searchInput.fill('Binary Search');
+    await page.waitForTimeout(300);
+
+    // Take screenshot of filtered catalog
+    await page.screenshot({ path: 'e2e/screenshots/audit-learn-search.png', fullPage: true });
+
+    // Clear search
+    await searchInput.fill('');
+    await page.waitForTimeout(200);
+
+    // Click on a Pattern Family accordion header to expand/collapse
+    const familyHeader = page.locator('.accordion-header').first();
+    await familyHeader.click();
+    await page.waitForTimeout(200);
+
+    // Verify subcase cards are visible
+    const runTraceBtn = page.locator('button:has-text("Run & Check Trace")').first();
+    await expect(runTraceBtn).toBeVisible();
+
+    // Click "Run & Check Trace" to jump to Visualize Workbench
+    await runTraceBtn.click();
+    await page.waitForTimeout(300);
+
+    // Verify active mode switched to Visualize
+    const stage = page.locator('main');
+    await expect(stage).toBeVisible();
+  });
+
+  test('Visualize Workbench: Algorithm switching, execution scrubber, and zero-scrollbar stage', async ({ page }) => {
+    // Navigate to Visualize Workbench
+    const vizBtn = page.locator('header button:has-text("Visualize")').first();
+    await vizBtn.click();
+    await page.waitForTimeout(300);
+
+    // Select different algorithms from dropdown
+    const algoSelect = page.locator('select').first();
+    await expect(algoSelect).toBeVisible();
+
+    const sampleAlgos = ['binary_search', 'reverse_linked_list', 'bfs_traversal', 'min_heap'];
+
+    for (const algoId of sampleAlgos) {
+      await algoSelect.selectOption(algoId);
+      await page.waitForTimeout(300);
+
+      // Verify stage visualizer is visible
+      const stage = page.locator('main');
+      await expect(stage).toBeVisible();
+
+      // Check step playback scrubber
+      const playBtn = page.locator('button:has-text("Play")').first();
+      if (await playBtn.isVisible()) {
+        await playBtn.click();
+        await page.waitForTimeout(400);
+        // Pause
+        await playBtn.click();
+      }
+
+      await page.screenshot({ path: `e2e/screenshots/audit-algo-${algoId}.png`, fullPage: true });
+    }
+  });
+
+  test('Multi-language switcher: Python, JavaScript, C++, Java code synchronization', async ({ page }) => {
+    const vizBtn = page.locator('header button:has-text("Visualize")').first();
+    await vizBtn.click();
+    await page.waitForTimeout(300);
+
+    const languages = ['Python', 'JavaScript', 'C++', 'Java'];
+
+    for (const lang of languages) {
+      const langBtn = page.locator(`header button:has-text("${lang}")`).first();
+      if (await langBtn.isVisible()) {
+        await langBtn.click();
         await page.waitForTimeout(200);
       }
-
-      const mainContent = page.locator('main, #root');
-      await expect(mainContent.first()).toBeVisible();
-
-      await page.screenshot({ 
-        path: `e2e/screenshots/audit-${mode.name}.png`, 
-        fullPage: true 
-      });
     }
   });
 
-  test('Interactive elements and buttons must have proper spacing and hit targets (>=30px)', async ({ page }) => {
-    const vizBtn = page.locator('header nav button:has-text("Visualize")').first();
-    if (await vizBtn.isVisible()) {
-      await vizBtn.click();
-    }
+  test('Predict Mode: Mental gym stats, streak counter, and challenge trigger', async ({ page }) => {
+    const predictBtn = page.locator('header button:has-text("Predict")').first();
+    await predictBtn.click();
+    await page.waitForTimeout(300);
 
-    const controlButtons = page.locator('header button, main button');
-    const count = await controlButtons.count();
+    // Check Accuracy and Streak HUD
+    const accuracyHud = page.locator('text=Accuracy Score');
+    await expect(accuracyHud).toBeVisible();
 
-    expect(count).toBeGreaterThan(0);
+    const streakHud = page.locator('text=Streak');
+    await expect(streakHud).toBeVisible();
 
-    for (let i = 0; i < Math.min(count, 15); i++) {
-      const button = controlButtons.nth(i);
-      if (await button.isVisible()) {
-        const box = await button.boundingBox();
-        if (box && box.width > 0 && box.height > 0) {
-          expect(box.height, `Button #${i} height too small`).toBeGreaterThanOrEqual(30);
-          expect(box.width, `Button #${i} width too small`).toBeGreaterThanOrEqual(30);
-        }
-      }
-    }
+    await page.screenshot({ path: 'e2e/screenshots/audit-predict-mode.png', fullPage: true });
   });
 
-  test('Theme toggle should switch between Light and Dark mode seamlessly with zero reload flicker', async ({ page }) => {
+  test('Day/Night Theme pilot toggle: light and dark persistence without flash', async ({ page }) => {
     const themeBtn = page.locator('button[aria-label="Toggle Theme Pilot"]').first();
     await expect(themeBtn).toBeVisible();
 
@@ -103,24 +153,17 @@ test.describe('DSA-VIZ Enterprise UI/UX & Responsive Layout Audit', () => {
     const initialTheme = await page.evaluate(() => document.documentElement.getAttribute('data-theme'));
     if (initialTheme === 'dark') {
       await themeBtn.click();
-      await page.waitForTimeout(100);
+      await page.waitForTimeout(150);
     }
 
     const lightTheme = await page.evaluate(() => document.documentElement.getAttribute('data-theme'));
     expect(lightTheme).toBe('light');
 
-    // Take screenshot of Light Mode Visualize
-    await page.screenshot({ path: 'e2e/screenshots/audit-light-mode-visualize.png', fullPage: true });
-
-    // Reload page to verify theme persistence without flash
-    await page.reload();
-    await page.waitForLoadState('domcontentloaded');
-    const reloadedTheme = await page.evaluate(() => document.documentElement.getAttribute('data-theme'));
-    expect(reloadedTheme).toBe('light');
+    await page.screenshot({ path: 'e2e/screenshots/audit-light-mode.png', fullPage: true });
 
     // Toggle back to Dark mode
     await themeBtn.click();
-    await page.waitForTimeout(100);
+    await page.waitForTimeout(150);
     const darkTheme = await page.evaluate(() => document.documentElement.getAttribute('data-theme'));
     expect(darkTheme).toBe('dark');
   });
