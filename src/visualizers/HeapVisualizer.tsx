@@ -53,7 +53,7 @@ export const HeapVisualizer: React.FC<HeapVisualizerProps> = ({ event }) => {
           justifyContent: "center"
         }}
       >
-        <svg width="520" height="240" style={{ overflow: "visible" }}>
+        <svg viewBox="0 0 520 240" style={{ width: "100%", maxWidth: "520px", height: "auto", overflow: "visible" }}>
           {/* Tree Edges: child i connects to parent floor((i - 1) / 2) */}
           {heap.map((_, idx) => {
             if (idx === 0) return null;

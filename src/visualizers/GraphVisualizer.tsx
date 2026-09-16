@@ -39,7 +39,7 @@ export const GraphVisualizer: React.FC<GraphVisualizerProps> = ({ event }) => {
         <span className="badge badge-emerald">Visited Set: [{state.visited.join(", ")}]</span>
       </div>
 
-      <svg width="480" height="300" style={{ overflow: "visible" }}>
+      <svg viewBox="0 0 480 300" style={{ width: "100%", maxWidth: "480px", height: "auto", overflow: "visible" }}>
         <defs>
           <marker
             id="arrowhead"

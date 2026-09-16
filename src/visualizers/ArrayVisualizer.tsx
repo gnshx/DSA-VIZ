@@ -58,18 +58,22 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ event }) => {
       )}
 
       {/* Array Container */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "flex-end",
-          justifyContent: "center",
-          flexWrap: "wrap",
-          gap: "0.75rem",
-          padding: "1.5rem 1rem",
-          position: "relative",
-          minHeight: "180px"
-        }}
-      >
+      <div style={{ width: "100%", overflowX: "auto", display: "flex", justifyContent: "center" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "flex-end",
+            justifyContent: "center",
+            flexWrap: "nowrap",
+            gap: "0.75rem",
+            padding: "1.5rem 1rem",
+            position: "relative",
+            minHeight: "180px",
+            width: "max-content",
+            maxWidth: "100%",
+            margin: "0 auto"
+          }}
+        >
         {array.map((value, idx) => {
           const isHighlighted = highlighted.has(idx);
           const isSwapped = swapped.has(idx);
@@ -165,5 +169,7 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ event }) => {
         })}
       </div>
     </div>
-  );
+  </div>
+);
 };
+

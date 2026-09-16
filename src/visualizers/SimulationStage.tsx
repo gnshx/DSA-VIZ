@@ -90,14 +90,26 @@ export const SimulationStage: React.FC<SimulationStageProps> = ({ event, title, 
         style={{
           flex: 1,
           display: "flex",
+          flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
           background: "var(--stage-bg)",
           position: "relative",
-          overflow: "auto"
+          overflow: "auto",
+          width: "100%"
         }}
       >
-        {renderVisualizer()}
+        <div
+          style={{
+            margin: "auto",
+            maxWidth: "100%",
+            width: "max-content",
+            display: "flex",
+            justifyContent: "center"
+          }}
+        >
+          {renderVisualizer()}
+        </div>
       </div>
 
       {/* Explanation Banner */}

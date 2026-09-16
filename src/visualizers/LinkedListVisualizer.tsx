@@ -21,158 +21,166 @@ export const LinkedListVisualizer: React.FC<LinkedListVisualizerProps> = ({ even
         flexDirection: "column",
         alignItems: "center",
         width: "100%",
-        padding: "2rem 1rem",
+        padding: "0.5rem",
         overflowX: "auto"
       }}
     >
       {/* Legend */}
-      <div style={{ display: "flex", gap: "1rem", marginBottom: "1.5rem" }}>
+      <div style={{ display: "flex", gap: "0.75rem", marginBottom: "0.75rem", flexWrap: "wrap", justifyContent: "center" }}>
         <span className="badge badge-indigo">prev</span>
         <span className="badge badge-cyan">curr</span>
         <span className="badge badge-amber">next_temp</span>
         <span className="badge badge-emerald">head</span>
       </div>
 
-      {/* Nodes Track */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "1.5rem",
-          padding: "2rem 1rem",
-          minHeight: "220px",
-          position: "relative"
-        }}
-      >
-        {nodes.map((node) => {
-          const isCurr = currId === node.id;
-          const isPrev = prevId === node.id;
-          const isNextTemp = nextTempId === node.id;
-          const isHead = headId === node.id;
+      {/* Nodes Track Wrapper */}
+      <div style={{ width: "100%", overflowX: "auto", display: "flex", justifyContent: "center" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "1.25rem",
+            padding: "3.25rem 2rem 1.5rem 2rem",
+            minHeight: "200px",
+            position: "relative",
+            width: "max-content",
+            margin: "0 auto"
+          }}
+        >
+          {nodes.map((node) => {
+            const isCurr = currId === node.id;
+            const isPrev = prevId === node.id;
+            const isNextTemp = nextTempId === node.id;
+            const isHead = headId === node.id;
 
-          // Target node pointed to by node.nextId
-          const nextTarget = node.nextId ? nodes.find((n) => n.id === node.nextId) : null;
-          const pointsBackward = nextTarget && nodes.indexOf(nextTarget) < nodes.indexOf(node);
+            // Target node pointed to by node.nextId
+            const nextTarget = node.nextId ? nodes.find((n) => n.id === node.nextId) : null;
+            const pointsBackward = nextTarget && nodes.indexOf(nextTarget) < nodes.indexOf(node);
 
-          return (
-            <div
-              key={node.id}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "1rem",
-                position: "relative"
-              }}
-            >
-              {/* Pointer Markers above */}
+            return (
               <div
+                key={node.id}
                 style={{
-                  position: "absolute",
-                  top: "-42px",
-                  left: "50%",
-                  transform: "translateX(-50%)",
                   display: "flex",
-                  flexDirection: "column",
                   alignItems: "center",
-                  gap: "0.2rem",
-                  whiteSpace: "nowrap"
+                  gap: "1rem",
+                  position: "relative"
                 }}
               >
-                {isHead && <span className="badge badge-emerald">HEAD</span>}
-                {isCurr && <span className="badge badge-cyan">curr</span>}
-                {isPrev && <span className="badge badge-indigo">prev</span>}
-                {isNextTemp && <span className="badge badge-amber">next_temp</span>}
-              </div>
-
-              {/* Node Card */}
-              <div
-                style={{
-                  display: "flex",
-                  borderRadius: "12px",
-                  border: isCurr
-                    ? "2px solid var(--cyan-400)"
-                    : isPrev
-                    ? "2px solid var(--indigo-400)"
-                    : "1px solid var(--border-subtle)",
-                  background: isCurr
-                    ? "linear-gradient(145deg, rgba(6, 182, 212, 0.2), var(--bg-card))"
-                    : isPrev
-                    ? "linear-gradient(145deg, rgba(99, 102, 241, 0.2), var(--bg-card))"
-                    : "var(--bg-card)",
-                  boxShadow: isCurr
-                    ? "var(--shadow-glow-cyan)"
-                    : isPrev
-                    ? "var(--shadow-glow-indigo)"
-                    : "var(--shadow-sm)",
-                  overflow: "hidden",
-                  transform: isCurr ? "scale(1.05)" : "none",
-                  transition: "all var(--transition-smooth)"
-                }}
-              >
-                {/* Value compartment */}
+                {/* Pointer Markers above */}
                 <div
                   style={{
-                    padding: "0.85rem 1.1rem",
-                    fontSize: "1.2rem",
-                    fontWeight: 700,
-                    fontFamily: "var(--font-mono)",
-                    color: "var(--text-primary)",
-                    borderRight: "1px solid var(--border-subtle)"
+                    position: "absolute",
+                    top: "-38px",
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    display: "flex",
+                    flexDirection: "row",
+                    flexWrap: "nowrap",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "0.25rem",
+                    whiteSpace: "nowrap",
+                    zIndex: 10
                   }}
                 >
-                  {node.val}
+                  {isHead && <span className="badge badge-emerald" style={{ fontSize: "0.7rem", padding: "0.15rem 0.4rem" }}>HEAD</span>}
+                  {isCurr && <span className="badge badge-cyan" style={{ fontSize: "0.7rem", padding: "0.15rem 0.4rem" }}>curr</span>}
+                  {isPrev && <span className="badge badge-indigo" style={{ fontSize: "0.7rem", padding: "0.15rem 0.4rem" }}>prev</span>}
+                  {isNextTemp && <span className="badge badge-amber" style={{ fontSize: "0.7rem", padding: "0.15rem 0.4rem" }}>next_temp</span>}
                 </div>
 
-                {/* Next Pointer compartment */}
+                {/* Node Card */}
                 <div
                   style={{
-                    padding: "0.85rem 0.75rem",
-                    fontSize: "0.75rem",
-                    fontFamily: "var(--font-mono)",
+                    display: "flex",
+                    borderRadius: "12px",
+                    border: isCurr
+                      ? "2px solid var(--cyan-400)"
+                      : isPrev
+                      ? "2px solid var(--indigo-400)"
+                      : "1px solid var(--border-subtle)",
+                    background: isCurr
+                      ? "linear-gradient(145deg, rgba(6, 182, 212, 0.2), var(--bg-card))"
+                      : isPrev
+                      ? "linear-gradient(145deg, rgba(99, 102, 241, 0.2), var(--bg-card))"
+                      : "var(--bg-card)",
+                    boxShadow: isCurr
+                      ? "var(--shadow-glow-cyan)"
+                      : isPrev
+                      ? "var(--shadow-glow-indigo)"
+                      : "var(--shadow-sm)",
+                    overflow: "hidden",
+                    transform: isCurr ? "scale(1.05)" : "none",
+                    transition: "all var(--transition-smooth)"
+                  }}
+                >
+                  {/* Value compartment */}
+                  <div
+                    style={{
+                      padding: "0.85rem 1.1rem",
+                      fontSize: "1.2rem",
+                      fontWeight: 700,
+                      fontFamily: "var(--font-mono)",
+                      color: "var(--text-primary)",
+                      borderRight: "1px solid var(--border-subtle)"
+                    }}
+                  >
+                    {node.val}
+                  </div>
+
+                  {/* Next Pointer compartment */}
+                  <div
+                    style={{
+                      padding: "0.85rem 0.75rem",
+                      fontSize: "0.75rem",
+                      fontFamily: "var(--font-mono)",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      color: node.nextId ? "var(--cyan-400)" : "var(--rose-400)",
+                      background: "var(--bg-tertiary)"
+                    }}
+                  >
+                    {node.nextId ? "next •" : "null"}
+                  </div>
+                </div>
+
+                {/* Arrow linking to next node */}
+                <div
+                  style={{
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    color: node.nextId ? "var(--cyan-400)" : "var(--rose-400)",
-                    background: "var(--bg-tertiary)"
+                    color: pointsBackward ? "var(--rose-400)" : "var(--cyan-400)",
+                    fontSize: "1.4rem",
+                    fontWeight: "bold",
+                    transform: pointsBackward ? "scaleX(-1)" : "none",
+                    transition: "transform 0.4s ease-in-out"
                   }}
                 >
-                  {node.nextId ? "next •" : "null"}
+                  ➔
                 </div>
               </div>
+            );
+          })}
 
-              {/* Arrow linking to next node */}
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: pointsBackward ? "var(--rose-400)" : "var(--cyan-400)",
-                  fontSize: "1.4rem",
-                  fontWeight: "bold",
-                  transform: pointsBackward ? "scaleX(-1)" : "none",
-                  transition: "transform 0.4s ease-in-out"
-                }}
-              >
-                ➔
-              </div>
-            </div>
-          );
-        })}
-
-        {/* Tail Null Node */}
-        <div
-          style={{
-            padding: "0.6rem 0.9rem",
-            borderRadius: "8px",
-            border: "1px dashed var(--border-medium)",
-            color: "var(--text-muted)",
-            fontSize: "0.85rem",
-            fontFamily: "var(--font-mono)"
-          }}
-        >
-          NULL
+          {/* Tail Null Node */}
+          <div
+            style={{
+              padding: "0.6rem 0.9rem",
+              borderRadius: "8px",
+              border: "1px dashed var(--border-medium)",
+              color: "var(--text-muted)",
+              fontSize: "0.85rem",
+              fontFamily: "var(--font-mono)"
+            }}
+          >
+            NULL
+          </div>
         </div>
       </div>
     </div>
   );
 };
+

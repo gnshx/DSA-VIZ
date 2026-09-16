@@ -41,7 +41,7 @@ export const TreeVisualizer: React.FC<TreeVisualizerProps> = ({ event }) => {
         <span className="badge badge-cyan">Active Traversal: Node {activeNodeId || "None"}</span>
       </div>
 
-      <svg width="600" height="300" style={{ overflow: "visible" }}>
+      <svg viewBox="0 0 600 300" style={{ width: "100%", maxWidth: "600px", height: "auto", overflow: "visible" }}>
         {/* Draw Edges */}
         {nodes.map((node) => {
           const parentCoord = coordinates[node.id];
