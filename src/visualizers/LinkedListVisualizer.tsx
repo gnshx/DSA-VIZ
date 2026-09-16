@@ -22,7 +22,7 @@ export const LinkedListVisualizer: React.FC<LinkedListVisualizerProps> = ({ even
         alignItems: "center",
         width: "100%",
         padding: "0.5rem",
-        overflowX: "auto"
+        overflow: "hidden"
       }}
     >
       {/* Legend */}
@@ -34,16 +34,18 @@ export const LinkedListVisualizer: React.FC<LinkedListVisualizerProps> = ({ even
       </div>
 
       {/* Nodes Track Wrapper */}
-      <div style={{ width: "100%", overflowX: "auto", display: "flex", justifyContent: "center" }}>
+      <div style={{ width: "100%", overflowX: "hidden", display: "flex", justifyContent: "center" }}>
         <div
           style={{
             display: "flex",
             alignItems: "center",
-            gap: "1.25rem",
-            padding: "3.25rem 2rem 1.5rem 2rem",
-            minHeight: "200px",
+            justifyContent: "center",
+            gap: "clamp(0.4rem, 1.2vw, 1.25rem)",
+            padding: "3rem 1rem 1.25rem 1rem",
+            minHeight: "180px",
             position: "relative",
-            width: "max-content",
+            width: "100%",
+            maxWidth: "100%",
             margin: "0 auto"
           }}
         >
@@ -53,7 +55,6 @@ export const LinkedListVisualizer: React.FC<LinkedListVisualizerProps> = ({ even
             const isNextTemp = nextTempId === node.id;
             const isHead = headId === node.id;
 
-            // Target node pointed to by node.nextId
             const nextTarget = node.nextId ? nodes.find((n) => n.id === node.nextId) : null;
             const pointsBackward = nextTarget && nodes.indexOf(nextTarget) < nodes.indexOf(node);
 
@@ -63,15 +64,18 @@ export const LinkedListVisualizer: React.FC<LinkedListVisualizerProps> = ({ even
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  gap: "1rem",
-                  position: "relative"
+                  gap: "clamp(0.2rem, 0.8vw, 0.75rem)",
+                  position: "relative",
+                  flex: "1 1 0px",
+                  maxWidth: "130px",
+                  minWidth: "70px"
                 }}
               >
                 {/* Pointer Markers above */}
                 <div
                   style={{
                     position: "absolute",
-                    top: "-38px",
+                    top: "-36px",
                     left: "50%",
                     transform: "translateX(-50%)",
                     display: "flex",
@@ -79,22 +83,22 @@ export const LinkedListVisualizer: React.FC<LinkedListVisualizerProps> = ({ even
                     flexWrap: "nowrap",
                     alignItems: "center",
                     justifyContent: "center",
-                    gap: "0.25rem",
+                    gap: "0.2rem",
                     whiteSpace: "nowrap",
                     zIndex: 10
                   }}
                 >
-                  {isHead && <span className="badge badge-emerald" style={{ fontSize: "0.7rem", padding: "0.15rem 0.4rem" }}>HEAD</span>}
-                  {isCurr && <span className="badge badge-cyan" style={{ fontSize: "0.7rem", padding: "0.15rem 0.4rem" }}>curr</span>}
-                  {isPrev && <span className="badge badge-indigo" style={{ fontSize: "0.7rem", padding: "0.15rem 0.4rem" }}>prev</span>}
-                  {isNextTemp && <span className="badge badge-amber" style={{ fontSize: "0.7rem", padding: "0.15rem 0.4rem" }}>next_temp</span>}
+                  {isHead && <span className="badge badge-emerald" style={{ fontSize: "0.65rem", padding: "0.1rem 0.35rem" }}>HEAD</span>}
+                  {isCurr && <span className="badge badge-cyan" style={{ fontSize: "0.65rem", padding: "0.1rem 0.35rem" }}>curr</span>}
+                  {isPrev && <span className="badge badge-indigo" style={{ fontSize: "0.65rem", padding: "0.1rem 0.35rem" }}>prev</span>}
+                  {isNextTemp && <span className="badge badge-amber" style={{ fontSize: "0.65rem", padding: "0.1rem 0.35rem" }}>next_temp</span>}
                 </div>
 
                 {/* Node Card */}
                 <div
                   style={{
                     display: "flex",
-                    borderRadius: "12px",
+                    borderRadius: "10px",
                     border: isCurr
                       ? "2px solid var(--cyan-400)"
                       : isPrev
@@ -111,19 +115,21 @@ export const LinkedListVisualizer: React.FC<LinkedListVisualizerProps> = ({ even
                       ? "var(--shadow-glow-indigo)"
                       : "var(--shadow-sm)",
                     overflow: "hidden",
-                    transform: isCurr ? "scale(1.05)" : "none",
+                    width: "100%",
                     transition: "all var(--transition-smooth)"
                   }}
                 >
                   {/* Value compartment */}
                   <div
                     style={{
-                      padding: "0.85rem 1.1rem",
-                      fontSize: "1.2rem",
+                      flex: 1,
+                      padding: "0.6rem 0.75rem",
+                      fontSize: "clamp(0.9rem, 1.4vw, 1.15rem)",
                       fontWeight: 700,
                       fontFamily: "var(--font-mono)",
                       color: "var(--text-primary)",
-                      borderRight: "1px solid var(--border-subtle)"
+                      borderRight: "1px solid var(--border-subtle)",
+                      textAlign: "center"
                     }}
                   >
                     {node.val}
@@ -132,8 +138,8 @@ export const LinkedListVisualizer: React.FC<LinkedListVisualizerProps> = ({ even
                   {/* Next Pointer compartment */}
                   <div
                     style={{
-                      padding: "0.85rem 0.75rem",
-                      fontSize: "0.75rem",
+                      padding: "0.6rem 0.5rem",
+                      fontSize: "0.7rem",
                       fontFamily: "var(--font-mono)",
                       display: "flex",
                       alignItems: "center",
@@ -142,7 +148,7 @@ export const LinkedListVisualizer: React.FC<LinkedListVisualizerProps> = ({ even
                       background: "var(--bg-tertiary)"
                     }}
                   >
-                    {node.nextId ? "next •" : "null"}
+                    {node.nextId ? "next" : "null"}
                   </div>
                 </div>
 
@@ -153,10 +159,9 @@ export const LinkedListVisualizer: React.FC<LinkedListVisualizerProps> = ({ even
                     alignItems: "center",
                     justifyContent: "center",
                     color: pointsBackward ? "var(--rose-400)" : "var(--cyan-400)",
-                    fontSize: "1.4rem",
+                    fontSize: "1.2rem",
                     fontWeight: "bold",
-                    transform: pointsBackward ? "scaleX(-1)" : "none",
-                    transition: "transform 0.4s ease-in-out"
+                    transform: pointsBackward ? "scaleX(-1)" : "none"
                   }}
                 >
                   ➔
@@ -168,11 +173,11 @@ export const LinkedListVisualizer: React.FC<LinkedListVisualizerProps> = ({ even
           {/* Tail Null Node */}
           <div
             style={{
-              padding: "0.6rem 0.9rem",
+              padding: "0.5rem 0.75rem",
               borderRadius: "8px",
               border: "1px dashed var(--border-medium)",
               color: "var(--text-muted)",
-              fontSize: "0.85rem",
+              fontSize: "0.78rem",
               fontFamily: "var(--font-mono)"
             }}
           >
@@ -183,4 +188,3 @@ export const LinkedListVisualizer: React.FC<LinkedListVisualizerProps> = ({ even
     </div>
   );
 };
-

@@ -28,12 +28,12 @@ export const GraphVisualizer: React.FC<GraphVisualizerProps> = ({ event }) => {
         flexDirection: "column",
         alignItems: "center",
         width: "100%",
-        padding: "1rem",
-        overflowX: "auto"
+        padding: "1rem 0.5rem",
+        overflow: "hidden"
       }}
     >
       {/* Legend & Stats */}
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem", marginBottom: "1rem", justifyContent: "center" }}>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem", marginBottom: "1rem", justifyContent: "center" }}>
         <span className="badge badge-indigo">Active: {activeNode || "None"}</span>
         <span className="badge badge-cyan">Frontier Queue: [{state.frontier.join(", ")}]</span>
         <span className="badge badge-emerald">Visited Set: [{state.visited.join(", ")}]</span>
