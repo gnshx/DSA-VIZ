@@ -1,36 +1,35 @@
 /* ==========================================================================
-   DSA-VIZ Design System
-   "Make Computation Observable"
-   Inspired by LeetCode, NeetCode, Vercel & Linear design engineering
+   DSA-VIZ Design System - Pitch Obsidian Edition
+   Inspired by LeetCode, Better CP, Vercel & Anthropic Frontend Guidelines
    ========================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap');
 
 :root, [data-theme="dark"] {
-  /* Surface & Base Colors (Night Mode - Deep Slate) */
-  --bg-primary: #080c14;
-  --bg-secondary: #0d1322;
-  --bg-tertiary: #131b2e;
-  --bg-card: rgba(19, 27, 46, 0.75);
-  --bg-card-hover: rgba(28, 38, 64, 0.9);
-  --bg-overlay: rgba(8, 12, 20, 0.88);
-  --bg-code: #0b101c;
-  --nav-bg: rgba(8, 12, 20, 0.95);
-  --stage-bg: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.05) 0%, rgba(8, 12, 20, 0.95) 100%);
+  /* Pitch Obsidian Surface Palette (Night Mode - Deep Obsidian) */
+  --bg-primary: #030712;
+  --bg-secondary: #0b0f19;
+  --bg-tertiary: #111726;
+  --bg-card: rgba(17, 23, 38, 0.75);
+  --bg-card-hover: rgba(26, 34, 54, 0.9);
+  --bg-overlay: rgba(3, 7, 18, 0.92);
+  --bg-code: #070a14;
+  --nav-bg: rgba(3, 7, 18, 0.95);
+  --stage-bg: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.06) 0%, rgba(3, 7, 18, 0.98) 100%);
   --stage-border: rgba(99, 102, 241, 0.25);
-  --chip-container-bg: rgba(15, 23, 42, 0.75);
+  --chip-container-bg: rgba(11, 15, 25, 0.85);
   --chip-inactive-bg: rgba(255, 255, 255, 0.04);
   --chip-inactive-text: #94a3b8;
-  --box-bg: rgba(0, 0, 0, 0.35);
-  --panel-header-bg: rgba(0, 0, 0, 0.25);
-  --code-active-bg: rgba(99, 102, 241, 0.18);
+  --box-bg: rgba(0, 0, 0, 0.45);
+  --panel-header-bg: rgba(0, 0, 0, 0.35);
+  --code-active-bg: rgba(99, 102, 241, 0.22);
   --code-active-text: #ffffff;
 
   /* Borders & Dividers */
   --border-subtle: rgba(255, 255, 255, 0.08);
   --border-medium: rgba(255, 255, 255, 0.16);
   --border-strong: rgba(255, 255, 255, 0.28);
-  --border-glow: rgba(99, 102, 241, 0.4);
+  --border-glow: rgba(99, 102, 241, 0.45);
 
   /* Curated HSL Neon / Accent Palette */
   --indigo-500: #6366f1;
@@ -69,9 +68,9 @@
   --text-dim: #475569;
 
   /* Shadows */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 4px 12px -1px rgba(0, 0, 0, 0.5), 0 2px 6px -2px rgba(0, 0, 0, 0.5);
-  --shadow-lg: 0 10px 25px -3px rgba(0, 0, 0, 0.6), 0 4px 12px -4px rgba(0, 0, 0, 0.5);
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 12px -1px rgba(0, 0, 0, 0.6), 0 2px 6px -2px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 10px 25px -3px rgba(0, 0, 0, 0.7), 0 4px 12px -4px rgba(0, 0, 0, 0.6);
   --shadow-glow-indigo: 0 0 25px -3px rgba(99, 102, 241, 0.45);
   --shadow-glow-cyan: 0 0 25px -3px rgba(6, 182, 212, 0.45);
   --shadow-glow-emerald: 0 0 25px -3px rgba(16, 185, 129, 0.45);
@@ -272,7 +271,7 @@ code, pre, .font-mono {
   border: 1px solid rgba(244, 63, 94, 0.3);
 }
 
-/* Buttons with Accessible Touch Targets (>=34px) */
+/* Buttons with Accessible Touch Targets (>=36px) */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -351,9 +350,51 @@ code, pre, .font-mono {
   }
 }
 
+/* Hierarchical List Accordion Styling */
+.accordion-item {
+  border: 1px solid var(--border-subtle);
+  border-radius: 12px;
+  background: var(--bg-card);
+  overflow: hidden;
+  transition: all var(--transition-normal);
+}
+
+.accordion-item:hover {
+  border-color: var(--border-medium);
+}
+
+.accordion-item-active {
+  border-color: var(--indigo-400) !important;
+  box-shadow: var(--shadow-glow-indigo);
+}
+
+.accordion-header {
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  user-select: none;
+  background: var(--bg-tertiary);
+  transition: background var(--transition-fast);
+}
+
+.accordion-header:hover {
+  background: var(--bg-card-hover);
+}
+
+.accordion-content {
+  padding: 1.25rem;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background: var(--bg-secondary);
+}
+
 /* Active line pulse in code editor */
 .code-active-line {
-  background: rgba(99, 102, 241, 0.18) !important;
+  background: rgba(99, 102, 241, 0.22) !important;
   border-left: 3px solid var(--indigo-400) !important;
 }
 
@@ -397,8 +438,8 @@ code, pre, .font-mono {
   bottom: 125%;
   left: 50%;
   transform: translateX(-50%);
-  background: #1e293b;
-  color: #e2e8f0;
+  background: #0f172a;
+  color: #f8fafc;
   font-size: 0.75rem;
   padding: 0.35rem 0.6rem;
   border-radius: 6px;

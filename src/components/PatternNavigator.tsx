@@ -1,16 +1,19 @@
 import React, { useState, useMemo } from "react";
 import { ALL_PATTERN_FAMILIES, ALL_PATTERN_COMBINATIONS } from "../engine/patterns";
-import { SubcaseDefinition, PatternCombination } from "../types/patterns";
+import { SubcaseDefinition, PatternCombination, PatternFamilyDefinition } from "../types/patterns";
 import {
   ArrowRight,
+  ChevronDown,
+  ChevronRight,
   Layers,
   Play,
   Search,
   Puzzle,
-  Code,
-  Sparkles,
-  Zap,
-  BookOpen
+  CheckCircle2,
+  Clock,
+  Cpu,
+  BookOpen,
+  Info
 } from "lucide-react";
 
 interface PatternNavigatorProps {
@@ -18,14 +21,35 @@ interface PatternNavigatorProps {
   selectedAlgorithmId?: string;
 }
 
+/**
+ * PatternNavigator Component
+ * Hierarchical Drill-Down Catalog:
+ * Level 1: Pattern Family List with brief definitions
+ * Level 2: Subcategories / Subcases with core mechanisms & pointer roles
+ * Level 3: Examples & Interactive Testcases with 1-click "Run & Check Trace"
+ */
 export const PatternNavigator: React.FC<PatternNavigatorProps> = ({
   onSelectSubcase,
   selectedAlgorithmId
 }) => {
   const [activeTab, setActiveTab] = useState<"catalog" | "combinations">("catalog");
-  const [activeFamilyId, setActiveFamilyId] = useState<string>("two_pointers");
+  const [expandedFamilies, setExpandedFamilies] = useState<Record<string, boolean>>({
+    two_pointers: true,
+    sliding_window: true
+  });
+  const [expandedSubcases, setExpandedSubcases] = useState<Record<string, boolean>>({
+    tp_opposite_ends: true,
+    sw_fixed: true
+  });
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedDifficulty, setSelectedDifficulty] = useState<string>("all");
+
+  const toggleFamily = (familyId: string) => {
+    setExpandedFamilies((prev) => ({ ...prev, [familyId]: !prev[familyId] }));
+  };
+
+  const toggleSubcase = (subcaseId: string) => {
+    setExpandedSubcases((prev) => ({ ...prev, [subcaseId]: !prev[subcaseId] }));
+  };
 
   // Filtered families by search query
   const filteredFamilies = useMemo(() => {
@@ -42,11 +66,6 @@ export const PatternNavigator: React.FC<PatternNavigatorProps> = ({
       return matchFam || matchSub;
     });
   }, [searchQuery]);
-
-  const activeFamily =
-    filteredFamilies.find((f) => f.id === activeFamilyId) ||
-    filteredFamilies[0] ||
-    ALL_PATTERN_FAMILIES[0];
 
   // Filtered combinations by search
   const filteredCombinations = useMemo(() => {
@@ -68,73 +87,60 @@ export const PatternNavigator: React.FC<PatternNavigatorProps> = ({
   const getDifficultyBadge = (diff: string) => {
     switch (diff.toLowerCase()) {
       case "easy":
-        return {
-          bg: "rgba(0, 184, 163, 0.15)",
-          color: "#00b8a3",
-          border: "1px solid rgba(0, 184, 163, 0.3)"
-        };
+        return { bg: "rgba(16, 185, 129, 0.15)", color: "var(--emerald-400)", border: "1px solid rgba(16, 185, 129, 0.3)" };
       case "hard":
-        return {
-          bg: "rgba(255, 55, 95, 0.15)",
-          color: "#ff375f",
-          border: "1px solid rgba(255, 55, 95, 0.3)"
-        };
+        return { bg: "rgba(244, 63, 94, 0.15)", color: "var(--rose-400)", border: "1px solid rgba(244, 63, 94, 0.3)" };
       default:
-        return {
-          bg: "rgba(255, 192, 30, 0.15)",
-          color: "#ffc01e",
-          border: "1px solid rgba(255, 192, 30, 0.3)"
-        };
+        return { bg: "rgba(245, 158, 11, 0.15)", color: "var(--amber-400)", border: "1px solid rgba(245, 158, 11, 0.3)" };
     }
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem", width: "100%" }}>
-      {/* LeetCode Explore Banner */}
+    <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem", width: "100%" }}>
+      {/* Top Banner & Tab Controls */}
       <div
         className="glass-panel"
         style={{
-          padding: "1.75rem 2rem",
+          padding: "1.5rem",
           background: "linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(6, 182, 212, 0.08))",
           border: "1px solid rgba(99, 102, 241, 0.25)",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
           flexWrap: "wrap",
-          gap: "1.5rem",
+          gap: "1.25rem",
           borderRadius: "16px"
         }}
       >
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flexWrap: "wrap" }}>
             <span className="badge badge-indigo" style={{ padding: "0.25rem 0.65rem", fontSize: "0.72rem" }}>
-              LEETCODE DSA PATTERN EXPLORE
+              DSA PATTERN MASTER CATALOG
             </span>
             <span className="badge badge-cyan" style={{ padding: "0.25rem 0.65rem", fontSize: "0.72rem" }}>
-              {ALL_PATTERN_FAMILIES.length} TOPIC FAMILIES • {totalSubcases} SUB-PATTERNS
+              {ALL_PATTERN_FAMILIES.length} PATTERN FAMILIES • {totalSubcases} SUBCATEGORIES
             </span>
             <span className="badge badge-emerald" style={{ padding: "0.25rem 0.65rem", fontSize: "0.72rem" }}>
-              {ALL_PATTERN_COMBINATIONS.length} MULTI-PATTERN SYNERGIES
+              100% VERIFIED TRACES
             </span>
           </div>
 
-          <h2 style={{ fontSize: "1.65rem", fontWeight: 800, marginTop: "0.5rem", letterSpacing: "-0.015em", color: "var(--text-primary)" }}>
-            DSA Algorithmic Patterns & Visual Execution Engine
+          <h2 style={{ fontSize: "1.5rem", fontWeight: 800, marginTop: "0.4rem", color: "var(--text-primary)" }}>
+            Hierorithmic Pattern Tree & Interactive Trace Explorer
           </h2>
 
-          <p style={{ color: "var(--text-secondary)", fontSize: "0.875rem", marginTop: "0.4rem", maxWidth: "860px", lineHeight: 1.55 }}>
-            Master technical interview patterns organized by <strong>Category → Operational Sub-Variants → LeetCode Problems</strong>.
-            Select any pattern subcase to launch deterministic, step-by-step state visualization.
+          <p style={{ color: "var(--text-secondary)", fontSize: "0.875rem", marginTop: "0.3rem", maxWidth: "860px", lineHeight: 1.5 }}>
+            Expand any <strong>Pattern Family</strong> to view its <strong>Subcategories</strong>, brief definitions, pointer invariants, and representative LeetCode testcases. Click <strong>"Run & Check Trace"</strong> to launch the observable execution engine.
           </p>
         </div>
 
-        {/* View Mode Tabs */}
+        {/* Mode Switcher Tabs */}
         <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
           <button
             onClick={() => setActiveTab("catalog")}
             className="btn"
             style={{
-              padding: "0.6rem 1.1rem",
+              padding: "0.55rem 1.05rem",
               fontSize: "0.85rem",
               fontWeight: 700,
               background: activeTab === "catalog" ? "linear-gradient(135deg, var(--indigo-500), #4f46e5)" : "var(--chip-inactive-bg)",
@@ -148,14 +154,14 @@ export const PatternNavigator: React.FC<PatternNavigatorProps> = ({
             }}
           >
             <Layers size={16} />
-            <span>Pattern Showcase ({ALL_PATTERN_FAMILIES.length})</span>
+            <span>Hierarchical Tree ({ALL_PATTERN_FAMILIES.length})</span>
           </button>
 
           <button
             onClick={() => setActiveTab("combinations")}
             className="btn"
             style={{
-              padding: "0.6rem 1.1rem",
+              padding: "0.55rem 1.05rem",
               fontSize: "0.85rem",
               fontWeight: 700,
               background: activeTab === "combinations" ? "linear-gradient(135deg, var(--cyan-500), #0284c7)" : "var(--chip-inactive-bg)",
@@ -169,36 +175,35 @@ export const PatternNavigator: React.FC<PatternNavigatorProps> = ({
             }}
           >
             <Puzzle size={16} />
-            <span>Synergy Combinations ({ALL_PATTERN_COMBINATIONS.length})</span>
+            <span>Multi-Pattern Synergies ({ALL_PATTERN_COMBINATIONS.length})</span>
           </button>
         </div>
       </div>
 
-      {/* LeetCode Search & Filter Bar */}
+      {/* Instant Search Bar */}
       <div
         className="glass-panel"
         style={{
-          padding: "1rem 1.25rem",
+          padding: "0.85rem 1.25rem",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          flexWrap: "wrap",
           gap: "1rem",
-          borderRadius: "14px"
+          borderRadius: "12px"
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flex: 1, minWidth: "280px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "0.6rem", flex: 1 }}>
           <Search size={18} color="var(--cyan-400)" />
           <input
             type="text"
-            placeholder="Search LeetCode problem or pattern (e.g., 167, Two Sum, Koko Bananas, Sliding Window, DP)..."
+            placeholder="Search pattern, subcategory, or LeetCode problem (e.g., Two Pointers, 167, Sliding Window, Prefix Sum, DP)..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             style={{
               background: "transparent",
               border: "none",
               color: "var(--text-primary)",
-              fontSize: "0.9rem",
+              fontSize: "0.875rem",
               outline: "none",
               width: "100%"
             }}
@@ -214,293 +219,243 @@ export const PatternNavigator: React.FC<PatternNavigatorProps> = ({
         </div>
       </div>
 
-      {/* TAB 1: ALL PATTERNS CATALOG */}
+      {/* TAB 1: HIERARCHICAL DRILL-DOWN CATALOG */}
       {activeTab === "catalog" && (
-        <>
-          {/* LeetCode Category Pills Bar */}
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              gap: "0.6rem",
-              overflowX: "auto",
-              padding: "0.4rem 0.2rem 0.8rem 0.2rem",
-              scrollbarWidth: "thin",
-              width: "100%",
-              maxWidth: "100%"
-            }}
-          >
-            {filteredFamilies.map((fam) => {
-              const isSelected = fam.id === activeFamily?.id;
-              return (
-                <button
-                  key={fam.id}
-                  onClick={() => setActiveFamilyId(fam.id)}
-                  className="btn"
-                  style={{
-                    flexShrink: 0,
-                    padding: "0.55rem 1.05rem",
-                    fontSize: "0.85rem",
-                    fontWeight: isSelected ? 700 : 500,
-                    whiteSpace: "nowrap",
-                    background: isSelected
-                      ? "linear-gradient(135deg, var(--indigo-600), var(--indigo-500))"
-                      : "var(--chip-inactive-bg)",
-                    color: isSelected ? "#ffffff" : "var(--text-secondary)",
-                    border: isSelected ? "1px solid var(--indigo-400)" : "1px solid var(--border-subtle)",
-                    boxShadow: isSelected ? "0 4px 14px rgba(99, 102, 241, 0.35)" : "none",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.5rem",
-                    borderRadius: "10px",
-                    cursor: "pointer"
-                  }}
+        <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+          {filteredFamilies.map((family: PatternFamilyDefinition) => {
+            const isFamilyExpanded = expandedFamilies[family.id] || Boolean(searchQuery.trim());
+            return (
+              <div
+                key={family.id}
+                className={`accordion-item ${isFamilyExpanded ? "accordion-item-active" : ""}`}
+              >
+                {/* Level 1: Pattern Family Header */}
+                <div
+                  className="accordion-header"
+                  onClick={() => toggleFamily(family.id)}
                 >
-                  <span>{fam.name}</span>
-                  <span
-                    style={{
-                      flexShrink: 0,
-                      fontSize: "0.7rem",
-                      padding: "0.15rem 0.45rem",
-                      borderRadius: "999px",
-                      background: isSelected ? "rgba(255, 255, 255, 0.25)" : "rgba(255, 255, 255, 0.08)",
-                      color: isSelected ? "#ffffff" : "var(--text-dim)",
-                      fontWeight: 700
-                    }}
-                  >
-                    {fam.subcases.length}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Active Pattern Family Spotlight */}
-          {activeFamily && (
-            <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-              {/* Pattern Overview Card */}
-              <div
-                className="glass-panel"
-                style={{
-                  padding: "1.25rem 1.5rem",
-                  background: "var(--bg-tertiary)",
-                  borderRadius: "14px",
-                  border: "1px solid var(--border-subtle)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  flexWrap: "wrap",
-                  gap: "1rem"
-                }}
-              >
-                <div>
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                    <span className="badge badge-indigo" style={{ fontSize: "0.7rem" }}>TOPIC ARCHITECTURE</span>
-                    <span className="badge badge-cyan" style={{ fontSize: "0.7rem" }}>{activeFamily.subcases.length} SUB-VARIANTS</span>
-                  </div>
-                  <h3 style={{ fontSize: "1.25rem", fontWeight: 800, marginTop: "0.3rem", color: "var(--text-primary)" }}>
-                    {activeFamily.name}
-                  </h3>
-                  <p style={{ fontSize: "0.875rem", color: "var(--text-secondary)", marginTop: "0.25rem", lineHeight: 1.5, maxWidth: "900px" }}>
-                    {activeFamily.description}
-                  </p>
-                </div>
-
-                <div style={{ display: "flex", gap: "0.5rem" }}>
-                  <span className={`badge ${activeFamily.badgeColor}`} style={{ fontSize: "0.75rem", padding: "0.3rem 0.75rem" }}>
-                    {activeFamily.name.toUpperCase()}
-                  </span>
-                </div>
-              </div>
-
-              {/* Subcases Grid */}
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fill, minmax(440px, 1fr))",
-                  gap: "1.5rem"
-                }}
-              >
-                {activeFamily.subcases.map((subcase: SubcaseDefinition) => {
-                  const isCurrentlyVisualizing = selectedAlgorithmId === subcase.algorithmId;
-                  return (
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.85rem" }}>
                     <div
-                      key={subcase.id}
-                      className="glass-panel"
                       style={{
-                        padding: "1.5rem",
+                        color: "var(--indigo-400)",
                         display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "space-between",
-                        gap: "1.25rem",
-                        border: isCurrentlyVisualizing
-                          ? "2px solid var(--cyan-400)"
-                          : "1px solid var(--border-medium)",
-                        background: isCurrentlyVisualizing
-                          ? "linear-gradient(145deg, rgba(6, 182, 212, 0.08), rgba(99, 102, 241, 0.06))"
-                          : "var(--bg-card)",
-                        borderRadius: "14px",
-                        boxShadow: isCurrentlyVisualizing ? "var(--shadow-glow-cyan)" : "var(--shadow-sm)"
+                        alignItems: "center",
+                        justifyContent: "center"
                       }}
                     >
-                      <div style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}>
-                        {/* Title & Complexity Badges */}
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "0.75rem" }}>
-                          <div>
-                            <span className="badge badge-indigo" style={{ fontSize: "0.68rem" }}>
-                              SUBCASE TOPOLOGY
-                            </span>
-                            <h4 style={{ fontSize: "1.15rem", fontWeight: 800, marginTop: "0.35rem", color: "var(--text-primary)" }}>
-                              {subcase.subcaseTitle}
-                            </h4>
-                          </div>
+                      {isFamilyExpanded ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
+                    </div>
+                    <div>
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
+                        <span className={`badge ${family.badgeColor}`}>
+                          {family.name.toUpperCase()}
+                        </span>
+                        <span style={{ fontSize: "0.75rem", color: "var(--text-muted)", fontWeight: 600 }}>
+                          {family.subcases.length} SUBCATEGORIES
+                        </span>
+                      </div>
+                      <h3 style={{ fontSize: "1.15rem", fontWeight: 800, marginTop: "0.25rem", color: "var(--text-primary)" }}>
+                        {family.name}
+                      </h3>
+                      <p style={{ fontSize: "0.825rem", color: "var(--text-secondary)", marginTop: "0.2rem", maxWidth: "900px" }}>
+                        {family.description}
+                      </p>
+                    </div>
+                  </div>
 
-                          <div style={{ display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
-                            <span className="badge badge-cyan" style={{ fontSize: "0.72rem" }}>
-                              Time: {subcase.timeComplexity}
-                            </span>
-                            <span className="badge badge-emerald" style={{ fontSize: "0.72rem" }}>
-                              Space: {subcase.spaceComplexity}
-                            </span>
-                          </div>
-                        </div>
+                  <span className="badge badge-cyan" style={{ fontSize: "0.7rem" }}>
+                    {family.tier.replace("_", " ").toUpperCase()}
+                  </span>
+                </div>
 
-                        {/* Visual Summary Mechanism Box */}
+                {/* Level 2: Subcategories / Subcases Accordion Content */}
+                {isFamilyExpanded && (
+                  <div className="accordion-content">
+                    {family.subcases.map((subcase: SubcaseDefinition) => {
+                      const isSubcaseExpanded = expandedSubcases[subcase.id] || Boolean(searchQuery.trim());
+                      const isCurrentlyVisualizing = selectedAlgorithmId === subcase.algorithmId;
+                      return (
                         <div
+                          key={subcase.id}
+                          className="glass-panel"
                           style={{
-                            padding: "0.7rem 0.9rem",
                             borderRadius: "10px",
-                            background: "var(--box-bg)",
-                            border: "1px solid var(--border-subtle)",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                            gap: "0.5rem"
+                            border: isCurrentlyVisualizing ? "2px solid var(--cyan-400)" : "1px solid var(--border-medium)",
+                            background: isCurrentlyVisualizing
+                              ? "linear-gradient(145deg, rgba(6, 182, 212, 0.08), rgba(99, 102, 241, 0.06))"
+                              : "var(--bg-tertiary)",
+                            overflow: "hidden"
                           }}
                         >
-                          <span style={{ fontSize: "0.75rem", color: "var(--text-muted)", fontWeight: 700 }}>
-                            STATE TOPOLOGY:
-                          </span>
-                          <span
+                          {/* Subcategory Header */}
+                          <div
                             style={{
-                              fontFamily: "var(--font-mono)",
-                              fontSize: "0.85rem",
-                              color: "var(--cyan-400)",
-                              fontWeight: 700
+                              padding: "0.85rem 1.15rem",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                              cursor: "pointer",
+                              background: "rgba(255, 255, 255, 0.02)",
+                              borderBottom: isSubcaseExpanded ? "1px solid var(--border-subtle)" : "none"
                             }}
+                            onClick={() => toggleSubcase(subcase.id)}
                           >
-                            {subcase.visualSummary}
-                          </span>
-                        </div>
-
-                        {/* Core Mechanism Description */}
-                        <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)", lineHeight: 1.5, margin: 0 }}>
-                          {subcase.coreMechanism}
-                        </p>
-
-                        {/* Pointer & State Roles */}
-                        <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
-                          <span style={{ fontSize: "0.72rem", fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase" }}>
-                            Pointer & State Invariants:
-                          </span>
-                          {Object.entries(subcase.pointerRoles).map(([ptr, role]) => (
-                            <div
-                              key={ptr}
-                              style={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: "0.5rem",
-                                fontSize: "0.8rem",
-                                fontFamily: "var(--font-mono)",
-                                background: "rgba(255, 255, 255, 0.02)",
-                                padding: "0.3rem 0.6rem",
-                                borderRadius: "6px",
-                                border: "1px solid var(--border-subtle)"
-                              }}
-                            >
-                              <span style={{ color: "var(--indigo-400)", fontWeight: 700 }}>{ptr}:</span>
-                              <span style={{ color: "var(--text-secondary)" }}>{role}</span>
-                            </div>
-                          ))}
-                        </div>
-
-                        {/* LeetCode Representative Problems */}
-                        <div>
-                          <span style={{ fontSize: "0.72rem", fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase" }}>
-                            LeetCode Problem Patterns:
-                          </span>
-                          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", marginTop: "0.4rem" }}>
-                            {subcase.classicProblems.map((prob, idx) => {
-                              const badgeStyle = getDifficultyBadge(prob.difficulty);
-                              return (
-                                <div
-                                  key={idx}
-                                  style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: "0.4rem",
-                                    fontSize: "0.75rem",
-                                    padding: "0.25rem 0.6rem",
-                                    background: "var(--box-bg)",
-                                    borderRadius: "6px",
-                                    border: "1px solid var(--border-subtle)"
-                                  }}
-                                >
-                                  <span style={{ color: "var(--text-primary)", fontWeight: 600 }}>{prob.title}</span>
-                                  <span
-                                    style={{
-                                      fontSize: "0.65rem",
-                                      fontWeight: 700,
-                                      padding: "0.1rem 0.35rem",
-                                      borderRadius: "4px",
-                                      background: badgeStyle.bg,
-                                      color: badgeStyle.color,
-                                      border: badgeStyle.border
-                                    }}
-                                  >
-                                    {prob.difficulty}
-                                  </span>
+                            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                              <div style={{ color: "var(--cyan-400)" }}>
+                                {isSubcaseExpanded ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
+                              </div>
+                              <div>
+                                <div style={{ fontSize: "0.95rem", fontWeight: 800, color: "var(--text-primary)" }}>
+                                  {subcase.subcaseTitle}
                                 </div>
-                              );
-                            })}
-                          </div>
-                        </div>
-                      </div>
+                                <div style={{ fontSize: "0.78rem", color: "var(--text-secondary)", marginTop: "0.15rem" }}>
+                                  {subcase.coreMechanism}
+                                </div>
+                              </div>
+                            </div>
 
-                      {/* Action Trigger */}
-                      <button
-                        onClick={() => onSelectSubcase(subcase.algorithmId)}
-                        className={`btn ${isCurrentlyVisualizing ? "btn-secondary" : "btn-primary"}`}
-                        style={{
-                          width: "100%",
-                          padding: "0.7rem 1.25rem",
-                          fontSize: "0.875rem",
-                          fontWeight: 700,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          gap: "0.6rem",
-                          marginTop: "0.5rem",
-                          borderRadius: "10px"
-                        }}
-                      >
-                        <Play size={16} />
-                        <span>{isCurrentlyVisualizing ? "Currently Visualizing" : "Visualize State Trace"}</span>
-                        <ArrowRight size={16} />
-                      </button>
-                    </div>
-                  );
-                })}
+                            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                              <span className="badge badge-cyan" style={{ fontSize: "0.68rem" }}>{subcase.timeComplexity}</span>
+                              <span className="badge badge-emerald" style={{ fontSize: "0.68rem" }}>{subcase.spaceComplexity}</span>
+                            </div>
+                          </div>
+
+                          {/* Subcategory Details & Level 3 Testcases */}
+                          {isSubcaseExpanded && (
+                            <div style={{ padding: "1.15rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
+                              {/* Topology & Invariants Summary */}
+                              <div
+                                style={{
+                                  padding: "0.65rem 0.85rem",
+                                  borderRadius: "8px",
+                                  background: "var(--box-bg)",
+                                  border: "1px solid var(--border-subtle)",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "space-between",
+                                  gap: "0.5rem",
+                                  flexWrap: "wrap"
+                                }}
+                              >
+                                <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", fontWeight: 700 }}>
+                                  STATE TOPOLOGY:
+                                </div>
+                                <div style={{ fontFamily: "var(--font-mono)", fontSize: "0.825rem", color: "var(--cyan-400)", fontWeight: 700 }}>
+                                  {subcase.visualSummary}
+                                </div>
+                              </div>
+
+                              {/* Pointer Roles */}
+                              <div>
+                                <div style={{ fontSize: "0.72rem", fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase", marginBottom: "0.35rem" }}>
+                                  Pointer & State Invariants:
+                                </div>
+                                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "0.4rem" }}>
+                                  {Object.entries(subcase.pointerRoles).map(([ptr, role]) => (
+                                    <div
+                                      key={ptr}
+                                      style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: "0.5rem",
+                                        fontSize: "0.775rem",
+                                        fontFamily: "var(--font-mono)",
+                                        background: "rgba(255, 255, 255, 0.02)",
+                                        padding: "0.3rem 0.6rem",
+                                        borderRadius: "6px",
+                                        border: "1px solid var(--border-subtle)"
+                                      }}
+                                    >
+                                      <span style={{ color: "var(--indigo-400)", fontWeight: 700 }}>{ptr}:</span>
+                                      <span style={{ color: "var(--text-secondary)" }}>{role}</span>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+
+                              {/* Level 3: Representative LeetCode Problems & Testcase Trigger */}
+                              <div>
+                                <div style={{ fontSize: "0.72rem", fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase", marginBottom: "0.4rem" }}>
+                                  Representative LeetCode Examples & Interactive Testcases:
+                                </div>
+                                <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                                  {subcase.classicProblems.map((prob, idx) => {
+                                    const diffStyle = getDifficultyBadge(prob.difficulty);
+                                    return (
+                                      <div
+                                        key={idx}
+                                        style={{
+                                          padding: "0.6rem 0.85rem",
+                                          borderRadius: "8px",
+                                          background: "var(--box-bg)",
+                                          border: "1px solid var(--border-subtle)",
+                                          display: "flex",
+                                          alignItems: "center",
+                                          justifyContent: "space-between",
+                                          gap: "0.5rem"
+                                        }}
+                                      >
+                                        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                                          <BookOpen size={15} color="var(--indigo-400)" />
+                                          <span style={{ fontSize: "0.825rem", fontWeight: 700, color: "var(--text-primary)" }}>
+                                            {prob.title}
+                                          </span>
+                                        </div>
+
+                                        <span
+                                          style={{
+                                            fontSize: "0.65rem",
+                                            fontWeight: 700,
+                                            padding: "0.15rem 0.4rem",
+                                            borderRadius: "4px",
+                                            background: diffStyle.bg,
+                                            color: diffStyle.color,
+                                            border: diffStyle.border
+                                          }}
+                                        >
+                                          {prob.difficulty}
+                                        </span>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+
+                              {/* Action Trigger: Run & Check Trace */}
+                              <button
+                                onClick={() => onSelectSubcase(subcase.algorithmId)}
+                                className={`btn ${isCurrentlyVisualizing ? "btn-secondary" : "btn-primary"}`}
+                                style={{
+                                  padding: "0.65rem 1.15rem",
+                                  fontSize: "0.85rem",
+                                  fontWeight: 700,
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  gap: "0.6rem",
+                                  borderRadius: "8px"
+                                }}
+                              >
+                                <Play size={15} />
+                                <span>{isCurrentlyVisualizing ? "Currently Visualizing Trace" : "Run & Check Trace"}</span>
+                                <ArrowRight size={15} />
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
-            </div>
-          )}
-        </>
+            );
+          })}
+        </div>
       )}
 
       {/* TAB 2: MULTI-PATTERN SYNERGIES */}
       {activeTab === "combinations" && (
-        <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
           <div
             className="glass-panel"
             style={{
@@ -516,29 +471,23 @@ export const PatternNavigator: React.FC<PatternNavigatorProps> = ({
                 Multi-Pattern Synergy & Recognition Layer
               </h3>
             </div>
-            <p style={{ fontSize: "0.875rem", color: "var(--text-secondary)", marginTop: "0.4rem", lineHeight: 1.5 }}>
-              FAANG and top tech interviews focus heavily on multi-pattern compositions (e.g. <code>HashMap + Prefix Sum</code>, <code>Binary Search + Greedy</code>). Recognize key problem cues and master the mathematical synergy.
+            <p style={{ fontSize: "0.875rem", color: "var(--text-secondary)", marginTop: "0.3rem", lineHeight: 1.5 }}>
+              Recognize multi-pattern compositions (e.g. <code>HashMap + Prefix Sum</code>, <code>Binary Search + Greedy</code>).
             </p>
           </div>
 
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(480px, 1fr))",
-              gap: "1.5rem"
-            }}
-          >
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(480px, 1fr))", gap: "1.25rem" }}>
             {filteredCombinations.map((combo: PatternCombination) => (
               <div
                 key={combo.id}
                 className="glass-panel"
                 style={{
-                  padding: "1.5rem",
+                  padding: "1.25rem",
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-between",
                   gap: "1rem",
-                  borderRadius: "14px",
+                  borderRadius: "12px",
                   border: "1px solid var(--border-medium)"
                 }}
               >
@@ -549,34 +498,32 @@ export const PatternNavigator: React.FC<PatternNavigatorProps> = ({
                     <span className="badge badge-cyan">{combo.secondaryPattern}</span>
                   </div>
 
-                  <h3 style={{ fontSize: "1.2rem", fontWeight: 800, marginTop: "0.5rem" }}>
+                  <h3 style={{ fontSize: "1.15rem", fontWeight: 800, marginTop: "0.4rem" }}>
                     {combo.name}
                   </h3>
 
-                  <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginTop: "0.4rem", lineHeight: 1.5 }}>
+                  <p style={{ fontSize: "0.85rem", color: "var(--text-secondary)", marginTop: "0.3rem", lineHeight: 1.5 }}>
                     {combo.whyItWorks}
                   </p>
 
-                  {/* Recognition Signals */}
-                  <div style={{ marginTop: "0.85rem" }}>
+                  <div style={{ marginTop: "0.75rem" }}>
                     <span style={{ fontSize: "0.72rem", fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase" }}>
-                      Recognition Cues & Problem Signals:
+                      Recognition Cues:
                     </span>
-                    <ul style={{ paddingLeft: "1.2rem", margin: "0.4rem 0 0 0", fontSize: "0.8rem", color: "var(--text-secondary)", lineHeight: 1.45 }}>
+                    <ul style={{ paddingLeft: "1.2rem", margin: "0.3rem 0 0 0", fontSize: "0.8rem", color: "var(--text-secondary)", lineHeight: 1.45 }}>
                       {combo.recognitionSignals.map((sig, i) => (
-                        <li key={i} style={{ marginBottom: "0.25rem" }}>
+                        <li key={i} style={{ marginBottom: "0.2rem" }}>
                           {sig}
                         </li>
                       ))}
                     </ul>
                   </div>
 
-                  {/* Code Snippet Box */}
                   <div
                     style={{
-                      marginTop: "0.85rem",
+                      marginTop: "0.75rem",
                       background: "var(--box-bg)",
-                      padding: "0.75rem 0.9rem",
+                      padding: "0.65rem 0.85rem",
                       borderRadius: "8px",
                       fontSize: "0.78rem",
                       fontFamily: "var(--font-mono)",
@@ -587,48 +534,6 @@ export const PatternNavigator: React.FC<PatternNavigatorProps> = ({
                   >
                     {combo.exampleSnippet}
                   </div>
-
-                  {/* Representative Problems */}
-                  <div style={{ marginTop: "0.85rem" }}>
-                    <span style={{ fontSize: "0.72rem", fontWeight: 700, color: "var(--text-dim)", textTransform: "uppercase" }}>
-                      Representative LeetCode Problems:
-                    </span>
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", marginTop: "0.4rem" }}>
-                      {combo.representativeProblems.map((prob, i) => {
-                        const badgeStyle = getDifficultyBadge(prob.difficulty);
-                        return (
-                          <div
-                            key={i}
-                            style={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: "0.4rem",
-                              fontSize: "0.75rem",
-                              padding: "0.25rem 0.6rem",
-                              background: "var(--box-bg)",
-                              borderRadius: "6px",
-                              border: "1px solid var(--border-subtle)"
-                            }}
-                          >
-                            <span style={{ color: "var(--text-primary)", fontWeight: 600 }}>{prob.title}</span>
-                            <span
-                              style={{
-                                fontSize: "0.65rem",
-                                fontWeight: 700,
-                                padding: "0.1rem 0.35rem",
-                                borderRadius: "4px",
-                                background: badgeStyle.bg,
-                                color: badgeStyle.color,
-                                border: badgeStyle.border
-                              }}
-                            >
-                              {prob.difficulty}
-                            </span>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
                 </div>
               </div>
             ))}
@@ -638,4 +543,3 @@ export const PatternNavigator: React.FC<PatternNavigatorProps> = ({
     </div>
   );
 };
-
