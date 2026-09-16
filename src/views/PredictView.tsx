@@ -49,7 +49,7 @@ export const PredictView: React.FC<PredictViewProps> = ({ language }) => {
   const accuracy = totalAnswered > 0 ? Math.round((correctCount / totalAnswered) * 100) : 100;
 
   return (
-    <div className="page-container">
+    <div className="page-container" style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
       {/* Top Header & Mental Model Metrics Banner */}
       <div
         className="glass-panel"
@@ -59,7 +59,8 @@ export const PredictView: React.FC<PredictViewProps> = ({ language }) => {
           justifyContent: "space-between",
           padding: "1.25rem 1.5rem",
           flexWrap: "wrap",
-          gap: "1rem"
+          gap: "1rem",
+          borderRadius: "14px"
         }}
       >
         <div>
@@ -67,10 +68,10 @@ export const PredictView: React.FC<PredictViewProps> = ({ language }) => {
             <span className="badge badge-indigo">MENTAL MODEL GYM</span>
             <span className="badge badge-amber">INTERACTIVE PREDICTION</span>
           </div>
-          <h1 style={{ fontSize: "1.6rem", marginTop: "0.4rem" }}>
+          <h1 style={{ fontSize: "1.6rem", fontWeight: 800, marginTop: "0.4rem" }}>
             Predict The Next Step
           </h1>
-          <p style={{ color: "var(--text-secondary)", fontSize: "0.85rem", margin: "0.2rem 0 0 0" }}>
+          <p style={{ color: "var(--text-secondary)", fontSize: "0.875rem", margin: "0.2rem 0 0 0", maxWidth: "800px" }}>
             True mastery means knowing what the computer will do before pressing 'Next'. Step through the algorithm and forecast state changes.
           </p>
         </div>
@@ -132,7 +133,7 @@ export const PredictView: React.FC<PredictViewProps> = ({ language }) => {
       </div>
 
       {/* Algorithm Selector Pills */}
-      <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+      <div style={{ display: "flex", gap: "0.6rem", overflowX: "auto", paddingBottom: "0.25rem", scrollbarWidth: "thin" }}>
         {ALL_ALGORITHMS.map((algo) => {
           const isSelected = selectedAlgo.id === algo.id;
           return (
@@ -145,11 +146,15 @@ export const PredictView: React.FC<PredictViewProps> = ({ language }) => {
               }}
               className="btn"
               style={{
+                flexShrink: 0,
                 background: isSelected ? "var(--indigo-500)" : "var(--chip-inactive-bg)",
                 color: isSelected ? "#ffffff" : "var(--chip-inactive-text)",
                 border: isSelected ? "1px solid var(--indigo-400)" : "1px solid var(--border-subtle)",
-                fontSize: "0.8rem",
-                padding: "0.4rem 0.8rem"
+                fontSize: "0.825rem",
+                padding: "0.45rem 0.9rem",
+                borderRadius: "8px",
+                cursor: "pointer",
+                whiteSpace: "nowrap"
               }}
             >
               {algo.name}
@@ -159,7 +164,7 @@ export const PredictView: React.FC<PredictViewProps> = ({ language }) => {
       </div>
 
       {/* Main Simulation Stage & Controls */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "1rem", flex: 1, minHeight: "500px" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem", flex: 1, minHeight: "520px" }}>
         <div style={{ flex: 1 }}>
           <SimulationStage
             event={currentEvent}

@@ -98,6 +98,7 @@ export const SolveView: React.FC<SolveViewProps> = ({ language, onSelectLanguage
                 onClick={() => handleSelectProblem(prob)}
                 className="btn"
                 style={{
+                  flexShrink: 0,
                   background: isSelected ? "linear-gradient(135deg, var(--indigo-600), var(--indigo-500))" : "var(--chip-inactive-bg)",
                   color: isSelected ? "#ffffff" : "var(--text-secondary)",
                   border: isSelected ? "1px solid var(--indigo-400)" : "1px solid var(--border-subtle)",
@@ -108,7 +109,8 @@ export const SolveView: React.FC<SolveViewProps> = ({ language, onSelectLanguage
                   display: "flex",
                   alignItems: "center",
                   gap: "0.5rem",
-                  boxShadow: isSelected ? "0 4px 12px rgba(99, 102, 241, 0.3)" : "none"
+                  boxShadow: isSelected ? "0 4px 12px rgba(99, 102, 241, 0.3)" : "none",
+                  cursor: "pointer"
                 }}
               >
                 <span>{prob.title}</span>

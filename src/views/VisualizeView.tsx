@@ -338,9 +338,9 @@ export const VisualizeView: React.FC<VisualizeViewProps> = ({
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
-          gap: "1.25rem",
-          minHeight: "560px"
+          gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))",
+          gap: "1.5rem",
+          minHeight: "580px"
         }}
       >
         {/* Left Pane: Code Studio with Active Line Sync */}
@@ -354,7 +354,7 @@ export const VisualizeView: React.FC<VisualizeViewProps> = ({
         </div>
 
         {/* Center Pane: Dynamic Simulation Canvas */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
           <div style={{ flex: 1 }}>
             <SimulationStage
               event={currentEvent}
@@ -379,12 +379,12 @@ export const VisualizeView: React.FC<VisualizeViewProps> = ({
         </div>
 
         {/* Right Pane: State & Memory Inspector */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
           <ComputerVisionHUD event={currentEvent} />
-          <div style={{ flex: 1, minHeight: "220px" }}>
+          <div style={{ flex: 1, minHeight: "240px" }}>
             <MemoryInspector event={currentEvent} />
           </div>
-          <div style={{ height: "160px" }}>
+          <div style={{ height: "180px" }}>
             <CallStackPanel callStack={currentEvent.callStack} />
           </div>
         </div>

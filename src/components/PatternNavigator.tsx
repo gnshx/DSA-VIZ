@@ -221,10 +221,14 @@ export const PatternNavigator: React.FC<PatternNavigatorProps> = ({
           <div
             style={{
               display: "flex",
-              gap: "0.5rem",
+              flexDirection: "row",
+              alignItems: "center",
+              gap: "0.6rem",
               overflowX: "auto",
-              paddingBottom: "0.5rem",
-              scrollbarWidth: "thin"
+              padding: "0.4rem 0.2rem 0.8rem 0.2rem",
+              scrollbarWidth: "thin",
+              width: "100%",
+              maxWidth: "100%"
             }}
           >
             {filteredFamilies.map((fam) => {
@@ -235,7 +239,8 @@ export const PatternNavigator: React.FC<PatternNavigatorProps> = ({
                   onClick={() => setActiveFamilyId(fam.id)}
                   className="btn"
                   style={{
-                    padding: "0.55rem 1rem",
+                    flexShrink: 0,
+                    padding: "0.55rem 1.05rem",
                     fontSize: "0.85rem",
                     fontWeight: isSelected ? 700 : 500,
                     whiteSpace: "nowrap",
@@ -248,12 +253,14 @@ export const PatternNavigator: React.FC<PatternNavigatorProps> = ({
                     display: "flex",
                     alignItems: "center",
                     gap: "0.5rem",
-                    borderRadius: "10px"
+                    borderRadius: "10px",
+                    cursor: "pointer"
                   }}
                 >
                   <span>{fam.name}</span>
                   <span
                     style={{
+                      flexShrink: 0,
                       fontSize: "0.7rem",
                       padding: "0.15rem 0.45rem",
                       borderRadius: "999px",
