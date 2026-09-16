@@ -51,7 +51,7 @@ export const SolveView: React.FC<SolveViewProps> = ({ language, onSelectLanguage
   };
 
   return (
-    <div style={{ maxWidth: "1800px", margin: "0 auto", padding: "1.25rem", display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+    <div className="page-container">
       {/* Problem Selection Pills */}
       <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", overflowX: "auto", paddingBottom: "0.5rem" }}>
         {ALL_PROBLEMS.map((prob) => {
@@ -78,7 +78,7 @@ export const SolveView: React.FC<SolveViewProps> = ({ language, onSelectLanguage
       </div>
 
       {/* Main Split Grid */}
-      <div style={{ display: "grid", gridTemplateColumns: "440px 1fr", gap: "1.25rem", minHeight: "620px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "1.25rem", minHeight: "620px" }}>
         {/* Left Column: Problem Statement & Starter Code */}
         <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
           {/* Problem Statement Card */}

@@ -167,7 +167,9 @@ export const UniversalTimeline: React.FC<UniversalTimelineProps> = ({
                     color: isSelected ? "var(--amber-400)" : "var(--text-muted)",
                     fontWeight: isSelected ? 700 : 500,
                     fontSize: "0.75rem",
-                    padding: "0.2rem 0.5rem",
+                    padding: "0.25rem 0.55rem",
+                    minHeight: "32px",
+                    minWidth: "32px",
                     borderRadius: "6px",
                     cursor: "pointer"
                   }}

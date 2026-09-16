@@ -147,7 +147,7 @@ export const ReviseView: React.FC<ReviseViewProps> = ({ onSelectAlgorithm }) => 
   ];
 
   return (
-    <div style={{ maxWidth: "1800px", margin: "0 auto", padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+    <div className="page-container">
       {/* Tab Selector */}
       <div
         style={{

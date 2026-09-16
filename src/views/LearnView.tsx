@@ -49,7 +49,7 @@ export const LearnView: React.FC<LearnViewProps> = ({ language, onSelectLanguage
   };
 
   return (
-    <div style={{ maxWidth: "1600px", margin: "0 auto", padding: "1.5rem", display: "flex", flexDirection: "column", gap: "2rem" }}>
+    <div className="page-container">
       {/* Course Header & Algorithm Selector */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem" }}>
         <div>
@@ -147,7 +147,7 @@ export const LearnView: React.FC<LearnViewProps> = ({ language, onSelectLanguage
       </div>
 
       {/* Synchronized Simulation & Code Stage */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 420px", gap: "1.5rem", minHeight: "520px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "1.5rem", minHeight: "520px" }}>
         {/* Left: Simulation Canvas & Timeline */}
         <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
           <div style={{ flex: 1 }}>

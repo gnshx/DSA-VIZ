@@ -49,7 +49,7 @@ export const PredictView: React.FC<PredictViewProps> = ({ language }) => {
   const accuracy = totalAnswered > 0 ? Math.round((correctCount / totalAnswered) * 100) : 100;
 
   return (
-    <div style={{ maxWidth: "1600px", margin: "0 auto", padding: "1.25rem", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+    <div className="page-container">
       {/* Top Header & Mental Model Metrics Banner */}
       <div
         className="glass-panel"

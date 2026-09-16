@@ -105,16 +105,7 @@ export const VisualizeView: React.FC<VisualizeViewProps> = ({
   };
 
   return (
-    <div
-      style={{
-        maxWidth: "1800px",
-        margin: "0 auto",
-        padding: "1.25rem",
-        display: "flex",
-        flexDirection: "column",
-        gap: "1rem"
-      }}
-    >
+    <div className="page-container">
       {/* Pattern Catalog Collapsible Toggle Banner */}
       <div
         className="glass-panel"
@@ -347,8 +338,8 @@ export const VisualizeView: React.FC<VisualizeViewProps> = ({
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "380px 1fr 340px",
-          gap: "1rem",
+          gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+          gap: "1.25rem",
           minHeight: "560px"
         }}
       >

@@ -1,6 +1,6 @@
 import React from "react";
 import { SupportedLanguage } from "../types/algorithm";
-import { Activity, BookOpen, Brain, CheckCircle2, Code2, Network, Terminal } from "lucide-react";
+import { Activity, BookOpen, Brain, CheckCircle2, Code2, Network, Sun, Moon, Terminal } from "lucide-react";
 
 export type AppMode = "learn" | "visualize" | "solve" | "predict" | "revise";
 
@@ -9,13 +9,17 @@ interface NavbarProps {
   onSelectMode: (mode: AppMode) => void;
   language: SupportedLanguage;
   onSelectLanguage: (lang: SupportedLanguage) => void;
+  theme: "dark" | "light";
+  onToggleTheme: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   currentMode,
   onSelectMode,
   language,
-  onSelectLanguage
+  onSelectLanguage,
+  theme,
+  onToggleTheme
 }) => {
   const modes: { id: AppMode; label: string; icon: React.ReactNode }[] = [
     { id: "learn", label: "Learn", icon: <BookOpen size={16} /> },
@@ -35,13 +39,14 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <header
       style={{
-        background: "rgba(8, 12, 20, 0.95)",
+        background: "var(--nav-bg)",
         backdropFilter: "blur(16px)",
         borderBottom: "1px solid var(--border-subtle)",
         position: "sticky",
         top: 0,
         zIndex: 50,
-        padding: "0.65rem 1.5rem"
+        padding: "0.65rem 1.5rem",
+        transition: "background var(--transition-normal)"
       }}
     >
       <div
@@ -51,7 +56,8 @@ export const Navbar: React.FC<NavbarProps> = ({
           justifyContent: "space-between",
           maxWidth: "1800px",
           margin: "0 auto",
-          gap: "1.5rem"
+          gap: "1rem",
+          flexWrap: "wrap"
         }}
       >
         {/* Brand & North Star */}
@@ -126,7 +132,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                     color: isSelected ? "var(--cyan-400)" : "var(--text-muted)",
                     fontWeight: isSelected ? 700 : 500,
                     fontSize: "0.75rem",
-                    padding: "0.25rem 0.6rem",
+                    padding: "0.35rem 0.65rem",
+                    minHeight: "32px",
                     borderRadius: "6px",
                     cursor: "pointer",
                     transition: "all var(--transition-fast)"
@@ -136,6 +143,27 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </button>
               );
             })}
+          </div>
+
+          {/* Day / Night Pilot Theme Toggle Button */}
+          <div className="tooltip-container">
+            <button
+              onClick={onToggleTheme}
+              className="btn btn-ghost btn-icon"
+              style={{
+                borderRadius: "10px",
+                border: "1px solid var(--border-subtle)",
+                background: theme === "light" ? "rgba(245, 158, 11, 0.15)" : "rgba(99, 102, 241, 0.15)",
+                color: theme === "light" ? "var(--amber-500)" : "var(--indigo-400)",
+                transition: "all var(--transition-fast)"
+              }}
+              aria-label="Toggle Theme Pilot"
+            >
+              {theme === "light" ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
+            <span className="tooltip-text">
+              {theme === "light" ? "Switch to Night Mode 🌙" : "Switch to Day Mode ☀️"}
+            </span>
           </div>
         </div>
       </div>
