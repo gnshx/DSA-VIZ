@@ -46,7 +46,7 @@ export const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ onSelectAlgorith
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            background: "radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.05) 0%, rgba(8, 12, 20, 0.8) 100%)",
+            background: "var(--stage-bg)",
             padding: "1rem"
           }}
         >
@@ -60,7 +60,7 @@ export const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ onSelectAlgorith
                 refY="3"
                 orient="auto"
               >
-                <polygon points="0 0, 8 3, 0 6" fill="rgba(99, 102, 241, 0.5)" />
+                <polygon points="0 0, 8 3, 0 6" fill="var(--indigo-400)" />
               </marker>
             </defs>
 
@@ -79,7 +79,7 @@ export const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ onSelectAlgorith
                   y1={y1}
                   x2={x2}
                   y2={y2}
-                  stroke={isSelectedPath ? "var(--cyan-400)" : "rgba(255, 255, 255, 0.12)"}
+                  stroke={isSelectedPath ? "var(--cyan-400)" : "var(--border-medium)"}
                   strokeWidth={isSelectedPath ? "2.5" : "1.5"}
                   strokeDasharray={isSelectedPath ? "none" : "4,4"}
                   markerEnd="url(#graph-arrow)"
@@ -130,7 +130,7 @@ export const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ onSelectAlgorith
                     x={x}
                     y={y + 4}
                     textAnchor="middle"
-                    fill="#ffffff"
+                    fill={isSelected ? "#ffffff" : "var(--text-primary)"}
                     fontSize="11"
                     fontWeight="700"
                     fontFamily="var(--font-sans)"

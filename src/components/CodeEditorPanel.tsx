@@ -54,7 +54,7 @@ export const CodeEditorPanel: React.FC<CodeEditorPanelProps> = ({
           alignItems: "center",
           justifyContent: "space-between",
           padding: "0.6rem 1rem",
-          background: "rgba(0, 0, 0, 0.3)",
+          background: "var(--panel-header-bg)",
           borderBottom: "1px solid var(--border-subtle)"
         }}
       >
@@ -106,7 +106,7 @@ export const CodeEditorPanel: React.FC<CodeEditorPanelProps> = ({
                 alignItems: "center",
                 padding: "0 1rem",
                 position: "relative",
-                background: isActive ? "rgba(99, 102, 241, 0.15)" : "transparent",
+                background: isActive ? "var(--code-active-bg)" : "transparent",
                 transition: "background var(--transition-fast)"
               }}
             >
@@ -143,7 +143,7 @@ export const CodeEditorPanel: React.FC<CodeEditorPanelProps> = ({
                 style={{
                   margin: 0,
                   whiteSpace: "pre",
-                  color: isActive ? "#ffffff" : "var(--text-primary)",
+                  color: isActive ? "var(--code-active-text)" : "var(--text-primary)",
                   fontWeight: isActive ? 600 : 400,
                   overflowX: "auto"
                 }}

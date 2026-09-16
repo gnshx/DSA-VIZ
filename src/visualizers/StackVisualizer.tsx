@@ -88,7 +88,7 @@ export const StackVisualizer: React.FC<StackVisualizerProps> = ({ event }) => {
                     borderRadius: "8px",
                     background: isTop
                       ? "linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(168, 85, 247, 0.25))"
-                      : "rgba(255, 255, 255, 0.05)",
+                      : "var(--bg-tertiary)",
                     border: isTop ? "2px solid var(--indigo-400)" : "1px solid var(--border-subtle)",
                     display: "flex",
                     alignItems: "center",
@@ -96,7 +96,7 @@ export const StackVisualizer: React.FC<StackVisualizerProps> = ({ event }) => {
                     fontFamily: "var(--font-mono)",
                     fontSize: "1.1rem",
                     fontWeight: 700,
-                    color: isTop ? "#ffffff" : "var(--text-secondary)",
+                    color: isTop ? "var(--cyan-400)" : "var(--text-primary)",
                     boxShadow: isTop ? "var(--shadow-glow-indigo)" : "none",
                     animation: isTop && isPush ? "pulseGlow 1.5s infinite" : "none",
                     transition: "all var(--transition-normal)"

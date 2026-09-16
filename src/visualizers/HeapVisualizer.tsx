@@ -73,7 +73,7 @@ export const HeapVisualizer: React.FC<HeapVisualizerProps> = ({ event }) => {
                 y1={pCoord.y}
                 x2={cCoord.x}
                 y2={cCoord.y}
-                stroke={isEdgeActive ? "var(--cyan-400)" : "rgba(255, 255, 255, 0.18)"}
+                stroke={isEdgeActive ? "var(--cyan-400)" : "var(--border-medium)"}
                 strokeWidth={isEdgeActive ? "3" : "1.5"}
                 style={{ transition: "all var(--transition-normal)" }}
               />
@@ -93,13 +93,13 @@ export const HeapVisualizer: React.FC<HeapVisualizerProps> = ({ event }) => {
             let strokeColor = "var(--border-medium)";
 
             if (isSwapped) {
-              fillColor = "rgba(244, 63, 94, 0.35)";
+              fillColor = "var(--rose-glow)";
               strokeColor = "var(--rose-400)";
             } else if (isActive) {
               fillColor = "var(--indigo-500)";
               strokeColor = "var(--cyan-400)";
             } else if (isParent) {
-              fillColor = "rgba(245, 158, 11, 0.3)";
+              fillColor = "var(--amber-glow)";
               strokeColor = "var(--amber-400)";
             }
 
@@ -129,7 +129,7 @@ export const HeapVisualizer: React.FC<HeapVisualizerProps> = ({ event }) => {
                   x={coord.x}
                   y={coord.y + 5}
                   textAnchor="middle"
-                  fill="#ffffff"
+                  fill={isActive ? "#ffffff" : "var(--text-primary)"}
                   fontSize="12"
                   fontWeight="700"
                   fontFamily="var(--font-mono)"
@@ -196,12 +196,12 @@ export const HeapVisualizer: React.FC<HeapVisualizerProps> = ({ event }) => {
                   fontWeight: 700,
                   fontSize: "1rem",
                   background: isSwapped
-                    ? "rgba(244, 63, 94, 0.3)"
+                    ? "var(--rose-glow)"
                     : isActive
-                    ? "rgba(99, 102, 241, 0.35)"
+                    ? "var(--indigo-glow)"
                     : isParent
-                    ? "rgba(245, 158, 11, 0.25)"
-                    : "rgba(255, 255, 255, 0.05)",
+                    ? "var(--amber-glow)"
+                    : "var(--bg-tertiary)",
                   border: isSwapped
                     ? "2px solid var(--rose-400)"
                     : isActive
@@ -213,7 +213,7 @@ export const HeapVisualizer: React.FC<HeapVisualizerProps> = ({ event }) => {
                     ? "var(--rose-400)"
                     : isActive
                     ? "var(--cyan-400)"
-                    : "#ffffff",
+                    : "var(--text-primary)",
                   transition: "all var(--transition-normal)"
                 }}
               >

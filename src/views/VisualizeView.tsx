@@ -117,8 +117,8 @@ export const VisualizeView: React.FC<VisualizeViewProps> = ({
           flexWrap: "wrap",
           gap: "0.75rem",
           background: showPatternDirectory
-            ? "rgba(99, 102, 241, 0.15)"
-            : "rgba(255, 255, 255, 0.02)",
+            ? "var(--indigo-glow)"
+            : "var(--bg-tertiary)",
           border: showPatternDirectory
             ? "1px solid var(--indigo-400)"
             : "1px solid var(--border-subtle)",
@@ -221,7 +221,7 @@ export const VisualizeView: React.FC<VisualizeViewProps> = ({
               value={customInputText}
               onChange={(e) => setCustomInputText(e.target.value)}
               style={{
-                background: "rgba(0, 0, 0, 0.35)",
+                background: "var(--bg-tertiary)",
                 color: "var(--text-primary)",
                 border: "1px solid var(--border-subtle)",
                 borderRadius: "6px",
@@ -260,7 +260,7 @@ export const VisualizeView: React.FC<VisualizeViewProps> = ({
             alignItems: "center",
             gap: "0.6rem",
             flexWrap: "wrap",
-            background: "rgba(15, 23, 42, 0.6)"
+            background: "var(--chip-container-bg)"
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", marginRight: "0.4rem" }}>
@@ -283,8 +283,8 @@ export const VisualizeView: React.FC<VisualizeViewProps> = ({
                     fontSize: "0.75rem",
                     fontWeight: isActive ? 700 : 500,
                     borderRadius: "6px",
-                    background: isActive ? "var(--indigo-500)" : "rgba(255, 255, 255, 0.04)",
-                    color: isActive ? "#ffffff" : "var(--text-secondary)",
+                    background: isActive ? "var(--indigo-500)" : "var(--chip-inactive-bg)",
+                    color: isActive ? "#ffffff" : "var(--chip-inactive-text)",
                     border: isActive ? "1px solid var(--indigo-400)" : "1px solid var(--border-subtle)",
                     boxShadow: isActive ? "0 2px 8px rgba(99, 102, 241, 0.35)" : "none"
                   }}

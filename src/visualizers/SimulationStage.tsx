@@ -58,7 +58,7 @@ export const SimulationStage: React.FC<SimulationStageProps> = ({ event, title, 
           justifyContent: "space-between",
           padding: "0.85rem 1.25rem",
           borderBottom: "1px solid var(--border-subtle)",
-          background: "rgba(0, 0, 0, 0.25)"
+          background: "var(--panel-header-bg)"
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
@@ -92,8 +92,7 @@ export const SimulationStage: React.FC<SimulationStageProps> = ({ event, title, 
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background:
-            "radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.04) 0%, rgba(8, 12, 20, 0.6) 100%)",
+          background: "var(--stage-bg)",
           position: "relative",
           overflow: "auto"
         }}
@@ -106,7 +105,7 @@ export const SimulationStage: React.FC<SimulationStageProps> = ({ event, title, 
         style={{
           padding: "0.85rem 1.25rem",
           borderTop: "1px solid var(--border-subtle)",
-          background: "rgba(11, 16, 28, 0.9)",
+          background: "var(--bg-tertiary)",
           display: "flex",
           alignItems: "center",
           gap: "0.75rem"

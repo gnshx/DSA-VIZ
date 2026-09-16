@@ -68,7 +68,7 @@ export const UniversalTimeline: React.FC<UniversalTimelineProps> = ({
         flexDirection: "column",
         gap: "0.75rem",
         padding: "0.85rem 1.25rem",
-        background: "rgba(13, 19, 34, 0.95)"
+        background: "var(--bg-card)"
       }}
     >
       {/* Scrubber Bar */}
@@ -153,7 +153,7 @@ export const UniversalTimeline: React.FC<UniversalTimelineProps> = ({
 
         {/* Speed Selector & Keyboard Hint */}
         <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.25rem", background: "rgba(255, 255, 255, 0.04)", padding: "0.2rem", borderRadius: "8px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.25rem", background: "var(--bg-tertiary)", padding: "0.2rem", borderRadius: "8px" }}>
             <Zap size={14} color="var(--amber-400)" style={{ marginLeft: "0.4rem" }} />
             {speeds.map((s) => {
               const isSelected = playbackSpeed === s;
@@ -181,7 +181,7 @@ export const UniversalTimeline: React.FC<UniversalTimelineProps> = ({
           </div>
 
           <span style={{ fontSize: "0.72rem", color: "var(--text-dim)" }}>
-            Tip: Press <kbd style={{ background: "rgba(255,255,255,0.1)", padding: "2px 4px", borderRadius: "4px" }}>Space</kbd> or <kbd style={{ background: "rgba(255,255,255,0.1)", padding: "2px 4px", borderRadius: "4px" }}>←</kbd> <kbd style={{ background: "rgba(255,255,255,0.1)", padding: "2px 4px", borderRadius: "4px" }}>→</kbd>
+            Tip: Press <kbd style={{ background: "var(--bg-tertiary)", color: "var(--text-secondary)", padding: "2px 4px", borderRadius: "4px" }}>Space</kbd> or <kbd style={{ background: "var(--bg-tertiary)", color: "var(--text-secondary)", padding: "2px 4px", borderRadius: "4px" }}>←</kbd> <kbd style={{ background: "var(--bg-tertiary)", color: "var(--text-secondary)", padding: "2px 4px", borderRadius: "4px" }}>→</kbd>
           </span>
         </div>
       </div>

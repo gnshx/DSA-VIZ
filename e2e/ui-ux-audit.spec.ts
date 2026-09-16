@@ -97,4 +97,34 @@ test.describe('DSA-VIZ Enterprise UI/UX & Responsive Layout Audit', () => {
     }
   });
 
+  test('Theme toggle should switch between Light and Dark mode seamlessly with zero reload flicker', async ({ page }) => {
+    const themeBtn = page.locator('button[aria-label="Toggle Theme Pilot"]').first();
+    await expect(themeBtn).toBeVisible();
+
+    // Toggle to Light mode if currently dark
+    const initialTheme = await page.evaluate(() => document.documentElement.getAttribute('data-theme'));
+    if (initialTheme === 'dark') {
+      await themeBtn.click();
+      await page.waitForTimeout(100);
+    }
+
+    const lightTheme = await page.evaluate(() => document.documentElement.getAttribute('data-theme'));
+    expect(lightTheme).toBe('light');
+
+    // Take screenshot of Light Mode Visualize
+    await page.screenshot({ path: 'e2e/screenshots/audit-light-mode-visualize.png', fullPage: true });
+
+    // Reload page to verify theme persistence without flash
+    await page.reload();
+    await page.waitForLoadState('domcontentloaded');
+    const reloadedTheme = await page.evaluate(() => document.documentElement.getAttribute('data-theme'));
+    expect(reloadedTheme).toBe('light');
+
+    // Toggle back to Dark mode
+    await themeBtn.click();
+    await page.waitForTimeout(100);
+    const darkTheme = await page.evaluate(() => document.documentElement.getAttribute('data-theme'));
+    expect(darkTheme).toBe('dark');
+  });
+
 });

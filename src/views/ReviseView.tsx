@@ -265,7 +265,7 @@ export const ReviseView: React.FC<ReviseViewProps> = ({ onSelectAlgorithm }) => 
               {/* Template hint */}
               <div
                 style={{
-                  background: "rgba(0, 0, 0, 0.3)",
+                  background: "var(--box-bg)",
                   padding: "0.6rem 0.75rem",
                   borderRadius: "6px",
                   fontSize: "0.75rem",

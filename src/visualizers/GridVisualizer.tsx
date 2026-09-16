@@ -49,7 +49,7 @@ export const GridVisualizer: React.FC<GridVisualizerProps> = ({ event }) => {
           <span style={{ fontSize: "0.75rem", color: "var(--indigo-400)", fontWeight: 700, textTransform: "uppercase" }}>
             State Transition:
           </span>
-          <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.85rem", color: "#ffffff", fontWeight: 600 }}>
+          <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.85rem", color: "var(--text-primary)", fontWeight: 600 }}>
             {formula}
           </span>
         </div>
@@ -68,7 +68,7 @@ export const GridVisualizer: React.FC<GridVisualizerProps> = ({ event }) => {
           display: "flex",
           flexDirection: "column",
           gap: "4px",
-          background: "rgba(0, 0, 0, 0.4)",
+          background: "var(--bg-tertiary)",
           padding: "1rem",
           borderRadius: "12px",
           border: "1px solid var(--border-subtle)",
@@ -126,14 +126,14 @@ export const GridVisualizer: React.FC<GridVisualizerProps> = ({ event }) => {
               const isBase = isBaseCase(rIdx, cIdx);
               const hasValue = cellVal !== null && cellVal !== undefined;
 
-              let bg = "rgba(255, 255, 255, 0.03)";
+              let bg = "var(--bg-card)";
               let border = "1px solid var(--border-subtle)";
               let color = "var(--text-dim)";
 
               if (isActive) {
-                bg = "rgba(6, 182, 212, 0.25)";
+                bg = "var(--cyan-glow)";
                 border = "2px solid var(--cyan-400)";
-                color = "#ffffff";
+                color = "var(--cyan-400)";
               } else if (isDep) {
                 bg = "rgba(245, 158, 11, 0.2)";
                 border = "2px solid var(--amber-400)";

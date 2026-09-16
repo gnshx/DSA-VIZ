@@ -57,7 +57,7 @@ export const MemoryInspector: React.FC<MemoryInspectorProps> = ({ event }) => {
                 }}
               >
                 <span style={{ color: "var(--indigo-400)", fontWeight: 700 }}>{name}:</span>
-                <span style={{ color: "#ffffff" }}>{String(val)}</span>
+                <span style={{ color: "var(--text-primary)" }}>{String(val)}</span>
               </div>
             ))
           )}
@@ -74,7 +74,7 @@ export const MemoryInspector: React.FC<MemoryInspectorProps> = ({ event }) => {
             display: "flex",
             flexDirection: "column",
             gap: "0.35rem",
-            background: "rgba(0, 0, 0, 0.25)",
+            background: "var(--box-bg)",
             padding: "0.5rem",
             borderRadius: "8px",
             border: "1px solid var(--border-subtle)"

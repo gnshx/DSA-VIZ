@@ -145,8 +145,8 @@ export const PredictView: React.FC<PredictViewProps> = ({ language }) => {
               }}
               className="btn"
               style={{
-                background: isSelected ? "var(--indigo-500)" : "rgba(255, 255, 255, 0.04)",
-                color: isSelected ? "#ffffff" : "var(--text-secondary)",
+                background: isSelected ? "var(--indigo-500)" : "var(--chip-inactive-bg)",
+                color: isSelected ? "#ffffff" : "var(--chip-inactive-text)",
                 border: isSelected ? "1px solid var(--indigo-400)" : "1px solid var(--border-subtle)",
                 fontSize: "0.8rem",
                 padding: "0.4rem 0.8rem"

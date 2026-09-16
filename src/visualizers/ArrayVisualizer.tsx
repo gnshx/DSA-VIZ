@@ -117,16 +117,16 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ event }) => {
                     ? "linear-gradient(145deg, rgba(244, 63, 94, 0.25), rgba(244, 63, 94, 0.1))"
                     : isHighlighted
                     ? "linear-gradient(145deg, rgba(6, 182, 212, 0.25), rgba(99, 102, 241, 0.2))"
-                    : "linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02))",
+                    : "var(--bg-card)",
                   border: isSwapped
                     ? "2px solid var(--rose-400)"
                     : isHighlighted
                     ? "2px solid var(--cyan-400)"
-                    : "1px solid var(--border-subtle)",
+                    : "1px solid var(--border-medium)",
                   color: isSwapped
                     ? "var(--rose-400)"
                     : isHighlighted
-                    ? "#ffffff"
+                    ? "var(--cyan-400)"
                     : "var(--text-primary)",
                   boxShadow: isSwapped
                     ? "var(--shadow-glow-rose)"

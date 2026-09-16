@@ -59,7 +59,7 @@ export const TreeVisualizer: React.FC<TreeVisualizerProps> = ({ event }) => {
                 y1={parentCoord.y}
                 x2={leftCoord.x}
                 y2={leftCoord.y}
-                stroke={isPathActive ? "var(--cyan-400)" : "rgba(255, 255, 255, 0.18)"}
+                stroke={isPathActive ? "var(--cyan-400)" : "var(--border-medium)"}
                 strokeWidth={isPathActive ? "3" : "1.5"}
                 strokeDasharray={isPathActive ? "none" : "3,3"}
                 style={{ transition: "all var(--transition-normal)" }}
@@ -77,7 +77,7 @@ export const TreeVisualizer: React.FC<TreeVisualizerProps> = ({ event }) => {
                 y1={parentCoord.y}
                 x2={rightCoord.x}
                 y2={rightCoord.y}
-                stroke={isPathActive ? "var(--cyan-400)" : "rgba(255, 255, 255, 0.18)"}
+                stroke={isPathActive ? "var(--cyan-400)" : "var(--border-medium)"}
                 strokeWidth={isPathActive ? "3" : "1.5"}
                 strokeDasharray={isPathActive ? "none" : "3,3"}
                 style={{ transition: "all var(--transition-normal)" }}
@@ -129,7 +129,7 @@ export const TreeVisualizer: React.FC<TreeVisualizerProps> = ({ event }) => {
                 x={coord.x}
                 y={coord.y + 5}
                 textAnchor="middle"
-                fill="#ffffff"
+                fill={isActive ? "#ffffff" : "var(--text-primary)"}
                 fontSize="13"
                 fontWeight="700"
                 fontFamily="var(--font-mono)"

@@ -92,7 +92,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
 
         {/* Mode Navigation Tabs */}
-        <nav style={{ display: "flex", alignItems: "center", gap: "0.35rem", background: "rgba(255, 255, 255, 0.04)", padding: "0.3rem", borderRadius: "10px", border: "1px solid var(--border-subtle)" }}>
+        <nav style={{ display: "flex", alignItems: "center", gap: "0.35rem", background: "var(--bg-tertiary)", padding: "0.3rem", borderRadius: "10px", border: "1px solid var(--border-subtle)" }}>
           {modes.map((m) => {
             const isActive = currentMode === m.id;
             return (
@@ -118,7 +118,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Language Selector */}
         <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", background: "rgba(255, 255, 255, 0.03)", padding: "0.25rem", borderRadius: "8px", border: "1px solid var(--border-subtle)" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", background: "var(--bg-tertiary)", padding: "0.25rem", borderRadius: "8px", border: "1px solid var(--border-subtle)" }}>
             <Terminal size={14} color="var(--text-muted)" style={{ marginLeft: "0.4rem" }} />
             {languages.map((lang) => {
               const isSelected = language === lang.id;
@@ -128,7 +128,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => onSelectLanguage(lang.id)}
                   style={{
                     border: "none",
-                    background: isSelected ? "rgba(6, 182, 212, 0.2)" : "transparent",
+                    background: isSelected ? "var(--indigo-glow)" : "transparent",
                     color: isSelected ? "var(--cyan-400)" : "var(--text-muted)",
                     fontWeight: isSelected ? 700 : 500,
                     fontSize: "0.75rem",

@@ -50,7 +50,7 @@ export const PredictionModal: React.FC<PredictionModalProps> = ({
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: "rgba(8, 12, 20, 0.8)",
+        backgroundColor: "var(--bg-overlay)",
         backdropFilter: "blur(8px)",
         display: "flex",
         alignItems: "center",
@@ -104,8 +104,8 @@ export const PredictionModal: React.FC<PredictionModalProps> = ({
             fontSize: "1rem",
             fontWeight: 600,
             lineHeight: 1.5,
-            color: "#ffffff",
-            background: "rgba(255, 255, 255, 0.03)",
+            color: "var(--text-primary)",
+            background: "var(--bg-tertiary)",
             padding: "1rem",
             borderRadius: "8px",
             border: "1px solid var(--border-subtle)"
@@ -118,7 +118,7 @@ export const PredictionModal: React.FC<PredictionModalProps> = ({
         <div style={{ display: "flex", flexDirection: "column", gap: "0.6rem" }}>
           {challenge.options.map((opt) => {
             const isSelected = selectedOptionId === opt.id;
-            let optBackground = isSelected ? "rgba(99, 102, 241, 0.2)" : "rgba(255, 255, 255, 0.03)";
+            let optBackground = isSelected ? "var(--indigo-glow)" : "var(--bg-tertiary)";
             let optBorder = isSelected ? "1px solid var(--indigo-400)" : "1px solid var(--border-subtle)";
 
             if (hasSubmitted) {

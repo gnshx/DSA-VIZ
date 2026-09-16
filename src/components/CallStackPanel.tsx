@@ -40,7 +40,7 @@ export const CallStackPanel: React.FC<CallStackPanelProps> = ({ callStack }) => 
               style={{
                 padding: "0.45rem 0.65rem",
                 borderRadius: "6px",
-                background: isTop ? "rgba(99, 102, 241, 0.15)" : "rgba(255, 255, 255, 0.03)",
+                background: isTop ? "var(--indigo-glow)" : "var(--bg-tertiary)",
                 border: isTop ? "1px solid var(--indigo-400)" : "1px solid var(--border-subtle)",
                 display: "flex",
                 flexDirection: "column",

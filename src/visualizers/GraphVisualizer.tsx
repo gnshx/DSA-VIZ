@@ -49,7 +49,7 @@ export const GraphVisualizer: React.FC<GraphVisualizerProps> = ({ event }) => {
             refY="3.5"
             orient="auto"
           >
-            <polygon points="0 0, 10 3.5, 0 7" fill="rgba(255, 255, 255, 0.4)" />
+            <polygon points="0 0, 10 3.5, 0 7" fill="var(--text-muted)" />
           </marker>
           <marker
             id="arrowhead-active"
@@ -82,7 +82,7 @@ export const GraphVisualizer: React.FC<GraphVisualizerProps> = ({ event }) => {
                 y1={uNode.y}
                 x2={vNode.x}
                 y2={vNode.y}
-                stroke={isEdgeActive ? "var(--cyan-400)" : "rgba(255, 255, 255, 0.15)"}
+                stroke={isEdgeActive ? "var(--cyan-400)" : "var(--border-medium)"}
                 strokeWidth={isEdgeActive ? "3.5" : "1.5"}
                 markerEnd={isEdgeActive ? "url(#arrowhead-active)" : "url(#arrowhead)"}
                 style={{ transition: "all var(--transition-normal)" }}
@@ -95,7 +95,7 @@ export const GraphVisualizer: React.FC<GraphVisualizerProps> = ({ event }) => {
                     width="20"
                     height="16"
                     rx="4"
-                    fill="rgba(11, 16, 28, 0.9)"
+                    fill="var(--bg-tertiary)"
                     stroke="var(--border-subtle)"
                   />
                   <text
@@ -128,10 +128,10 @@ export const GraphVisualizer: React.FC<GraphVisualizerProps> = ({ event }) => {
             nodeColor = "var(--indigo-500)";
             strokeColor = "var(--cyan-400)";
           } else if (isVisited) {
-            nodeColor = "rgba(16, 185, 129, 0.25)";
+            nodeColor = "var(--emerald-glow)";
             strokeColor = "var(--emerald-400)";
           } else if (isFrontier) {
-            nodeColor = "rgba(6, 182, 212, 0.2)";
+            nodeColor = "var(--cyan-glow)";
             strokeColor = "var(--cyan-400)";
           }
 
@@ -167,7 +167,7 @@ export const GraphVisualizer: React.FC<GraphVisualizerProps> = ({ event }) => {
                 x={node.x}
                 y={node.y + 5}
                 textAnchor="middle"
-                fill="#ffffff"
+                fill={isActive ? "#ffffff" : "var(--text-primary)"}
                 fontSize="14"
                 fontWeight="700"
                 fontFamily="var(--font-mono)"

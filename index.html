@@ -11,8 +11,17 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- Theme Color -->
-    <meta name="theme-color" content="#090d16" />
+    <!-- Theme Color & Flash Prevention Script -->
+    <meta name="theme-color" content="#080c14" />
+    <script>
+      (function() {
+        try {
+          var saved = localStorage.getItem('dsa_viz_theme');
+          var theme = (saved === 'dark' || saved === 'light') ? saved : (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+          document.documentElement.setAttribute('data-theme', theme);
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

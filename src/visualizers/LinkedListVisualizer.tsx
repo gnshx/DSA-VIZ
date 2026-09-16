@@ -95,10 +95,10 @@ export const LinkedListVisualizer: React.FC<LinkedListVisualizerProps> = ({ even
                     ? "2px solid var(--indigo-400)"
                     : "1px solid var(--border-subtle)",
                   background: isCurr
-                    ? "linear-gradient(145deg, rgba(6, 182, 212, 0.2), rgba(15, 23, 42, 0.8))"
+                    ? "linear-gradient(145deg, rgba(6, 182, 212, 0.2), var(--bg-card))"
                     : isPrev
-                    ? "linear-gradient(145deg, rgba(99, 102, 241, 0.2), rgba(15, 23, 42, 0.8))"
-                    : "linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(15, 23, 42, 0.6))",
+                    ? "linear-gradient(145deg, rgba(99, 102, 241, 0.2), var(--bg-card))"
+                    : "var(--bg-card)",
                   boxShadow: isCurr
                     ? "var(--shadow-glow-cyan)"
                     : isPrev
@@ -133,7 +133,7 @@ export const LinkedListVisualizer: React.FC<LinkedListVisualizerProps> = ({ even
                     alignItems: "center",
                     justifyContent: "center",
                     color: node.nextId ? "var(--cyan-400)" : "var(--rose-400)",
-                    background: "rgba(0, 0, 0, 0.25)"
+                    background: "var(--bg-tertiary)"
                   }}
                 >
                   {node.nextId ? "next •" : "null"}

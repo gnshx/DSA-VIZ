@@ -53,7 +53,7 @@ export const ComputerVisionHUD: React.FC<ComputerVisionHUDProps> = ({ event }) =
       {evalData ? (
         <div
           style={{
-            background: "rgba(0, 0, 0, 0.35)",
+            background: "var(--box-bg)",
             border: "1px solid var(--border-subtle)",
             borderRadius: "8px",
             padding: "0.75rem",
@@ -97,7 +97,7 @@ export const ComputerVisionHUD: React.FC<ComputerVisionHUDProps> = ({ event }) =
       ) : (
         <div
           style={{
-            background: "rgba(0, 0, 0, 0.25)",
+            background: "var(--box-bg)",
             border: "1px solid var(--border-subtle)",
             borderRadius: "8px",
             padding: "0.6rem 0.75rem",
