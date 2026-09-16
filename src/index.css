@@ -1,12 +1,13 @@
 /* ==========================================================================
    DSA-VIZ Design System
    "Make Computation Observable"
+   Inspired by LeetCode, NeetCode, Vercel & Linear design engineering
    ========================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap');
 
 :root, [data-theme="dark"] {
-  /* Surface & Base Colors (Night Mode) */
+  /* Surface & Base Colors (Night Mode - Deep Slate) */
   --bg-primary: #080c14;
   --bg-secondary: #0d1322;
   --bg-tertiary: #131b2e;
@@ -15,8 +16,8 @@
   --bg-overlay: rgba(8, 12, 20, 0.88);
   --bg-code: #0b101c;
   --nav-bg: rgba(8, 12, 20, 0.95);
-  --stage-bg: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.05) 0%, rgba(8, 12, 20, 0.9) 100%);
-  --stage-border: rgba(99, 102, 241, 0.2);
+  --stage-bg: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.05) 0%, rgba(8, 12, 20, 0.95) 100%);
+  --stage-border: rgba(99, 102, 241, 0.25);
   --chip-container-bg: rgba(15, 23, 42, 0.75);
   --chip-inactive-bg: rgba(255, 255, 255, 0.04);
   --chip-inactive-text: #94a3b8;
@@ -34,6 +35,7 @@
   /* Curated HSL Neon / Accent Palette */
   --indigo-500: #6366f1;
   --indigo-400: #818cf8;
+  --indigo-300: #a5b4fc;
   --indigo-glow: rgba(99, 102, 241, 0.25);
 
   --cyan-500: #06b6d4;
@@ -79,11 +81,10 @@
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-smooth: 350ms cubic-bezier(0.16, 1, 0.3, 1);
-  --transition-spring: 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 [data-theme="light"] {
-  /* Surface & Base Colors (Day Mode) */
+  /* Surface & Base Colors (Day Mode - Clean Slate) */
   --bg-primary: #f8fafc;
   --bg-secondary: #ffffff;
   --bg-tertiary: #f1f5f9;
@@ -111,6 +112,7 @@
   /* Accent Adjustments for Light Contrast */
   --indigo-500: #4f46e5;
   --indigo-400: #6366f1;
+  --indigo-300: #4338ca;
   --indigo-glow: rgba(99, 102, 241, 0.18);
 
   --cyan-500: #0284c7;
@@ -149,7 +151,7 @@
   --shadow-glow-rose: 0 0 20px rgba(244, 63, 94, 0.2);
 }
 
-/* Reset & Box Sizing */
+/* Reset & Global Base Setup */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -158,6 +160,7 @@
 
 html {
   scroll-behavior: smooth;
+  font-size: 16px;
 }
 
 html, body {
@@ -178,18 +181,19 @@ html, body {
   flex-direction: column;
 }
 
-/* Typography styles */
+/* Typography Scale */
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
   letter-spacing: -0.02em;
   font-weight: 700;
+  color: var(--text-primary);
 }
 
 code, pre, .font-mono {
   font-family: var(--font-mono);
 }
 
-/* Ultra-thin Scrollbars */
+/* Scrollbar Engineering */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -205,11 +209,11 @@ code, pre, .font-mono {
   background: rgba(148, 163, 184, 0.45);
 }
 
-/* Glassmorphism Panel */
+/* Glassmorphism Panel Primitives */
 .glass-panel {
   background: var(--bg-card);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border-subtle);
   border-radius: 12px;
 }
@@ -221,6 +225,7 @@ code, pre, .font-mono {
   background: var(--bg-card-hover);
   border-color: var(--border-medium);
   box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
 }
 
 /* Glow Badges */
@@ -234,6 +239,7 @@ code, pre, .font-mono {
   font-weight: 600;
   letter-spacing: 0.02em;
   text-transform: uppercase;
+  flex-shrink: 0;
 }
 
 .badge-indigo {
@@ -273,8 +279,8 @@ code, pre, .font-mono {
   justify-content: center;
   gap: 0.5rem;
   padding: 0.55rem 1rem;
-  min-height: 34px;
-  min-width: 34px;
+  min-height: 36px;
+  min-width: 36px;
   border-radius: 8px;
   font-size: 0.875rem;
   font-weight: 600;
@@ -284,6 +290,7 @@ code, pre, .font-mono {
   outline: none;
   user-select: none;
   font-family: var(--font-sans);
+  flex-shrink: 0;
 }
 
 .btn-primary {
@@ -326,10 +333,10 @@ code, pre, .font-mono {
   border-radius: 8px;
 }
 
-/* Page Layout Container */
+/* Layout Containers */
 .page-container {
   width: 100%;
-  max-width: 1700px;
+  max-width: 1750px;
   margin: 0 auto;
   padding: 1.5rem;
   display: flex;
@@ -380,7 +387,7 @@ code, pre, .font-mono {
   background: #ffffff;
 }
 
-/* Tooltip */
+/* Tooltip helper */
 .tooltip-container {
   position: relative;
 }

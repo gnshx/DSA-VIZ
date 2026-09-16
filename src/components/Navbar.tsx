@@ -1,6 +1,6 @@
 import React from "react";
 import { SupportedLanguage } from "../types/algorithm";
-import { Activity, BookOpen, Brain, CheckCircle2, Code2, Network, Sun, Moon, Terminal } from "lucide-react";
+import { Activity, BookOpen, Brain, CheckCircle2, Code2, Network, Sun, Moon, Terminal, Search } from "lucide-react";
 
 export type AppMode = "learn" | "visualize" | "solve" | "predict" | "revise";
 
@@ -41,6 +41,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       style={{
         background: "var(--nav-bg)",
         backdropFilter: "blur(16px)",
+        WebkitBackdropFilter: "blur(16px)",
         borderBottom: "1px solid var(--border-subtle)",
         position: "sticky",
         top: 0,
@@ -64,35 +65,46 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div style={{ display: "flex", alignItems: "center", gap: "0.85rem" }}>
           <div
             style={{
-              width: "36px",
-              height: "36px",
+              width: "38px",
+              height: "38px",
               borderRadius: "10px",
               background: "linear-gradient(135deg, var(--indigo-500), var(--cyan-500))",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              boxShadow: "var(--shadow-glow-indigo)"
+              boxShadow: "var(--shadow-glow-indigo)",
+              flexShrink: 0
             }}
           >
-            <Code2 size={20} color="#ffffff" />
+            <Code2 size={22} color="#ffffff" />
           </div>
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              <span style={{ fontSize: "1.15rem", fontWeight: 800, letterSpacing: "-0.02em" }}>
+              <span style={{ fontSize: "1.2rem", fontWeight: 800, letterSpacing: "-0.02em" }}>
                 DSA<span style={{ color: "var(--cyan-400)" }}>-VIZ</span>
               </span>
               <span className="badge badge-indigo" style={{ fontSize: "0.65rem" }}>
                 OBSERVABLE ENGINE
               </span>
             </div>
-            <div style={{ fontSize: "0.72rem", color: "var(--text-muted)", letterSpacing: "0.01em" }}>
-              Make Computation Observable
+            <div style={{ fontSize: "0.725rem", color: "var(--text-muted)", letterSpacing: "0.01em" }}>
+              State-Driven Algorithmic Intelligence
             </div>
           </div>
         </div>
 
-        {/* Mode Navigation Tabs */}
-        <nav style={{ display: "flex", alignItems: "center", gap: "0.35rem", background: "var(--bg-tertiary)", padding: "0.3rem", borderRadius: "10px", border: "1px solid var(--border-subtle)" }}>
+        {/* Mode Navigation Dock */}
+        <nav
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "0.35rem",
+            background: "var(--bg-tertiary)",
+            padding: "0.3rem",
+            borderRadius: "12px",
+            border: "1px solid var(--border-subtle)"
+          }}
+        >
           {modes.map((m) => {
             const isActive = currentMode === m.id;
             return (
@@ -101,12 +113,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onClick={() => onSelectMode(m.id)}
                 className="btn"
                 style={{
-                  padding: "0.45rem 0.85rem",
+                  padding: "0.45rem 0.9rem",
                   fontSize: "0.825rem",
+                  fontWeight: isActive ? 700 : 500,
                   background: isActive ? "linear-gradient(135deg, var(--indigo-500), #4f46e5)" : "transparent",
                   color: isActive ? "#ffffff" : "var(--text-secondary)",
                   boxShadow: isActive ? "0 2px 10px rgba(99, 102, 241, 0.35)" : "none",
-                  border: "none"
+                  border: "none",
+                  borderRadius: "8px"
                 }}
               >
                 {m.icon}
@@ -116,10 +130,21 @@ export const Navbar: React.FC<NavbarProps> = ({
           })}
         </nav>
 
-        {/* Language Selector */}
-        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.4rem", background: "var(--bg-tertiary)", padding: "0.25rem", borderRadius: "8px", border: "1px solid var(--border-subtle)" }}>
-            <Terminal size={14} color="var(--text-muted)" style={{ marginLeft: "0.4rem" }} />
+        {/* Language Selector & Theme Toggle */}
+        <div style={{ display: "flex", alignItems: "center", gap: "0.85rem" }}>
+          {/* Multi-language Selector Pill Bar */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.3rem",
+              background: "var(--bg-tertiary)",
+              padding: "0.25rem",
+              borderRadius: "10px",
+              border: "1px solid var(--border-subtle)"
+            }}
+          >
+            <Terminal size={14} color="var(--text-muted)" style={{ marginLeft: "0.4rem", marginRight: "0.1rem" }} />
             {languages.map((lang) => {
               const isSelected = language === lang.id;
               return (
@@ -131,7 +156,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     background: isSelected ? "var(--indigo-glow)" : "transparent",
                     color: isSelected ? "var(--cyan-400)" : "var(--text-muted)",
                     fontWeight: isSelected ? 700 : 500,
-                    fontSize: "0.75rem",
+                    fontSize: "0.775rem",
                     padding: "0.35rem 0.65rem",
                     minHeight: "32px",
                     borderRadius: "6px",
@@ -145,7 +170,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             })}
           </div>
 
-          {/* Day / Night Pilot Theme Toggle Button */}
+          {/* Theme Toggle Button */}
           <div className="tooltip-container">
             <button
               onClick={onToggleTheme}
