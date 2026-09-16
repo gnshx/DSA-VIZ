@@ -46,10 +46,10 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ event }) => {
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%", padding: "2rem 1rem", position: "relative" }}>
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%", padding: "1.5rem 0.5rem", position: "relative" }}>
       {/* Visual Window Header if bounded */}
       {windowRange && (
-        <div style={{ marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+        <div style={{ marginBottom: "1.25rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
           <span className="badge badge-cyan">Active Search Space: [{windowRange[0]} ... {windowRange[1]}]</span>
           <span style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>
             ({windowRange[1] >= windowRange[0] ? `${windowRange[1] - windowRange[0] + 1} candidates remaining` : "empty"})
@@ -57,23 +57,20 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ event }) => {
         </div>
       )}
 
-      {/* Array Container */}
-      <div style={{ width: "100%", overflowX: "auto", display: "flex", justifyContent: "center" }}>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "flex-end",
-            justifyContent: "center",
-            flexWrap: "nowrap",
-            gap: "0.75rem",
-            padding: "1.5rem 1rem",
-            position: "relative",
-            minHeight: "180px",
-            width: "max-content",
-            maxWidth: "100%",
-            margin: "0 auto"
-          }}
-        >
+      {/* Array Container - Fluid Zero Scrollbar Engine */}
+      <div
+        style={{
+          width: "100%",
+          display: "flex",
+          alignItems: "flex-end",
+          justifyContent: "center",
+          gap: "clamp(0.2rem, 1vw, 0.65rem)",
+          padding: "1rem 0.25rem",
+          position: "relative",
+          minHeight: "170px",
+          overflowX: "hidden"
+        }}
+      >
         {array.map((value, idx) => {
           const isHighlighted = highlighted.has(idx);
           const isSwapped = swapped.has(idx);
@@ -84,6 +81,9 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ event }) => {
             <div
               key={idx}
               style={{
+                flex: "1 1 0px",
+                minWidth: "28px",
+                maxWidth: "56px",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
@@ -95,10 +95,10 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ event }) => {
               {/* Index Number Label */}
               <span
                 style={{
-                  fontSize: "0.75rem",
+                  fontSize: "0.725rem",
                   fontFamily: "var(--font-mono)",
                   color: isHighlighted ? "var(--cyan-400)" : "var(--text-dim)",
-                  marginBottom: "0.4rem",
+                  marginBottom: "0.35rem",
                   fontWeight: 600
                 }}
               >
@@ -108,13 +108,13 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ event }) => {
               {/* Memory Element Cell */}
               <div
                 style={{
-                  width: "56px",
-                  height: "64px",
+                  width: "100%",
+                  aspectRatio: "1 / 1.12",
                   borderRadius: "10px",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  fontSize: "1.25rem",
+                  fontSize: "clamp(0.85rem, 1.4vw, 1.25rem)",
                   fontWeight: 700,
                   fontFamily: "var(--font-mono)",
                   background: isSwapped
@@ -137,7 +137,7 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ event }) => {
                     : isHighlighted
                     ? "var(--shadow-glow-cyan)"
                     : "var(--shadow-sm)",
-                  transform: isHighlighted || isSwapped ? "translateY(-6px) scale(1.05)" : "none",
+                  transform: isHighlighted || isSwapped ? "translateY(-4px) scale(1.04)" : "none",
                   transition: "all var(--transition-smooth)"
                 }}
               >
@@ -150,15 +150,15 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ event }) => {
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
-                  gap: "0.25rem",
-                  marginTop: "0.6rem",
-                  minHeight: "50px"
+                  gap: "0.2rem",
+                  marginTop: "0.5rem",
+                  minHeight: "46px"
                 }}
               >
                 {pointers.map((pName) => (
                   <div key={pName} className="pointer-marker" style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                    <span style={{ fontSize: "0.85rem", color: "var(--indigo-400)" }}>▲</span>
-                    <span className={`badge ${getPointerBadgeClass(pName)}`}>
+                    <span style={{ fontSize: "0.8rem", color: "var(--indigo-400)", lineHeight: 1 }}>▲</span>
+                    <span className={`badge ${getPointerBadgeClass(pName)}`} style={{ fontSize: "0.65rem", padding: "0.15rem 0.4rem" }}>
                       {pName}
                     </span>
                   </div>
@@ -169,7 +169,5 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ event }) => {
         })}
       </div>
     </div>
-  </div>
-);
+  );
 };
-

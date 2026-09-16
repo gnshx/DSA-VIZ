@@ -1,8 +1,8 @@
 import React from "react";
 import { SupportedLanguage } from "../types/algorithm";
-import { Activity, BookOpen, Brain, CheckCircle2, Code2, Network, Sun, Moon, Terminal, Search } from "lucide-react";
+import { Activity, BookOpen, Brain, Code2, Sun, Moon, Terminal } from "lucide-react";
 
-export type AppMode = "learn" | "visualize" | "solve" | "predict" | "revise";
+export type AppMode = "learn" | "visualize" | "predict";
 
 interface NavbarProps {
   currentMode: AppMode;
@@ -22,11 +22,9 @@ export const Navbar: React.FC<NavbarProps> = ({
   onToggleTheme
 }) => {
   const modes: { id: AppMode; label: string; icon: React.ReactNode }[] = [
-    { id: "learn", label: "Learn", icon: <BookOpen size={16} /> },
-    { id: "visualize", label: "Visualize", icon: <Activity size={16} /> },
-    { id: "solve", label: "Solve", icon: <CheckCircle2 size={16} /> },
-    { id: "predict", label: "Predict Mode", icon: <Brain size={16} /> },
-    { id: "revise", label: "Revise & Graph", icon: <Network size={16} /> }
+    { id: "learn", label: "Learn & Catalog", icon: <BookOpen size={16} /> },
+    { id: "visualize", label: "Visualize Workbench", icon: <Activity size={16} /> },
+    { id: "predict", label: "Predict Mode", icon: <Brain size={16} /> }
   ];
 
   const languages: { id: SupportedLanguage; label: string }[] = [
@@ -46,7 +44,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         position: "sticky",
         top: 0,
         zIndex: 50,
-        padding: "0.65rem 1.5rem",
+        padding: "0.6rem 1.5rem",
         transition: "background var(--transition-normal)"
       }}
     >
@@ -93,7 +91,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
         </div>
 
-        {/* Mode Navigation Dock */}
+        {/* Mode Navigation Dock (3 Core Pillars) */}
         <nav
           style={{
             display: "flex",
@@ -113,7 +111,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onClick={() => onSelectMode(m.id)}
                 className="btn"
                 style={{
-                  padding: "0.45rem 0.9rem",
+                  padding: "0.45rem 0.95rem",
                   fontSize: "0.825rem",
                   fontWeight: isActive ? 700 : 500,
                   background: isActive ? "linear-gradient(135deg, var(--indigo-500), #4f46e5)" : "transparent",

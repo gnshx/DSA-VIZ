@@ -3,9 +3,7 @@ import { Navbar, AppMode } from "./components/Navbar";
 import { SupportedLanguage } from "./types/algorithm";
 import { LearnView } from "./views/LearnView";
 import { VisualizeView } from "./views/VisualizeView";
-import { SolveView } from "./views/SolveView";
 import { PredictView } from "./views/PredictView";
-import { ReviseView } from "./views/ReviseView";
 import { Code2, Sparkles, Terminal } from "lucide-react";
 
 export function App() {
@@ -58,13 +56,7 @@ export function App() {
             initialAlgorithmId={selectedAlgorithmId}
           />
         )}
-        {currentMode === "solve" && (
-          <SolveView language={language} onSelectLanguage={setLanguage} />
-        )}
         {currentMode === "predict" && <PredictView language={language} />}
-        {currentMode === "revise" && (
-          <ReviseView onSelectAlgorithm={handleSelectAlgorithm} />
-        )}
       </main>
 
       {/* Global Status Footer */}

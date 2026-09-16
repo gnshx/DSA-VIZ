@@ -50,11 +50,9 @@ test.describe('DSA-VIZ Enterprise UI/UX & Responsive Layout Audit', () => {
 
   test('All core views and visualizers must render cleanly across viewports', async ({ page }) => {
     const modes = [
-      { name: 'visualize', label: 'Visualize' },
-      { name: 'learn', label: 'Learn' },
-      { name: 'solve', label: 'Solve' },
+      { name: 'visualize', label: 'Visualize Workbench' },
+      { name: 'learn', label: 'Learn & Catalog' },
       { name: 'predict', label: 'Predict Mode' },
-      { name: 'revise', label: 'Revise & Graph' },
     ];
 
     for (const mode of modes) {

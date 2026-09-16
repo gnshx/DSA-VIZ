@@ -14,7 +14,9 @@ import {
   Compass,
   ChevronDown,
   ChevronUp,
-  Tag
+  Tag,
+  Code2,
+  Sparkles
 } from "lucide-react";
 
 interface VisualizeViewProps {
@@ -105,8 +107,8 @@ export const VisualizeView: React.FC<VisualizeViewProps> = ({
   };
 
   return (
-    <div className="page-container">
-      {/* Pattern Catalog Collapsible Toggle Banner */}
+    <div className="page-container" style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+      {/* Pattern Catalog Collapsible Drawer Banner */}
       <div
         className="glass-panel"
         style={{
@@ -116,22 +118,18 @@ export const VisualizeView: React.FC<VisualizeViewProps> = ({
           alignItems: "center",
           flexWrap: "wrap",
           gap: "0.75rem",
-          background: showPatternDirectory
-            ? "var(--indigo-glow)"
-            : "var(--bg-tertiary)",
-          border: showPatternDirectory
-            ? "1px solid var(--indigo-400)"
-            : "1px solid var(--border-subtle)",
+          background: showPatternDirectory ? "var(--indigo-glow)" : "var(--bg-tertiary)",
+          border: showPatternDirectory ? "1px solid var(--indigo-400)" : "1px solid var(--border-subtle)",
           borderRadius: "10px"
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
           <Compass size={18} color="var(--cyan-400)" />
           <span style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--text-primary)" }}>
-            DSA Pattern Master Directory & Subcases
+            DSA Pattern Master Catalog Drawer
           </span>
           <span className="badge badge-cyan" style={{ fontSize: "0.68rem" }}>
-            11 PATTERNS • 23 SUB-VARIANTS
+            19 PATTERN FAMILIES
           </span>
         </div>
 
@@ -142,7 +140,7 @@ export const VisualizeView: React.FC<VisualizeViewProps> = ({
         >
           {showPatternDirectory ? (
             <>
-              <span>Close Directory</span>
+              <span>Close Directory Drawer</span>
               <ChevronUp size={14} />
             </>
           ) : (
@@ -173,14 +171,15 @@ export const VisualizeView: React.FC<VisualizeViewProps> = ({
           justifyContent: "space-between",
           padding: "0.75rem 1.25rem",
           flexWrap: "wrap",
-          gap: "1rem"
+          gap: "1rem",
+          borderRadius: "12px"
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "1rem", flexWrap: "wrap" }}>
           {/* Algorithm Dropdown */}
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            <span style={{ fontSize: "0.8rem", color: "var(--text-muted)", fontWeight: 600 }}>
-              ALGORITHM / SUBCASE:
+            <span style={{ fontSize: "0.8rem", color: "var(--text-muted)", fontWeight: 700, textTransform: "uppercase" }}>
+              ALGORITHM:
             </span>
             <select
               value={selectedAlgo.id}
@@ -192,7 +191,7 @@ export const VisualizeView: React.FC<VisualizeViewProps> = ({
                 borderRadius: "8px",
                 padding: "0.45rem 0.85rem",
                 fontSize: "0.85rem",
-                fontWeight: 600,
+                fontWeight: 700,
                 outline: "none",
                 cursor: "pointer",
                 maxWidth: "340px"
@@ -206,9 +205,9 @@ export const VisualizeView: React.FC<VisualizeViewProps> = ({
             </select>
           </div>
 
-          {/* Custom Input Field for Arrays/Heaps/Strings */}
+          {/* Custom Input Field */}
           <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-            <span style={{ fontSize: "0.8rem", color: "var(--text-muted)", fontWeight: 600 }}>
+            <span style={{ fontSize: "0.8rem", color: "var(--text-muted)", fontWeight: 700, textTransform: "uppercase" }}>
               CUSTOM INPUT:
             </span>
             <input
@@ -216,7 +215,7 @@ export const VisualizeView: React.FC<VisualizeViewProps> = ({
               placeholder={
                 selectedAlgo.structureType === "stack"
                   ? "e.g. 70, 72, 69, 75"
-                  : "e.g. 1, 4, 6, 9, 12"
+                  : "e.g. 1, 4, 6, 9, 12, 16, 23, 38, 56, 72"
               }
               value={customInputText}
               onChange={(e) => setCustomInputText(e.target.value)}
@@ -228,7 +227,7 @@ export const VisualizeView: React.FC<VisualizeViewProps> = ({
                 padding: "0.4rem 0.75rem",
                 fontSize: "0.825rem",
                 fontFamily: "var(--font-mono)",
-                width: "200px",
+                width: "220px",
                 outline: "none"
               }}
             />
@@ -244,13 +243,13 @@ export const VisualizeView: React.FC<VisualizeViewProps> = ({
 
         {/* Quick Stats Badges */}
         <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
-          <span className="badge badge-cyan">{selectedAlgo.timeComplexity}</span>
-          <span className="badge badge-emerald">{selectedAlgo.spaceComplexity}</span>
+          <span className="badge badge-cyan">Time: {selectedAlgo.timeComplexity}</span>
+          <span className="badge badge-emerald">Aux Space: {selectedAlgo.spaceComplexity}</span>
           <span className="badge badge-indigo">{trace.totalSteps} STEPS</span>
         </div>
       </div>
 
-      {/* Subcase Quick Switcher Chips (when active algorithm belongs to a pattern family) */}
+      {/* Subcase Quick Switcher Chips */}
       {currentFamily && (
         <div
           className="glass-panel"
@@ -260,7 +259,8 @@ export const VisualizeView: React.FC<VisualizeViewProps> = ({
             alignItems: "center",
             gap: "0.6rem",
             flexWrap: "wrap",
-            background: "var(--chip-container-bg)"
+            background: "var(--chip-container-bg)",
+            borderRadius: "10px"
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", marginRight: "0.4rem" }}>
@@ -297,7 +297,7 @@ export const VisualizeView: React.FC<VisualizeViewProps> = ({
         </div>
       )}
 
-      {/* Pointer Topology & Roles HUD (if active subcase defines pointer roles) */}
+      {/* Pointer Topology HUD */}
       {currentSubcase && (
         <div
           style={{
@@ -318,7 +318,7 @@ export const VisualizeView: React.FC<VisualizeViewProps> = ({
               TOPOLOGY: {currentSubcase.visualSummary}
             </span>
             <span style={{ color: "var(--border-medium)" }}>|</span>
-            <span style={{ color: "var(--text-muted)" }}>
+            <span style={{ color: "var(--text-secondary)" }}>
               {currentSubcase.coreMechanism}
             </span>
           </div>
@@ -334,28 +334,31 @@ export const VisualizeView: React.FC<VisualizeViewProps> = ({
         </div>
       )}
 
-      {/* Main 3-Pane Workbench */}
+      {/* Main IDE Workbench Layout (2-Column Architecture) */}
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))",
-          gap: "1.5rem",
-          minHeight: "580px"
+          gridTemplateColumns: "repeat(auto-fit, minmax(360px, 1fr))",
+          gap: "1.25rem",
+          minHeight: "620px"
         }}
       >
-        {/* Left Pane: Code Studio with Active Line Sync */}
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <CodeEditorPanel
-            code={selectedAlgo.code[language]}
-            language={language}
-            activeLine={currentEvent.sourceLine}
-            onLanguageChange={onSelectLanguage}
-          />
+        {/* Left Column: Code Editor Studio */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+          <div style={{ flex: 1, minHeight: "420px" }}>
+            <CodeEditorPanel
+              code={selectedAlgo.code[language]}
+              language={language}
+              activeLine={currentEvent.sourceLine}
+              onLanguageChange={onSelectLanguage}
+            />
+          </div>
         </div>
 
-        {/* Center Pane: Dynamic Simulation Canvas */}
+        {/* Right Main Column: Prominent Simulation Canvas & Inspectors */}
         <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-          <div style={{ flex: 1 }}>
+          {/* Simulation Stage (Maximized width, zero scrollbars) */}
+          <div style={{ flex: 1, minHeight: "340px" }}>
             <SimulationStage
               event={currentEvent}
               title={selectedAlgo.name}
@@ -366,7 +369,7 @@ export const VisualizeView: React.FC<VisualizeViewProps> = ({
             />
           </div>
 
-          {/* Timeline Scrubber */}
+          {/* Universal Scrubber Timeline */}
           <UniversalTimeline
             currentStep={currentStep}
             totalSteps={trace.totalSteps}
@@ -376,15 +379,11 @@ export const VisualizeView: React.FC<VisualizeViewProps> = ({
             onTogglePlay={() => setIsPlaying(!isPlaying)}
             onSpeedChange={(sp) => setSpeed(sp)}
           />
-        </div>
 
-        {/* Right Pane: State & Memory Inspector */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-          <ComputerVisionHUD event={currentEvent} />
-          <div style={{ flex: 1, minHeight: "240px" }}>
+          {/* Bottom State & Memory Inspectors */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1rem" }}>
+            <ComputerVisionHUD event={currentEvent} />
             <MemoryInspector event={currentEvent} />
-          </div>
-          <div style={{ height: "180px" }}>
             <CallStackPanel callStack={currentEvent.callStack} />
           </div>
         </div>
