@@ -638,6 +638,18 @@ export const MASTER_PATTERN_FAMILIES: PatternFamilyDefinition[] = [
         classicProblems: [{ title: "912. Sort an Array", difficulty: "Medium" }],
         timeComplexity: "O(n²)",
         spaceComplexity: "O(1)"
+      },
+      {
+        id: "sort_selection",
+        subcaseTitle: "3. Select Minimum (Selection Sort)",
+        algorithmId: "selection_sort",
+        topology: "selection_scan",
+        pointerRoles: { i: "Sorted-prefix boundary", j: "Unsorted scan", min: "Smallest value seen" },
+        coreMechanism: "Scan the unsorted suffix, remember its smallest element, and swap it once into the next sorted position.",
+        visualSummary: "scan -> remember minimum -> one placement swap",
+        classicProblems: [{ title: "912. Sort an Array", difficulty: "Medium" }],
+        timeComplexity: "O(n²)",
+        spaceComplexity: "O(1)"
       }
     ]
   },

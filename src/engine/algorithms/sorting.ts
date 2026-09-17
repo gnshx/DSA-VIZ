@@ -223,3 +223,86 @@ export const bubbleSortAlgorithm: AlgorithmDefinition = {
     };
   }
 };
+
+export const selectionSortAlgorithm: AlgorithmDefinition = {
+  id: "selection_sort",
+  name: "Selection Sort (Choose Minimum)",
+  category: "sorting",
+  structureType: "array",
+  difficulty: "Easy",
+  description: "Builds a sorted prefix by scanning the unsorted region for its smallest value, then placing that value at the next open position.",
+  timeComplexity: "O(n²)",
+  spaceComplexity: "O(1)",
+  mentalModel: ["Treat the left side as a finished shelf.", "Each pass chooses the smallest remaining item for the next shelf position."],
+  invariants: ["Before pass i, arr[0..i-1] is sorted.", "minIndex always refers to the smallest value seen in the unsorted suffix."],
+  commonMistakes: ["Reset minIndex to i at every outer pass.", "Do not swap while scanning; swap once after choosing the minimum."],
+  defaultInput: [64, 25, 12, 22, 11],
+  code: {
+    python: `def selection_sort(arr):
+    for i in range(len(arr) - 1):
+        min_index = i
+        for j in range(i + 1, len(arr)):
+            if arr[j] < arr[min_index]:
+                min_index = j
+        arr[i], arr[min_index] = arr[min_index], arr[i]
+    return arr`,
+    javascript: `function selectionSort(arr) {
+    for (let i = 0; i < arr.length - 1; i++) {
+        let minIndex = i;
+        for (let j = i + 1; j < arr.length; j++) {
+            if (arr[j] < arr[minIndex]) minIndex = j;
+        }
+        [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]];
+    }
+    return arr;
+}`,
+    cpp: `void selectionSort(std::vector<int>& arr) {
+    for (int i = 0; i < arr.size() - 1; i++) {
+        int minIndex = i;
+        for (int j = i + 1; j < arr.size(); j++)
+            if (arr[j] < arr[minIndex]) minIndex = j;
+        std::swap(arr[i], arr[minIndex]);
+    }
+}`,
+    java: `public static void selectionSort(int[] arr) {
+    for (int i = 0; i < arr.length - 1; i++) {
+        int minIndex = i;
+        for (int j = i + 1; j < arr.length; j++)
+            if (arr[j] < arr[minIndex]) minIndex = j;
+        int temp = arr[i]; arr[i] = arr[minIndex]; arr[minIndex] = temp;
+    }
+}`
+  },
+  generateTrace: (input = [64, 25, 12, 22, 11]): ExecutionTrace => {
+    const arr = Array.isArray(input) ? [...input] : [64, 25, 12, 22, 11];
+    const events: ExecutionEvent[] = [];
+    let step = 0;
+    const event = (type: ExecutionEvent["type"], sourceLine: number, explanation: string, i: number, j?: number, minIndex?: number, swappedIndices?: [number, number]) => events.push({
+      step: ++step, type, sourceLine, codeSnippet: type === "SWAP" ? "arr[i], arr[minIndex] = arr[minIndex], arr[i]" : "if arr[j] < arr[minIndex]",
+      explanation, variables: { i, ...(j === undefined ? {} : { j }), ...(minIndex === undefined ? {} : { minIndex }) },
+      pointers: { i, ...(j === undefined ? {} : { j }), ...(minIndex === undefined ? {} : { min: minIndex }) },
+      callStack: [{ id: "main", name: "selection_sort", args: { i, j, minIndex }, line: sourceLine }], structureType: "array", structureState: [...arr],
+      highlightedIndices: [i, ...(j === undefined ? [] : [j]), ...(minIndex === undefined ? [] : [minIndex])], swappedIndices
+    });
+
+    event("LINE", 2, `Start with an unsorted array of ${arr.length} elements.`, 0);
+    for (let i = 0; i < arr.length - 1; i++) {
+      let minIndex = i;
+      event("ASSIGN", 3, `Pass ${i + 1}: assume arr[${i}] = ${arr[i]} is the smallest remaining value.`, i, undefined, minIndex);
+      for (let j = i + 1; j < arr.length; j++) {
+        const isNewMinimum = arr[j] < arr[minIndex];
+        event("COMPARE", 5, `Compare ${arr[j]} with current minimum ${arr[minIndex]}. ${isNewMinimum ? "A new minimum was found." : "Keep the current minimum."}`, i, j, minIndex);
+        if (isNewMinimum) {
+          minIndex = j;
+          event("ASSIGN", 6, `Remember index ${j}: ${arr[j]} is now the smallest value in the unsorted suffix.`, i, j, minIndex);
+        }
+      }
+      if (minIndex !== i) {
+        [arr[i], arr[minIndex]] = [arr[minIndex], arr[i]];
+        event("SWAP", 7, `Place the chosen minimum at index ${i}; the sorted prefix grows by one element.`, i, undefined, minIndex, [i, minIndex]);
+      }
+    }
+    events.push({ step: ++step, type: "COMPLETE", sourceLine: 8, codeSnippet: "return arr", explanation: "Every position has received its smallest remaining value. The array is sorted.", variables: { result: [...arr] }, pointers: {}, callStack: [], structureType: "array", structureState: [...arr] });
+    return { id: "selection_sort_trace", algorithmId: "selection_sort", title: "Selection Sort Execution Trace", structureType: "array", totalSteps: events.length, events };
+  }
+};

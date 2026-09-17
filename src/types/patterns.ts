@@ -12,6 +12,7 @@ export type PointerTopology =
   | "read_write"              // read scans ahead, write anchors placement
   | "two_sequences"           // p1 on arr1, p2 on arr2
   | "partition_dnf"           // low, mid, high 3-way partition
+  | "selection_scan"          // scan suffix for its minimum, then place it
   // Sliding Window
   | "sliding_fixed"           // [start ... end] size k
   | "sliding_dynamic"         // [left ... right] dynamic expand/shrink

@@ -1,5 +1,5 @@
 import { AlgorithmDefinition, ConceptNode, ProblemDefinition } from "../../types/algorithm";
-import { bubbleSortAlgorithm } from "./sorting";
+import { bubbleSortAlgorithm, selectionSortAlgorithm } from "./sorting";
 import { binarySearchAlgorithm, twoPointersAlgorithm, slidingWindowAlgorithm } from "./searching";
 import { reverseLinkedListAlgorithm } from "./linkedList";
 import { validParenthesesAlgorithm } from "./stackQueue";
@@ -85,6 +85,7 @@ export const ALL_ALGORITHMS: AlgorithmDefinition[] = [
   // Partitioning & Sorting
   dutchNationalFlagAlgorithm,
   bubbleSortAlgorithm,
+  selectionSortAlgorithm,
 
   // Stacks & Monotonic Stacks
   monotonicStackDailyTemperaturesAlgorithm,
