@@ -27,3 +27,8 @@ dist-ssr
 test-results/
 playwright-report/
 
+# Security & Secrets
+.env
+.env.*
+credentials.json
+token.json
