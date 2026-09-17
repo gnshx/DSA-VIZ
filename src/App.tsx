@@ -47,7 +47,7 @@ export function App() {
       {/* Main View Container */}
       <main style={{ flex: 1, display: "flex", flexDirection: "column" }}>
         {currentMode === "learn" && (
-          <LearnView language={language} onSelectLanguage={setLanguage} />
+          <LearnView />
         )}
         {currentMode === "visualize" && (
           <VisualizeView

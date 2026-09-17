@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import { ALL_ALGORITHMS } from "../engine/algorithms";
-import { AlgorithmDefinition, SupportedLanguage } from "../types/algorithm";
-import { SimulationStage } from "../visualizers/SimulationStage";
-import { UniversalTimeline } from "../components/UniversalTimeline";
-import { ComputerVisionHUD } from "../components/ComputerVisionHUD";
-import { CodeEditorPanel } from "../components/CodeEditorPanel";
+import { AlgorithmDefinition } from "../types/algorithm";
+import { IntuitionDemo } from "../components/IntuitionDemo";
 import { PatternNavigator } from "../components/PatternNavigator";
 import {
   AlertTriangle,
@@ -14,42 +11,11 @@ import {
   Lightbulb
 } from "lucide-react";
 
-interface LearnViewProps {
-  language: SupportedLanguage;
-  onSelectLanguage: (lang: SupportedLanguage) => void;
-}
-
-export const LearnView: React.FC<LearnViewProps> = ({ language, onSelectLanguage }) => {
+export const LearnView: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"pathway" | "showcase">("showcase");
   const [selectedAlgo, setSelectedAlgo] = useState<AlgorithmDefinition>(ALL_ALGORITHMS[0]);
-  const [currentStep, setCurrentStep] = useState(1);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [speed, setSpeed] = useState(1);
-
-  const trace = selectedAlgo.generateTrace();
-  const currentEvent = trace.events[Math.min(currentStep - 1, trace.events.length - 1)] || trace.events[0];
-
-  // Playback timer
-  React.useEffect(() => {
-    let timer: any = null;
-    if (isPlaying) {
-      timer = setInterval(() => {
-        setCurrentStep((prev) => {
-          if (prev >= trace.totalSteps) {
-            setIsPlaying(false);
-            return prev;
-          }
-          return prev + 1;
-        });
-      }, 1000 / speed);
-    }
-    return () => clearInterval(timer);
-  }, [isPlaying, speed, trace.totalSteps]);
-
   const handleSelectAlgo = (algo: AlgorithmDefinition) => {
     setSelectedAlgo(algo);
-    setCurrentStep(1);
-    setIsPlaying(false);
   };
 
   const handleSelectAlgoById = (algoId: string) => {
@@ -194,48 +160,9 @@ export const LearnView: React.FC<LearnViewProps> = ({ language, onSelectLanguage
             </div>
           </div>
 
-          {/* Synchronized Simulation & Code Stage */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))", gap: "1.5rem", minHeight: "540px" }}>
-            {/* Left: Simulation Canvas & Timeline */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-              <div style={{ flex: 1 }}>
-                <SimulationStage
-                  event={currentEvent}
-                  title={`${selectedAlgo.name} Simulation`}
-                  onReset={() => {
-                    setCurrentStep(1);
-                    setIsPlaying(false);
-                  }}
-                />
-              </div>
-
-              <UniversalTimeline
-                currentStep={currentStep}
-                totalSteps={trace.totalSteps}
-                isPlaying={isPlaying}
-                playbackSpeed={speed}
-                onStepChange={(s) => setCurrentStep(s)}
-                onTogglePlay={() => setIsPlaying(!isPlaying)}
-                onSpeedChange={(sp) => setSpeed(sp)}
-              />
-            </div>
-
-            {/* Right: Code Sync & What Computer Sees */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-              <ComputerVisionHUD event={currentEvent} />
-              <div style={{ flex: 1, minHeight: "360px" }}>
-                <CodeEditorPanel
-                  code={selectedAlgo.code[language]}
-                  language={language}
-                  activeLine={currentEvent.sourceLine}
-                  onLanguageChange={onSelectLanguage}
-                />
-              </div>
-            </div>
-          </div>
+          <IntuitionDemo algorithm={selectedAlgo} />
         </div>
       )}
     </div>
   );
 };
-

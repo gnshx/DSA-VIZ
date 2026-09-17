@@ -76,9 +76,11 @@ test.describe('DSA-VIZ Exhaustive UI/UX & Interactive Quality Audit', () => {
     await runTraceBtn.click();
     await page.waitForTimeout(300);
 
-    // Verify active mode switched to Visualize
+    // Verify the concept pathway is a no-code visual walkthrough
     const stage = page.locator('main');
     await expect(stage).toBeVisible();
+    await expect(page.getByText('Watch the idea work')).toBeVisible();
+    await expect(page.locator('text=solution.py')).toHaveCount(0);
   });
 
   test('Visualize Workbench: Algorithm switching, execution scrubber, and zero-scrollbar stage', async ({ page }) => {
