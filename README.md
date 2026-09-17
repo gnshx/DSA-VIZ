@@ -4,12 +4,13 @@
 
 **"Don't visualize code. Visualize the state changes caused by code. Make computation observable."**
 
+[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black.svg)](https://dsa-viz-rho.vercel.app/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-indigo.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/Language-TypeScript-blue.svg)](https://www.typescriptlang.org/)
 [![Multi-Language](https://img.shields.io/badge/Supported-Python%20%7C%20JS%20%7C%20C%2B%2B%20%7C%20Java-cyan.svg)](#multi-language-support)
 [![Vite](https://img.shields.io/badge/Built%20with-Vite%20%2B%20React-646CFF.svg)](https://vitejs.dev/)
 
-[**Live Demo**](http://localhost:5173/) • [**Architecture**](#architecture) • [**Trace Protocol**](#universal-trace-protocol-ir) • [**Visualizers**](#canonical-visualization-sdk) • [**Modes**](#the-5-learning-modes)
+[**Live Demo**](https://dsa-viz-rho.vercel.app/) • [**Architecture**](#architecture) • [**Trace Protocol**](#universal-trace-protocol-ir) • [**Visualizers**](#canonical-visualization-sdk) • [**Modes**](#the-5-learning-modes)
 
 </div>
 
@@ -146,6 +147,36 @@ Switch between **Python**, **JavaScript**, **C++**, and **Java** with 1 click:
 
 ---
 
+## 📚 Comprehensive Pattern Recognition Catalog (21 Families)
+
+DSA-VIZ features a complete hierarchical pattern recognition tree covering every canonical technical interview topic:
+
+| # | Family | Core Techniques & Invariants | Classic LeetCode Benchmarks |
+|---|---|---|---|
+| 01 | **Arrays & Prefix Techniques** | Traversal, In-place modification, Insertion/deletion costs, 1D/2D Prefix sum, Suffix sum, Kadane's max subarray, 2D Matrix rotations, Sorting-based array scans | 560, 53, 48, 15, 27, 238 |
+| 02 | **Hashing & Sets** | O(1) Complement search, Frequency counting, HashSet deduplication, Group-by-key (anagrams), Prefix Sum + HashMap | 1, 217, 49, 128, 560 |
+| 03 | **Strings & Substrings** | Immutability-aware traversal, Palindromes (expand-around-center), Anagram frequency signatures, Substrings vs Subsequences, Window constraints | 344, 125, 5, 242, 392, 3, 76 |
+| 04 | **Two Pointers** | Opposite ends (converging), Backward writing, Fast & slow pointers, Read/write in-place compaction, Two sequences parallel | 167, 11, 88, 283, 21 |
+| 05 | **Sliding Window** | Fixed-width aggregates ($K$), Dynamic expanding/contracting windows, Frequency-map constraints, Min/max window tracking | 643, 3, 76, 424, 209 |
+| 06 | **Binary Search & Answer Space** | Exact target, Lower/upper bounds, Rotated sorted pivot inflection, Search on monotonic answer space, 2D Matrix binary search | 704, 35, 33, 875, 1011, 74 |
+| 07 | **Sorting & Partitioning** | Dutch National Flag (3-way partition), Bubble, Selection, Insertion, Merge Sort (stable D&C), Quick Sort (pivot partitioning), Custom Python sorting (`key=`, multi-key) | 75, 912, 148, 179, 56 |
+| 08 | **Stack & Monotonic Stack** | LIFO parenthesis matching, Min/Max auxiliary stack, Monotonic increasing/decreasing stacks, Histogram area calculation | 20, 155, 739, 496, 84, 85 |
+| 09 | **Queue, Deque & Monotonic Deque** | FIFO discipline (`collections.deque`), Circular queue wrap-around, Level-order BFS, Monotonic deque window maximums | 232, 622, 102, 239, 862 |
+| 10 | **Linked Lists** | Singly/doubly linked list traversal, In-place reversal (3-pointer), Floyd's cycle detection, Dummy heads, Remove Nth from end | 206, 141, 142, 21, 19, 146 |
+| 11 | **Recursion Fundamentals** | Base cases & correct termination, Call stack depth & frame allocation, Problem decomposition, Recursion vs Iteration | 509, 50, 104, 22, 912 |
+| 12 | **Backtracking** | Choose-Explore-Undo mechanics, Power set include/exclude trees, Permutation generation, Combination Sum target pruning, Constraint-based search (N-Queens, Sudoku) | 78, 90, 46, 39, 51, 37 |
+| 13 | **Trees & Binary Search Trees** | Pre/In/Post order DFS, Level-order BFS (views), Subtree reduction (invert), Tree recursion (height, diameter, balance), Path sum, Lowest Common Ancestor, Tree construction, BST search/validate/insert/delete, Inorder rank | 102, 199, 226, 104, 543, 112, 236, 105, 98, 230 |
+| 14 | **Heaps & Priority Queues** | Sift-up/sift-down heap property, Fixed-size Top-K min-heap, Dual-heap running median, K-way sorted merge | 215, 347, 295, 23, 378 |
+| 15 | **Greedy Algorithms** | Jump Game horizon expansion, Earliest deadline activity scheduling, Resource minimization (Gas Station), Sorting + Greedy | 55, 45, 435, 452, 134, 455 |
+| 16 | **Intervals & Sweep-Line** | Interval sorting, Overlapping merge, Insert interval into sorted lists, Minimum removals for non-overlap, Event-based sweep-line | 56, 57, 435, 253, 1094, 218 |
+| 17 | **Graph Fundamentals** | Adjacency list/matrix, Unweighted BFS shortest path, Recursive/iterative DFS, Directed/undirected cycle detection, Grid as graph (islands), Dijkstra weighted shortest paths, Bipartite 2-coloring | 200, 733, 207, 743, 785, 127 |
+| 18 | **Topological Sort & DSU** | Kahn's in-degree BFS, Disjoint Set Union (path compression + union by rank), Dynamic connectivity & Kruskal's MST | 207, 210, 684, 547, 1584 |
+| 19 | **Dynamic Programming** | 1D linear recurrences, 2D Grid pathing, 0/1 Knapsack decision table, Subsequence DP (LCS, LIS), Partition DP | 70, 198, 62, 64, 416, 1143, 139 |
+| 20 | **Trie & Bit Manipulation** | Prefix tree insert/search/startsWith, Trie-guided grid pruning, XOR cancellation, Brian Kernighan bit clearing, Bitmask subset representations | 208, 212, 136, 191, 231, 78 |
+| 21 | **Complexity Analysis & Pattern Recall** | Asymptotic bounds $O(1) \dots O(n!)$, Auxiliary vs stack space, Amortized analysis, Python collection costs (`list`, `dict`, `set`, `deque`, `heapq`), Rapid cognitive trigger cheat sheet | 704, 239, 146, 215, 1 |
+
+---
+
 ## 🛠 Getting Started
 
 ### Prerequisites
@@ -169,7 +200,7 @@ npm run dev
 npm run build
 ```
 
-Open [http://localhost:5173/](http://localhost:5173/) in your browser.
+Open [http://localhost:5173/](http://localhost:5173/) in your browser, or explore the live deployment directly at [https://dsa-viz-rho.vercel.app/](https://dsa-viz-rho.vercel.app/).
 
 ---
 
