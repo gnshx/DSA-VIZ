@@ -76,7 +76,10 @@ export type PointerTopology =
   | "trie_prefix"             // char node tree traversal
   | "bit_single_number"       // XOR cancellation
   | "bit_kernighan"           // n & (n - 1) bit clearing
-  | "sweep_line";             // event points sweep
+  | "sweep_line"              // event points sweep
+  | "string_scan"             // string traversal & expand-around-center
+  | "complexity_analysis"     // asymptotic complexity classes & profiles
+  | "pattern_recall";         // quick memory trigger & canonical recognition
 
 export interface SubcaseDefinition {
   id: string;

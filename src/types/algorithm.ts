@@ -25,7 +25,11 @@ export type AlgorithmCategory =
   | "dp"
   | "trie"
   | "bit_manipulation"
-  | "range_queries";
+  | "range_queries"
+  | "strings"
+  | "queue_deque"
+  | "complexity"
+  | "recall";
 
 export interface CodeImplementation {
   code: string;
