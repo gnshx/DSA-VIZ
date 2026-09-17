@@ -91,7 +91,7 @@ test.describe('DSA-VIZ Exhaustive UI/UX & Interactive Quality Audit', () => {
     const algoSelect = page.locator('select').first();
     await expect(algoSelect).toBeVisible();
 
-    const sampleAlgos = ['binary_search', 'reverse_linked_list', 'bfs_traversal', 'min_heap'];
+    const sampleAlgos = ['binary_search', 'selection_sort', 'reverse_linked_list', 'bfs_traversal', 'min_heap'];
 
     for (const algoId of sampleAlgos) {
       await algoSelect.selectOption(algoId);
@@ -104,8 +104,11 @@ test.describe('DSA-VIZ Exhaustive UI/UX & Interactive Quality Audit', () => {
       // Check step playback scrubber play/pause button
       const playBtn = page.locator('button[title*="Play / Pause"]').first();
       if (await playBtn.isVisible()) {
+        await page.locator('button:has-text("5x")').first().click();
         await playBtn.click();
-        await page.waitForTimeout(200);
+        await page.waitForTimeout(800);
+        const stepAfterPlayback = await page.locator('input[type="range"]').first().inputValue();
+        expect(Number(stepAfterPlayback)).toBeGreaterThan(1);
         await playBtn.click();
       }
 
