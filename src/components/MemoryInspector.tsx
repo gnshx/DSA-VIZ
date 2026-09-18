@@ -52,9 +52,9 @@ export const MemoryInspector: React.FC<MemoryInspectorProps> = ({ event }) => {
             Object.entries(variables).map(([key, value]) => {
               const displayVal = typeof value === "object" ? JSON.stringify(value) : String(value);
               return (
-                <div key={key} className="var-row">
+                <div key={key} className="var-row" style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", gap: "0.5rem" }}>
                   <span style={{ color: "var(--cyan-400)", fontWeight: 600 }}>{key}</span>
-                  <span style={{ color: "var(--text-primary)", maxWidth: "160px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  <span style={{ color: "var(--text-primary)", wordBreak: "break-word", overflowWrap: "anywhere", maxWidth: "100%", textAlign: "right" }}>
                     {displayVal}
                   </span>
                 </div>

@@ -36,13 +36,13 @@ export const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ onSelectAlgorith
         </div>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 340px", gap: "1.5rem", flex: 1, minHeight: "480px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 340px), 1fr))", gap: "1.5rem", flex: 1, minHeight: "480px" }}>
         {/* Interactive SVG DAG Canvas */}
         <div
           className="glass-panel"
           style={{
             position: "relative",
-            overflow: "auto",
+            overflow: "hidden",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -50,7 +50,7 @@ export const KnowledgeGraph: React.FC<KnowledgeGraphProps> = ({ onSelectAlgorith
             padding: "1rem"
           }}
         >
-          <svg width="600" height="460" style={{ overflow: "visible" }}>
+          <svg viewBox="0 0 600 460" style={{ width: "100%", maxWidth: "600px", height: "auto", overflow: "visible" }}>
             <defs>
               <marker
                 id="graph-arrow"

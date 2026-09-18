@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { PredictionChallenge } from "../types/trace";
-import { Brain, CheckCircle2, HelpCircle, XCircle } from "lucide-react";
+import { Brain, CheckCircle2, XCircle } from "lucide-react";
 import confetti from "canvas-confetti";
 
 interface PredictionModalProps {
@@ -148,12 +148,14 @@ export const PredictionModal: React.FC<PredictionModalProps> = ({
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
+                  gap: "0.5rem",
+                  flexWrap: "wrap",
                   transition: "all var(--transition-fast)"
                 }}
               >
-                <span>{opt.text}</span>
-                {hasSubmitted && opt.isCorrect && <CheckCircle2 size={18} color="var(--emerald-400)" />}
-                {hasSubmitted && isSelected && !opt.isCorrect && <XCircle size={18} color="var(--rose-400)" />}
+                <span style={{ flex: "1 1 200px", minWidth: 0, wordBreak: "break-word" }}>{opt.text}</span>
+                {hasSubmitted && opt.isCorrect && <CheckCircle2 size={18} color="var(--emerald-400)" style={{ flexShrink: 0 }} />}
+                {hasSubmitted && isSelected && !opt.isCorrect && <XCircle size={18} color="var(--rose-400)" style={{ flexShrink: 0 }} />}
               </button>
             );
           })}

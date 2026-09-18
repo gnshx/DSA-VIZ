@@ -30,7 +30,7 @@ export const GridVisualizer: React.FC<GridVisualizerProps> = ({ event }) => {
         width: "100%",
         padding: "1.5rem 1rem",
         gap: "1.25rem",
-        overflowX: "auto"
+        overflowX: "hidden"
       }}
     >
       {/* Top Formula Banner */}
@@ -39,6 +39,8 @@ export const GridVisualizer: React.FC<GridVisualizerProps> = ({ event }) => {
           style={{
             display: "flex",
             alignItems: "center",
+            justifyContent: "center",
+            flexWrap: "wrap",
             gap: "0.5rem",
             background: "rgba(99, 102, 241, 0.12)",
             border: "1px solid rgba(99, 102, 241, 0.3)",
@@ -49,7 +51,7 @@ export const GridVisualizer: React.FC<GridVisualizerProps> = ({ event }) => {
           <span style={{ fontSize: "0.75rem", color: "var(--indigo-400)", fontWeight: 700, textTransform: "uppercase" }}>
             State Transition:
           </span>
-          <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.85rem", color: "var(--text-primary)", fontWeight: 600 }}>
+          <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.85rem", color: "var(--text-primary)", fontWeight: 600, wordBreak: "break-word" }}>
             {formula}
           </span>
         </div>

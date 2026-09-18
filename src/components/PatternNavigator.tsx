@@ -290,29 +290,35 @@ export const PatternNavigator: React.FC<PatternNavigatorProps> = ({
                               display: "flex",
                               alignItems: "center",
                               justifyContent: "space-between",
+                              flexWrap: "wrap",
+                              gap: "0.75rem",
                               cursor: "pointer",
                               background: "rgba(255, 255, 255, 0.02)",
                               borderBottom: isSubcaseExpanded ? "1px solid var(--border-subtle)" : "none"
                             }}
                             onClick={() => toggleSubcase(subcase.id)}
                           >
-                            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                              <div style={{ color: "var(--cyan-400)" }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flex: "1 1 240px", minWidth: 0 }}>
+                              <div style={{ color: "var(--cyan-400)", flexShrink: 0 }}>
                                 {isSubcaseExpanded ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
                               </div>
-                              <div>
-                                <div style={{ fontSize: "0.95rem", fontWeight: 800, color: "var(--text-primary)" }}>
+                              <div style={{ minWidth: 0 }}>
+                                <div style={{ fontSize: "0.95rem", fontWeight: 800, color: "var(--text-primary)", wordBreak: "break-word" }}>
                                   {subcase.subcaseTitle}
                                 </div>
-                                <div style={{ fontSize: "0.78rem", color: "var(--text-secondary)", marginTop: "0.15rem" }}>
+                                <div style={{ fontSize: "0.78rem", color: "var(--text-secondary)", marginTop: "0.15rem", wordBreak: "break-word" }}>
                                   {subcase.coreMechanism}
                                 </div>
                               </div>
                             </div>
 
-                            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                              <span className="badge badge-cyan" style={{ fontSize: "0.68rem" }}>{subcase.timeComplexity}</span>
-                              <span className="badge badge-emerald" style={{ fontSize: "0.68rem" }}>{subcase.spaceComplexity}</span>
+                            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap", flexShrink: 0 }}>
+                              <span className="badge badge-cyan" style={{ fontSize: "0.68rem", whiteSpace: "normal", wordBreak: "break-word", maxWidth: "260px", textAlign: "center" }}>
+                                {subcase.timeComplexity}
+                              </span>
+                              <span className="badge badge-emerald" style={{ fontSize: "0.68rem", whiteSpace: "normal", wordBreak: "break-word", maxWidth: "160px", textAlign: "center" }}>
+                                {subcase.spaceComplexity}
+                              </span>
                               <button
                                 type="button"
                                 onClick={(e) => {
@@ -320,7 +326,7 @@ export const PatternNavigator: React.FC<PatternNavigatorProps> = ({
                                   onSelectSubcase(subcase.algorithmId);
                                 }}
                                 className={`btn ${isCurrentlyVisualizing ? "btn-secondary" : "btn-primary"}`}
-                                style={{ padding: "0.25rem 0.65rem", fontSize: "0.72rem", height: "auto", borderRadius: "6px" }}
+                                style={{ padding: "0.25rem 0.65rem", fontSize: "0.72rem", height: "auto", borderRadius: "6px", flexShrink: 0 }}
                                 title="Simulate this subcase in Workbench"
                               >
                                 {isCurrentlyVisualizing ? "Active" : "Simulate"}
@@ -400,12 +406,13 @@ export const PatternNavigator: React.FC<PatternNavigatorProps> = ({
                                           display: "flex",
                                           alignItems: "center",
                                           justifyContent: "space-between",
+                                          flexWrap: "wrap",
                                           gap: "0.5rem"
                                         }}
                                       >
-                                        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                                          <BookOpen size={15} color="var(--indigo-400)" />
-                                          <span style={{ fontSize: "0.825rem", fontWeight: 700, color: "var(--text-primary)" }}>
+                                        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flex: "1 1 200px", minWidth: 0 }}>
+                                          <BookOpen size={15} color="var(--indigo-400)" style={{ flexShrink: 0 }} />
+                                          <span style={{ fontSize: "0.825rem", fontWeight: 700, color: "var(--text-primary)", wordBreak: "break-word" }}>
                                             {prob.title}
                                           </span>
                                         </div>
@@ -418,7 +425,8 @@ export const PatternNavigator: React.FC<PatternNavigatorProps> = ({
                                             borderRadius: "4px",
                                             background: diffStyle.bg,
                                             color: diffStyle.color,
-                                            border: diffStyle.border
+                                            border: diffStyle.border,
+                                            flexShrink: 0
                                           }}
                                         >
                                           {prob.difficulty}
@@ -484,7 +492,7 @@ export const PatternNavigator: React.FC<PatternNavigatorProps> = ({
             </p>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(480px, 1fr))", gap: "1.25rem" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(100%, 360px), 1fr))", gap: "1.25rem" }}>
             {filteredCombinations.map((combo: PatternCombination) => (
               <div
                 key={combo.id}

@@ -241,4 +241,79 @@ test.describe('DSA-VIZ Exhaustive UI/UX & Interactive Quality Audit', () => {
     }
   });
 
+  test('Zero horizontal scrollbars and clean code line wrapping in Workbench', async ({ page }) => {
+    const vizBtn = page.locator('header button:has-text("Visualize")').first();
+    await vizBtn.click();
+    await page.waitForTimeout(200);
+
+    // Switch to Prefix Sum + HashMap (which has longer code lines)
+    const algoSelect = page.locator('select').first();
+    await algoSelect.selectOption('prefix_sum_hashmap');
+    await page.waitForTimeout(300);
+
+    // Verify all code lines have scrollWidth <= clientWidth (no horizontal scrollbar on individual lines)
+    const codeLinesCount = await page.locator('.editor-line').count();
+    expect(codeLinesCount).toBeGreaterThan(0);
+
+    const hasHorizontalOverflow = await page.evaluate(() => {
+      const codeElements = document.querySelectorAll('.editor-code, .editor-body, .stage-canvas');
+      for (const el of codeElements) {
+        if (el.scrollWidth > el.clientWidth + 2) {
+          return true;
+        }
+      }
+      return false;
+    });
+    expect(hasHorizontalOverflow).toBe(false);
+  });
+
+  test('Subcase cards wrap badges cleanly and "Simulate" button is fully visible', async ({ page }) => {
+    const learnBtn = page.locator('header button:has-text("Learn")').first();
+    await learnBtn.click();
+    await page.waitForTimeout(200);
+
+    // Expand the first pattern family
+    const familyHeader = page.locator('.accordion-header').first();
+    await familyHeader.click();
+    await page.waitForTimeout(300);
+
+    // Verify all simulate buttons inside subcase headers are fully visible with positive width and not clipped
+    const simulateButtons = page.locator('.accordion-content button:has-text("Simulate"), .accordion-content button:has-text("Active")');
+    const count = await simulateButtons.count();
+    expect(count).toBeGreaterThan(0);
+
+    for (let i = 0; i < Math.min(count, 5); i++) {
+      const btn = simulateButtons.nth(i);
+      await expect(btn).toBeVisible();
+      const box = await btn.boundingBox();
+      expect(box).not.toBeNull();
+      expect(box!.width).toBeGreaterThan(40);
+    }
+  });
+
+  test('Predict Mode algorithm pills wrap cleanly without horizontal scrollbar', async ({ page }) => {
+    const predictBtn = page.locator('header button:has-text("Predict")').first();
+    await predictBtn.click();
+    await page.waitForTimeout(200);
+
+    // Verify that the pills container wraps and has no horizontal scrolling
+    const hasPillsScrollbar = await page.evaluate(() => {
+      const pillsContainer = document.querySelector('.page-container > div:nth-child(2)');
+      if (!pillsContainer) return false;
+      return pillsContainer.scrollWidth > pillsContainer.clientWidth + 2;
+    });
+    expect(hasPillsScrollbar).toBe(false);
+  });
+
+  test('Sticky navbar has solid opaque background preventing text bleed-through', async ({ page }) => {
+    const navbarBg = await page.evaluate(() => {
+      const nav = document.querySelector('header.navbar');
+      if (!nav) return '';
+      return window.getComputedStyle(nav).backgroundColor;
+    });
+    // Ensure background is solid opaque (alpha 1 in dark or light mode)
+    expect(navbarBg).toMatch(/rgb\(3,\s*7,\s*18\)|rgb\(255,\s*255,\s*255\)|#030712|#ffffff/);
+  });
+
 });
+

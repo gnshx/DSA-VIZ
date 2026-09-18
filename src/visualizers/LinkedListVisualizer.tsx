@@ -75,16 +75,17 @@ export const LinkedListVisualizer: React.FC<LinkedListVisualizerProps> = ({ even
                 <div
                   style={{
                     position: "absolute",
-                    top: "-36px",
+                    top: "-38px",
                     left: "50%",
                     transform: "translateX(-50%)",
                     display: "flex",
                     flexDirection: "row",
-                    flexWrap: "nowrap",
+                    flexWrap: "wrap",
                     alignItems: "center",
                     justifyContent: "center",
                     gap: "0.2rem",
-                    whiteSpace: "nowrap",
+                    width: "max-content",
+                    maxWidth: "140px",
                     zIndex: 10
                   }}
                 >

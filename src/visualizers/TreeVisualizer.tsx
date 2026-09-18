@@ -33,10 +33,10 @@ export const TreeVisualizer: React.FC<TreeVisualizerProps> = ({ event }) => {
         alignItems: "center",
         width: "100%",
         padding: "1rem",
-        overflowX: "auto"
+        overflowX: "hidden"
       }}
     >
-      <div style={{ marginBottom: "1rem", display: "flex", gap: "0.75rem" }}>
+      <div style={{ marginBottom: "1rem", display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "0.75rem" }}>
         <span className="badge badge-indigo">Binary Search Tree</span>
         <span className="badge badge-cyan">Active Traversal: Node {activeNodeId || "None"}</span>
       </div>

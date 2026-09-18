@@ -89,7 +89,7 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ event }) => {
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%", padding: "1.5rem 0.5rem", position: "relative" }}>
       {/* Visual Window Header if bounded */}
       {windowInfo && (
-        <div style={{ marginBottom: "1.25rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+        <div style={{ marginBottom: "1.25rem", display: "flex", alignItems: "center", justifyContent: "center", flexWrap: "wrap", gap: "0.5rem" }}>
           <span className="badge badge-cyan">{windowInfo.badge}</span>
           <span style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>
             ({windowInfo.detail})

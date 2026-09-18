@@ -98,10 +98,8 @@ export const SolveView: React.FC<SolveViewProps> = ({ language, onSelectLanguage
           style={{
             display: "flex",
             alignItems: "center",
-            gap: "0.6rem",
-            overflowX: "auto",
-            paddingBottom: "0.25rem",
-            scrollbarWidth: "thin"
+            gap: "0.5rem",
+            flexWrap: "wrap"
           }}
         >
           {ALL_PROBLEMS.map((prob) => {
@@ -113,15 +111,13 @@ export const SolveView: React.FC<SolveViewProps> = ({ language, onSelectLanguage
                 onClick={() => handleSelectProblem(prob)}
                 className="btn"
                 style={{
-                  flexShrink: 0,
                   background: isSelected
                     ? "linear-gradient(135deg, var(--indigo-600), var(--indigo-500))"
                     : "var(--chip-inactive-bg)",
                   color: isSelected ? "#ffffff" : "var(--text-secondary)",
                   border: isSelected ? "1px solid var(--indigo-400)" : "1px solid var(--border-subtle)",
                   fontSize: "0.825rem",
-                  padding: "0.5rem 0.95rem",
-                  whiteSpace: "nowrap",
+                  padding: "0.45rem 0.85rem",
                   borderRadius: "10px",
                   display: "flex",
                   alignItems: "center",

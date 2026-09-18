@@ -4,7 +4,7 @@ import { AlgorithmDefinition, SupportedLanguage } from "../types/algorithm";
 import { SimulationStage } from "../visualizers/SimulationStage";
 import { UniversalTimeline } from "../components/UniversalTimeline";
 import { PredictionModal } from "../components/PredictionModal";
-import { Award, Brain, CheckCircle2, Flame, Target } from "lucide-react";
+import { Flame, Target } from "lucide-react";
 
 interface PredictViewProps {
   language: SupportedLanguage;
@@ -24,17 +24,17 @@ export const PredictView: React.FC<PredictViewProps> = ({
   const [isPlaying, setIsPlaying] = useState(false);
   const [speed, setSpeed] = useState(1);
 
-  // Sync when selectedAlgorithmId changes externally
-  React.useEffect(() => {
-    if (!selectedAlgorithmId) return;
-    if (selectedAlgorithmId === selectedAlgo.id) return;
+  // Synchronize state during render when selectedAlgorithmId changes externally (React 19 pattern)
+  const [prevPropId, setPrevPropId] = useState(selectedAlgorithmId);
+  if (selectedAlgorithmId && selectedAlgorithmId !== prevPropId) {
+    setPrevPropId(selectedAlgorithmId);
     const found = ALL_ALGORITHMS.find((a) => a.id === selectedAlgorithmId);
     if (found) {
       setSelectedAlgo(found);
       setCurrentStep(1);
       setIsPlaying(false);
     }
-  }, [selectedAlgorithmId, selectedAlgo.id]);
+  }
 
   // Gamification & Mental model metrics
   const [correctCount, setCorrectCount] = useState(0);
@@ -153,7 +153,7 @@ export const PredictView: React.FC<PredictViewProps> = ({
       </div>
 
       {/* Algorithm Selector Pills */}
-      <div style={{ display: "flex", gap: "0.6rem", overflowX: "auto", paddingBottom: "0.25rem", scrollbarWidth: "thin" }}>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
         {ALL_ALGORITHMS.map((algo) => {
           const isSelected = selectedAlgo.id === algo.id;
           return (
@@ -167,15 +167,14 @@ export const PredictView: React.FC<PredictViewProps> = ({
               }}
               className="btn"
               style={{
-                flexShrink: 0,
                 background: isSelected ? "var(--indigo-500)" : "var(--chip-inactive-bg)",
                 color: isSelected ? "#ffffff" : "var(--chip-inactive-text)",
                 border: isSelected ? "1px solid var(--indigo-400)" : "1px solid var(--border-subtle)",
                 fontSize: "0.825rem",
-                padding: "0.45rem 0.9rem",
+                padding: "0.45rem 0.85rem",
                 borderRadius: "8px",
                 cursor: "pointer",
-                whiteSpace: "nowrap"
+                textAlign: "center"
               }}
             >
               {algo.name}

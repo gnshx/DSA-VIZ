@@ -6,7 +6,6 @@ import { PatternNavigator } from "../components/PatternNavigator";
 import {
   Activity,
   AlertTriangle,
-  BookOpen,
   Clock,
   Layers,
   Lightbulb
@@ -28,15 +27,15 @@ export const LearnView: React.FC<LearnViewProps> = ({
     () => ALL_ALGORITHMS.find((a) => a.id === selectedAlgorithmId) ?? ALL_ALGORITHMS[0]
   );
 
-  // Keep selectedAlgo in sync if selectedAlgorithmId changes externally
-  React.useEffect(() => {
-    if (!selectedAlgorithmId) return;
-    if (selectedAlgorithmId === selectedAlgo.id) return;
+  // Synchronize state during render when selectedAlgorithmId changes externally (React 19 pattern)
+  const [prevPropId, setPrevPropId] = useState(selectedAlgorithmId);
+  if (selectedAlgorithmId && selectedAlgorithmId !== prevPropId) {
+    setPrevPropId(selectedAlgorithmId);
     const found = ALL_ALGORITHMS.find((a) => a.id === selectedAlgorithmId);
     if (found) {
       setSelectedAlgo(found);
     }
-  }, [selectedAlgorithmId, selectedAlgo.id]);
+  }
 
   const handleSelectAlgo = (algo: AlgorithmDefinition) => {
     setSelectedAlgo(algo);
@@ -84,7 +83,7 @@ export const LearnView: React.FC<LearnViewProps> = ({
               </p>
             </div>
 
-            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap" }}>
               <button
                 onClick={() => setActiveTab("showcase")}
                 className="btn btn-secondary"
@@ -120,7 +119,7 @@ export const LearnView: React.FC<LearnViewProps> = ({
                 <span>Simulate in Workbench</span>
               </button>
 
-              <div style={{ display: "flex", flexDirection: "column", gap: "0.3rem", minWidth: "240px" }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.3rem", minWidth: "200px", flex: "1 1 200px" }}>
                 <span style={{ fontSize: "0.72rem", color: "var(--text-muted)", fontWeight: 700, textTransform: "uppercase" }}>
                   Select Blueprint:
                 </span>

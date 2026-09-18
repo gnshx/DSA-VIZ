@@ -159,7 +159,8 @@ export const HeapVisualizer: React.FC<HeapVisualizerProps> = ({ event }) => {
           display: "flex",
           alignItems: "center",
           gap: "0.5rem",
-          overflowX: "auto",
+          flexWrap: "wrap",
+          justifyContent: "center",
           maxWidth: "100%",
           padding: "0.5rem"
         }}
