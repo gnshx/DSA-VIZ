@@ -6,14 +6,8 @@ import { SimulationStage } from "../visualizers/SimulationStage";
 import { UniversalTimeline } from "../components/UniversalTimeline";
 import {
   CheckCircle2,
-  Code2,
-  Play,
-  Terminal,
-  Zap,
   FileCode2,
-  Target,
-  Sparkles,
-  AlertCircle
+  Sparkles
 } from "lucide-react";
 
 interface SolveViewProps {

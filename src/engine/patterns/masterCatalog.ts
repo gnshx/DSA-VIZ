@@ -345,7 +345,7 @@ export const MASTER_PATTERN_FAMILIES: PatternFamilyDefinition[] = [
       {
         id: "kadane",
         subcaseTitle: "6. Kadane's Algorithm (Maximum Subarray Sum)",
-        algorithmId: "prefix_sum_1d",
+        algorithmId: "kadane_max_subarray",
         topology: "dp_1d",
         pointerRoles: { current: "Scanning element", localMax: "Best ending here", globalMax: "Best seen overall" },
         coreMechanism: "local_max = max(num, local_max + num). If all negative, local_max resets to current element. global_max tracks the answer.",
@@ -1008,7 +1008,7 @@ export const MASTER_PATTERN_FAMILIES: PatternFamilyDefinition[] = [
       {
         id: "sort_merge",
         subcaseTitle: "4. Merge Sort (Divide & Conquer, Stable)",
-        algorithmId: "bubble_sort",
+        algorithmId: "merge_sort",
         topology: "two_sequences",
         pointerRoles: { left: "Left half pointer", right: "Right half pointer", mid: "Split point" },
         coreMechanism: "Divide array in half recursively until single elements. Merge step: compare left[i] and right[j], place smaller first. Stable: equal elements keep original order. O(n log n) guaranteed.",
@@ -1232,7 +1232,7 @@ export const MASTER_PATTERN_FAMILIES: PatternFamilyDefinition[] = [
       {
         id: "deque_monotonic_sliding",
         subcaseTitle: "4. Sliding Window Using Deque (Monotonic Deque Max/Min)",
-        algorithmId: "sliding_window_fixed",
+        algorithmId: "sliding_window_max_deque",
         topology: "monotonic_deque",
         pointerRoles: { deque: "Monotonic decreasing index store", right: "Incoming element index", left: "Trailing window bound" },
         coreMechanism: "Store indices of candidate maximums. Before appending right, pop all indices from the back whose values <= arr[right]. Evict front index if it falls behind window start r - k + 1. Front element is always current window maximum in O(1) amortized.",
@@ -1585,7 +1585,7 @@ export const MASTER_PATTERN_FAMILIES: PatternFamilyDefinition[] = [
       {
         id: "tree_traversals",
         subcaseTitle: "3. DFS Traversals (Pre / In / Post Order)",
-        algorithmId: "invert_binary_tree",
+        algorithmId: "tree_dfs_traversals",
         topology: "tree_dfs",
         pointerRoles: { node: "Current tree node", left: "Left subtree", right: "Right subtree" },
         coreMechanism: "Preorder: root-left-right (copy, serialize). Inorder: left-root-right (BST sorted order). Postorder: left-right-root (delete, evaluate). All O(n) time.",
@@ -2011,7 +2011,7 @@ export const MASTER_PATTERN_FAMILIES: PatternFamilyDefinition[] = [
       {
         id: "graph_dfs",
         subcaseTitle: "3. DFS (Connected Components & Recursive/Iterative)",
-        algorithmId: "bfs_traversal",
+        algorithmId: "graph_dfs_traversal",
         topology: "graph_dfs",
         pointerRoles: { stack: "Explicit stack or call stack", visited: "Processed set" },
         coreMechanism: "Explore as deep as possible before backtracking. Recursive: dfs(node) visits node, marks visited, recurses on unvisited neighbors. Iterative: use explicit stack. Counts connected components.",
@@ -2027,7 +2027,7 @@ export const MASTER_PATTERN_FAMILIES: PatternFamilyDefinition[] = [
       {
         id: "graph_cycle",
         subcaseTitle: "4. Cycle Detection (Directed & Undirected)",
-        algorithmId: "bfs_traversal",
+        algorithmId: "graph_dfs_traversal",
         topology: "graph_dfs",
         pointerRoles: { color: "WHITE/GRAY/BLACK (or in_stack boolean)", parent: "Previous node (undirected)" },
         coreMechanism: "Directed: 3-color DFS — if a GRAY (in-stack) node is revisited, a cycle exists. Undirected: if a visited neighbor is not the parent, cycle found. BFS: topological sort — if processed < V, cycle.",

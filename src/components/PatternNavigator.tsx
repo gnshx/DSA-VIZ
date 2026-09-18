@@ -9,11 +9,7 @@ import {
   Play,
   Search,
   Puzzle,
-  CheckCircle2,
-  Clock,
-  Cpu,
-  BookOpen,
-  Info
+  BookOpen
 } from "lucide-react";
 
 interface PatternNavigatorProps {
@@ -317,6 +313,18 @@ export const PatternNavigator: React.FC<PatternNavigatorProps> = ({
                             <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
                               <span className="badge badge-cyan" style={{ fontSize: "0.68rem" }}>{subcase.timeComplexity}</span>
                               <span className="badge badge-emerald" style={{ fontSize: "0.68rem" }}>{subcase.spaceComplexity}</span>
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  onSelectSubcase(subcase.algorithmId);
+                                }}
+                                className={`btn ${isCurrentlyVisualizing ? "btn-secondary" : "btn-primary"}`}
+                                style={{ padding: "0.25rem 0.65rem", fontSize: "0.72rem", height: "auto", borderRadius: "6px" }}
+                                title="Simulate this subcase in Workbench"
+                              >
+                                {isCurrentlyVisualizing ? "Active" : "Simulate"}
+                              </button>
                             </div>
                           </div>
 

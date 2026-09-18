@@ -4,6 +4,7 @@ import { AlgorithmDefinition } from "../types/algorithm";
 import { IntuitionDemo } from "../components/IntuitionDemo";
 import { PatternNavigator } from "../components/PatternNavigator";
 import {
+  Activity,
   AlertTriangle,
   BookOpen,
   Clock,
@@ -11,11 +12,35 @@ import {
   Lightbulb
 } from "lucide-react";
 
-export const LearnView: React.FC = () => {
+interface LearnViewProps {
+  selectedAlgorithmId?: string;
+  onSelectAlgorithm?: (algoId: string) => void;
+  onNavigateToVisualize?: (algoId: string) => void;
+}
+
+export const LearnView: React.FC<LearnViewProps> = ({
+  selectedAlgorithmId,
+  onSelectAlgorithm,
+  onNavigateToVisualize
+}) => {
   const [activeTab, setActiveTab] = useState<"pathway" | "showcase">("showcase");
-  const [selectedAlgo, setSelectedAlgo] = useState<AlgorithmDefinition>(ALL_ALGORITHMS[0]);
+  const [selectedAlgo, setSelectedAlgo] = useState<AlgorithmDefinition>(
+    () => ALL_ALGORITHMS.find((a) => a.id === selectedAlgorithmId) ?? ALL_ALGORITHMS[0]
+  );
+
+  // Keep selectedAlgo in sync if selectedAlgorithmId changes externally
+  React.useEffect(() => {
+    if (!selectedAlgorithmId) return;
+    if (selectedAlgorithmId === selectedAlgo.id) return;
+    const found = ALL_ALGORITHMS.find((a) => a.id === selectedAlgorithmId);
+    if (found) {
+      setSelectedAlgo(found);
+    }
+  }, [selectedAlgorithmId, selectedAlgo.id]);
+
   const handleSelectAlgo = (algo: AlgorithmDefinition) => {
     setSelectedAlgo(algo);
+    onSelectAlgorithm?.(algo.id);
   };
 
   const handleSelectAlgoById = (algoId: string) => {
@@ -75,6 +100,24 @@ export const LearnView: React.FC = () => {
               >
                 <Layers size={15} />
                 <span>Explore All Patterns</span>
+              </button>
+
+              <button
+                onClick={() => onNavigateToVisualize?.(selectedAlgo.id)}
+                className="btn btn-primary"
+                style={{
+                  padding: "0.5rem 1rem",
+                  fontSize: "0.85rem",
+                  fontWeight: 700,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.4rem",
+                  borderRadius: "8px"
+                }}
+                title="Launch in Visualize Workbench"
+              >
+                <Activity size={15} />
+                <span>Simulate in Workbench</span>
               </button>
 
               <div style={{ display: "flex", flexDirection: "column", gap: "0.3rem", minWidth: "240px" }}>

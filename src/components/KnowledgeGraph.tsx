@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { CS_KNOWLEDGE_GRAPH } from "../engine/algorithms";
 import { ConceptNode } from "../types/algorithm";
-import { ArrowRight, BookOpen, Layers, Sparkles } from "lucide-react";
+import { ArrowRight, Layers, Sparkles } from "lucide-react";
 
 interface KnowledgeGraphProps {
   onSelectAlgorithm: (algoId: string) => void;

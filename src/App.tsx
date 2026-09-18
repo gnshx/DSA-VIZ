@@ -9,7 +9,14 @@ import { Sparkles, Terminal } from "lucide-react";
 export function App() {
   const [currentMode, setCurrentMode] = useState<AppMode>("visualize");
   const [language, setLanguage] = useState<SupportedLanguage>("python");
-  const [selectedAlgorithmId] = useState<string>("binary_search");
+  const [selectedAlgorithmId, setSelectedAlgorithmId] = useState<string>("binary_search");
+
+  const handleNavigateToVisualize = (algoId?: string) => {
+    if (algoId) {
+      setSelectedAlgorithmId(algoId);
+    }
+    setCurrentMode("visualize");
+  };
 
   // Day/Night Theme Pilot State
   const [theme, setTheme] = useState<"dark" | "light">(() => {
@@ -43,16 +50,27 @@ export function App() {
       {/* Main View Container */}
       <main id="main-content" className="app-main">
         {currentMode === "learn" && (
-          <LearnView />
+          <LearnView
+            selectedAlgorithmId={selectedAlgorithmId}
+            onSelectAlgorithm={setSelectedAlgorithmId}
+            onNavigateToVisualize={handleNavigateToVisualize}
+          />
         )}
         {currentMode === "visualize" && (
           <VisualizeView
             language={language}
             onSelectLanguage={setLanguage}
-            initialAlgorithmId={selectedAlgorithmId}
+            selectedAlgorithmId={selectedAlgorithmId}
+            onSelectAlgorithm={setSelectedAlgorithmId}
           />
         )}
-        {currentMode === "predict" && <PredictView language={language} />}
+        {currentMode === "predict" && (
+          <PredictView
+            language={language}
+            selectedAlgorithmId={selectedAlgorithmId}
+            onSelectAlgorithm={setSelectedAlgorithmId}
+          />
+        )}
       </main>
 
       {/* Global Status Footer */}

@@ -53,9 +53,15 @@ import {
   knapsack01Algorithm,
   lcsStringDpAlgorithm
 } from "./advancedDpSubcases";
+import { kadaneAlgorithm } from "./kadaneSubcases";
+import { graphDfsAlgorithm } from "./graphDfsSubcases";
+import { mergeSortAlgorithm } from "./mergeSortSubcases";
+import { monotonicDequeAlgorithm } from "./monotonicDequeSubcases";
+import { treeDfsTraversalsAlgorithm } from "./treeDfsSubcases";
 
 export const ALL_ALGORITHMS: AlgorithmDefinition[] = [
   // Arrays & Prefix Techniques
+  kadaneAlgorithm,
   prefixSum1DAlgorithm,
   differenceArrayAlgorithm,
 
@@ -75,6 +81,7 @@ export const ALL_ALGORITHMS: AlgorithmDefinition[] = [
   // Sliding Window Subcases
   slidingWindowFixedAlgorithm,
   slidingWindowDynamicAlgorithm,
+  monotonicDequeAlgorithm,
 
   // Binary Search Subcases
   binarySearchAlgorithm,
@@ -84,6 +91,7 @@ export const ALL_ALGORITHMS: AlgorithmDefinition[] = [
 
   // Partitioning & Sorting
   dutchNationalFlagAlgorithm,
+  mergeSortAlgorithm,
   bubbleSortAlgorithm,
   selectionSortAlgorithm,
 
@@ -99,6 +107,7 @@ export const ALL_ALGORITHMS: AlgorithmDefinition[] = [
   reverseLinkedListAlgorithm,
 
   // Trees & BST
+  treeDfsTraversalsAlgorithm,
   invertTreeAlgorithm,
   bstSearchAlgorithm,
 
@@ -113,6 +122,7 @@ export const ALL_ALGORITHMS: AlgorithmDefinition[] = [
 
   // Graphs & Topological Sort
   bfsAlgorithm,
+  graphDfsAlgorithm,
   dijkstraAlgorithm,
   topologicalSortKahnAlgorithm,
 
@@ -605,5 +615,10 @@ export {
   bitManipulationXorSingleNumberAlgorithm,
   bitManipulationKernighanAlgorithm,
   knapsack01Algorithm,
-  lcsStringDpAlgorithm
+  lcsStringDpAlgorithm,
+  kadaneAlgorithm,
+  mergeSortAlgorithm,
+  monotonicDequeAlgorithm,
+  treeDfsTraversalsAlgorithm,
+  graphDfsAlgorithm
 };

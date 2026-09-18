@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { ALL_ALGORITHMS } from "../engine/algorithms";
 import { ALL_PATTERN_FAMILIES } from "../engine/patterns";
 import { AlgorithmDefinition, SupportedLanguage } from "../types/algorithm";
@@ -15,12 +15,18 @@ import { ChevronDown, ChevronUp, Compass } from "lucide-react";
 interface VisualizeViewProps {
   language: SupportedLanguage;
   onSelectLanguage: (lang: SupportedLanguage) => void;
-  initialAlgorithmId?: string;
+  selectedAlgorithmId?: string;
+  onSelectAlgorithm?: (id: string) => void;
 }
 
-export const VisualizeView: React.FC<VisualizeViewProps> = ({ language, onSelectLanguage, initialAlgorithmId }) => {
+export const VisualizeView: React.FC<VisualizeViewProps> = ({
+  language,
+  onSelectLanguage,
+  selectedAlgorithmId,
+  onSelectAlgorithm
+}) => {
   const [selectedAlgo, setSelectedAlgo] = useState<AlgorithmDefinition>(
-    () => ALL_ALGORITHMS.find((algo) => algo.id === initialAlgorithmId) ?? ALL_ALGORITHMS[0]
+    () => ALL_ALGORITHMS.find((algo) => algo.id === selectedAlgorithmId) ?? ALL_ALGORITHMS[0]
   );
   const [customInputText, setCustomInputText] = useState("");
   const [appliedInput, setAppliedInput] = useState("");
@@ -30,21 +36,19 @@ export const VisualizeView: React.FC<VisualizeViewProps> = ({ language, onSelect
   const [showDirectory, setShowDirectory] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
 
-  // Sync only when the incoming prop itself changes — never snap back
-  // to it after the user picks a different algorithm locally.
-  const lastInitialIdRef = useRef(initialAlgorithmId);
-  useEffect(() => {
-    if (initialAlgorithmId === lastInitialIdRef.current) return;
-    lastInitialIdRef.current = initialAlgorithmId;
-    const next = ALL_ALGORITHMS.find((algo) => algo.id === initialAlgorithmId);
-    if (next) {
+  // Sync state cleanly when selectedAlgorithmId changes from outside
+  const [prevSelectedId, setPrevSelectedId] = useState(selectedAlgorithmId);
+  if (selectedAlgorithmId && selectedAlgorithmId !== prevSelectedId) {
+    setPrevSelectedId(selectedAlgorithmId);
+    const next = ALL_ALGORITHMS.find((algo) => algo.id === selectedAlgorithmId);
+    if (next && next.id !== selectedAlgo.id) {
       setSelectedAlgo(next);
       setCustomInputText("");
       setAppliedInput("");
       setCurrentStep(1);
       setIsPlaying(false);
     }
-  }, [initialAlgorithmId]);
+  }
 
   const parsedInput = useMemo(
     () => (appliedInput ? parseUserInput(appliedInput, selectedAlgo.structureType) : undefined),
@@ -75,6 +79,7 @@ export const VisualizeView: React.FC<VisualizeViewProps> = ({ language, onSelect
       return;
     }
     setSelectedAlgo(next);
+    onSelectAlgorithm?.(id);
     setCustomInputText("");
     setAppliedInput("");
     setCurrentStep(1);
@@ -98,6 +103,17 @@ export const VisualizeView: React.FC<VisualizeViewProps> = ({ language, onSelect
     setIsPlaying(false);
   };
 
+  // Group algorithms by category for intuitive navigation
+  const groupedAlgorithms = useMemo(() => {
+    const groups: Record<string, AlgorithmDefinition[]> = {};
+    for (const algo of ALL_ALGORITHMS) {
+      const cat = algo.category || "other";
+      if (!groups[cat]) groups[cat] = [];
+      groups[cat].push(algo);
+    }
+    return groups;
+  }, []);
+
   return (
     <div className="workbench page-container">
       <section className="workbench-header" aria-label="Algorithm controls">
@@ -117,7 +133,15 @@ export const VisualizeView: React.FC<VisualizeViewProps> = ({ language, onSelect
         <label className="field-group">
           <span>Algorithm</span>
           <select value={selectedAlgo.id} onChange={(event) => selectAlgorithm(event.target.value)} aria-label="Algorithm">
-            {ALL_ALGORITHMS.map((algo) => <option key={algo.id} value={algo.id}>{algo.name}</option>)}
+            {Object.entries(groupedAlgorithms).map(([cat, algos]) => (
+              <optgroup key={cat} label={cat.toUpperCase().replace(/_/g, " ")}>
+                {algos.map((algo) => (
+                  <option key={algo.id} value={algo.id}>
+                    {algo.name}
+                  </option>
+                ))}
+              </optgroup>
+            ))}
           </select>
         </label>
         <label className="field-group workbench-input">

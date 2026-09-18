@@ -4,17 +4,37 @@ import { AlgorithmDefinition, SupportedLanguage } from "../types/algorithm";
 import { SimulationStage } from "../visualizers/SimulationStage";
 import { UniversalTimeline } from "../components/UniversalTimeline";
 import { PredictionModal } from "../components/PredictionModal";
-import { Award, Brain, CheckCircle2, Flame, HelpCircle, RotateCcw, Target } from "lucide-react";
+import { Award, Brain, CheckCircle2, Flame, Target } from "lucide-react";
 
 interface PredictViewProps {
   language: SupportedLanguage;
+  selectedAlgorithmId?: string;
+  onSelectAlgorithm?: (algoId: string) => void;
 }
 
-export const PredictView: React.FC<PredictViewProps> = ({ language }) => {
-  const [selectedAlgo, setSelectedAlgo] = useState<AlgorithmDefinition>(ALL_ALGORITHMS[1]); // Binary search by default has great prediction points
+export const PredictView: React.FC<PredictViewProps> = ({
+  language: _language,
+  selectedAlgorithmId,
+  onSelectAlgorithm
+}) => {
+  const [selectedAlgo, setSelectedAlgo] = useState<AlgorithmDefinition>(
+    () => ALL_ALGORITHMS.find((a) => a.id === selectedAlgorithmId) ?? ALL_ALGORITHMS[0]
+  );
   const [currentStep, setCurrentStep] = useState(1);
   const [isPlaying, setIsPlaying] = useState(false);
   const [speed, setSpeed] = useState(1);
+
+  // Sync when selectedAlgorithmId changes externally
+  React.useEffect(() => {
+    if (!selectedAlgorithmId) return;
+    if (selectedAlgorithmId === selectedAlgo.id) return;
+    const found = ALL_ALGORITHMS.find((a) => a.id === selectedAlgorithmId);
+    if (found) {
+      setSelectedAlgo(found);
+      setCurrentStep(1);
+      setIsPlaying(false);
+    }
+  }, [selectedAlgorithmId, selectedAlgo.id]);
 
   // Gamification & Mental model metrics
   const [correctCount, setCorrectCount] = useState(0);
@@ -141,6 +161,7 @@ export const PredictView: React.FC<PredictViewProps> = ({ language }) => {
               key={algo.id}
               onClick={() => {
                 setSelectedAlgo(algo);
+                onSelectAlgorithm?.(algo.id);
                 setCurrentStep(1);
                 setIsPlaying(false);
               }}

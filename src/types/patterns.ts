@@ -1,4 +1,4 @@
-import { AlgorithmCategory, SupportedLanguage } from "./algorithm";
+import { AlgorithmCategory } from "./algorithm";
 import { StructureType } from "./trace";
 
 export type PatternMasteryTier = "tier1_core" | "tier2_advanced" | "tier3_competitive";

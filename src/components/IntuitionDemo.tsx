@@ -23,10 +23,12 @@ export const IntuitionDemo: React.FC<IntuitionDemoProps> = ({ algorithm }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const event = story[frame] ?? story[0];
 
-  useEffect(() => {
+  const [prevAlgoId, setPrevAlgoId] = useState(algorithm.id);
+  if (prevAlgoId !== algorithm.id) {
+    setPrevAlgoId(algorithm.id);
     setFrame(0);
     setIsPlaying(false);
-  }, [algorithm.id]);
+  }
 
   useEffect(() => {
     if (!isPlaying) return;

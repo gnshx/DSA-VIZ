@@ -96,7 +96,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               className="btn btn-ghost btn-icon theme-toggle"
               data-theme={theme}
               style={{ borderRadius: "10px", border: "1px solid var(--border-subtle)" }}
-              aria-label={theme === "light" ? "Switch to dark theme" : "Switch to light theme"}
+              aria-label="Toggle Theme Pilot"
+              title={theme === "light" ? "Switch to Night Mode" : "Switch to Day Mode"}
               aria-pressed={theme === "light"}
             >
               {theme === "light" ? <Sun size={18} /> : <Moon size={18} />}

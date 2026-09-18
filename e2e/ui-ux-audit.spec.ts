@@ -172,4 +172,73 @@ test.describe('DSA-VIZ Exhaustive UI/UX & Interactive Quality Audit', () => {
     expect(darkTheme).toBe('dark');
   });
 
+  test('Visualize Workbench persists selected algorithm when switching modes', async ({ page }) => {
+    const vizBtn = page.locator('header button:has-text("Visualize")').first();
+    await vizBtn.click();
+    await page.waitForTimeout(200);
+
+    const algoSelect = page.locator('select').first();
+    // Select kadane_max_subarray
+    await algoSelect.selectOption('kadane_max_subarray');
+    await page.waitForTimeout(200);
+
+    await expect(page.locator('h1')).toContainText("Kadane's Algorithm");
+
+    // Switch to Learn & Catalog
+    const learnBtn = page.locator('header button:has-text("Learn")').first();
+    await learnBtn.click();
+    await page.waitForTimeout(200);
+
+    // Switch back to Visualize Workbench
+    await vizBtn.click();
+    await page.waitForTimeout(200);
+
+    // It MUST still show Kadane's Algorithm, NOT revert to Binary Search!
+    await expect(page.locator('h1')).toContainText("Kadane's Algorithm");
+  });
+
+  test('Learn Mode pathway "Simulate in Workbench" navigates with selected algorithm', async ({ page }) => {
+    const learnBtn = page.locator('header button:has-text("Learn")').first();
+    await learnBtn.click();
+    await page.waitForTimeout(200);
+
+    // Expand search and click a subcase
+    const runTraceBtn = page.locator('button:has-text("Run & Check Trace")').first();
+    await runTraceBtn.click();
+    await page.waitForTimeout(300);
+
+    // Click "Simulate in Workbench"
+    const simBtn = page.locator('button:has-text("Simulate in Workbench")').first();
+    await expect(simBtn).toBeVisible();
+    await simBtn.click();
+    await page.waitForTimeout(300);
+
+    // Verify we are now on Visualize Workbench
+    const vizHeader = page.locator('.workbench-eyebrow');
+    await expect(vizHeader).toBeVisible();
+    await expect(vizHeader).toContainText('Algorithm workspace');
+  });
+
+  test('New algorithms (Kadane, Merge Sort, Monotonic Deque, Graph DFS, Tree DFS) render in Workbench', async ({ page }) => {
+    const vizBtn = page.locator('header button:has-text("Visualize")').first();
+    await vizBtn.click();
+    await page.waitForTimeout(200);
+
+    const algoSelect = page.locator('select').first();
+    const newAlgos = [
+      { id: 'kadane_max_subarray', name: "Kadane's Algorithm" },
+      { id: 'merge_sort', name: "Merge Sort" },
+      { id: 'sliding_window_max_deque', name: "Sliding Window Maximum" },
+      { id: 'graph_dfs_traversal', name: "Depth-First Search" },
+      { id: 'tree_dfs_traversals', name: "Binary Tree DFS" }
+    ];
+
+    for (const algo of newAlgos) {
+      await algoSelect.selectOption(algo.id);
+      await page.waitForTimeout(200);
+      await expect(page.locator('h1')).toContainText(algo.name);
+      await expect(page.locator('.stage')).toBeVisible();
+    }
+  });
+
 });

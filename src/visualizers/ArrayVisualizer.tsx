@@ -45,14 +45,54 @@ export const ArrayVisualizer: React.FC<ArrayVisualizerProps> = ({ event }) => {
     }
   };
 
+  // Contextual header for bounded range based on algorithm family
+  const getWindowLabel = () => {
+    if (!windowRange) return null;
+    const [l, r] = windowRange;
+    const count = r >= l ? r - l + 1 : 0;
+    const ptrs = event.pointers || {};
+    const expl = (event.explanation || "").toLowerCase();
+
+    if (ptrs.mid !== undefined || ptrs.target !== undefined || expl.includes("search space") || expl.includes("binary search")) {
+      return {
+        badge: `Active Search Space: [${l} ... ${r}]`,
+        detail: count > 0 ? `${count} candidates remaining` : "empty"
+      };
+    }
+    if (ptrs.windowStart !== undefined || expl.includes("window") || expl.includes("sliding")) {
+      return {
+        badge: `Active Sliding Window: [${l} ... ${r}]`,
+        detail: `Window size: ${count}`
+      };
+    }
+    if (ptrs.maxReach !== undefined || expl.includes("jump") || expl.includes("reach")) {
+      return {
+        badge: `Reachable Range: [${l} ... ${r}]`,
+        detail: `Span: ${count} elements`
+      };
+    }
+    if (ptrs.left !== undefined && ptrs.right !== undefined) {
+      return {
+        badge: `Pointer Boundaries: [${l} ... ${r}]`,
+        detail: count > 0 ? `${count} elements bounded` : "converged"
+      };
+    }
+    return {
+      badge: `Active Range: [${l} ... ${r}]`,
+      detail: `Span: ${count}`
+    };
+  };
+
+  const windowInfo = getWindowLabel();
+
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%", padding: "1.5rem 0.5rem", position: "relative" }}>
       {/* Visual Window Header if bounded */}
-      {windowRange && (
+      {windowInfo && (
         <div style={{ marginBottom: "1.25rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-          <span className="badge badge-cyan">Active Search Space: [{windowRange[0]} ... {windowRange[1]}]</span>
+          <span className="badge badge-cyan">{windowInfo.badge}</span>
           <span style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>
-            ({windowRange[1] >= windowRange[0] ? `${windowRange[1] - windowRange[0] + 1} candidates remaining` : "empty"})
+            ({windowInfo.detail})
           </span>
         </div>
       )}
