@@ -35,157 +35,74 @@ export const Navbar: React.FC<NavbarProps> = ({
   ];
 
   return (
-    <header
-      style={{
-        background: "var(--nav-bg)",
-        backdropFilter: "blur(16px)",
-        WebkitBackdropFilter: "blur(16px)",
-        borderBottom: "1px solid var(--border-subtle)",
-        position: "sticky",
-        top: 0,
-        zIndex: 50,
-        padding: "0.6rem 1.5rem",
-        transition: "background var(--transition-normal)"
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          maxWidth: "1800px",
-          margin: "0 auto",
-          gap: "1rem",
-          flexWrap: "wrap"
-        }}
-      >
-        {/* Brand & North Star */}
-        <div style={{ display: "flex", alignItems: "center", gap: "0.85rem" }}>
-          <div
-            style={{
-              width: "38px",
-              height: "38px",
-              borderRadius: "10px",
-              background: "linear-gradient(135deg, var(--indigo-500), var(--cyan-500))",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              boxShadow: "var(--shadow-glow-indigo)",
-              flexShrink: 0
-            }}
-          >
+    <header className="navbar">
+      <div className="navbar-inner">
+        <div className="navbar-brand">
+          <div className="navbar-mark">
             <Code2 size={22} color="#ffffff" />
           </div>
           <div>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              <span style={{ fontSize: "1.2rem", fontWeight: 800, letterSpacing: "-0.02em" }}>
-                DSA<span style={{ color: "var(--cyan-400)" }}>-VIZ</span>
+            <div className="navbar-title">
+              <span>
+                DSA<em>-VIZ</em>
               </span>
               <span className="badge badge-indigo" style={{ fontSize: "0.65rem" }}>
                 OBSERVABLE ENGINE
               </span>
             </div>
-            <div style={{ fontSize: "0.725rem", color: "var(--text-muted)", letterSpacing: "0.01em" }}>
+            <div className="navbar-subtitle">
               State-Driven Algorithmic Intelligence
             </div>
           </div>
         </div>
 
-        {/* Mode Navigation Dock (3 Core Pillars) */}
-        <nav
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "0.35rem",
-            background: "var(--bg-tertiary)",
-            padding: "0.3rem",
-            borderRadius: "12px",
-            border: "1px solid var(--border-subtle)"
-          }}
-        >
-          {modes.map((m) => {
-            const isActive = currentMode === m.id;
-            return (
-              <button
-                key={m.id}
-                onClick={() => onSelectMode(m.id)}
-                className="btn"
-                style={{
-                  padding: "0.45rem 0.95rem",
-                  fontSize: "0.825rem",
-                  fontWeight: isActive ? 700 : 500,
-                  background: isActive ? "linear-gradient(135deg, var(--indigo-500), #4f46e5)" : "transparent",
-                  color: isActive ? "#ffffff" : "var(--text-secondary)",
-                  boxShadow: isActive ? "0 2px 10px rgba(99, 102, 241, 0.35)" : "none",
-                  border: "none",
-                  borderRadius: "8px"
-                }}
-              >
-                {m.icon}
-                <span>{m.label}</span>
-              </button>
-            );
-          })}
+        <nav aria-label="Primary modes" className="nav-dock">
+          {modes.map((m) => (
+            <button
+              key={m.id}
+              type="button"
+              aria-current={currentMode === m.id ? "page" : undefined}
+              onClick={() => onSelectMode(m.id)}
+              className="nav-dock-btn"
+              data-active={currentMode === m.id}
+            >
+              {m.icon}
+              <span>{m.label}</span>
+            </button>
+          ))}
         </nav>
 
-        {/* Language Selector & Theme Toggle */}
-        <div style={{ display: "flex", alignItems: "center", gap: "0.85rem" }}>
-          {/* Multi-language Selector Pill Bar */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "0.3rem",
-              background: "var(--bg-tertiary)",
-              padding: "0.25rem",
-              borderRadius: "10px",
-              border: "1px solid var(--border-subtle)"
-            }}
-          >
+        <div className="navbar-controls">
+          <div className="lang-dock" role="group" aria-label="Programming language">
             <Terminal size={14} color="var(--text-muted)" style={{ marginLeft: "0.4rem", marginRight: "0.1rem" }} />
-            {languages.map((lang) => {
-              const isSelected = language === lang.id;
-              return (
-                <button
-                  key={lang.id}
-                  onClick={() => onSelectLanguage(lang.id)}
-                  style={{
-                    border: "none",
-                    background: isSelected ? "var(--indigo-glow)" : "transparent",
-                    color: isSelected ? "var(--cyan-400)" : "var(--text-muted)",
-                    fontWeight: isSelected ? 700 : 500,
-                    fontSize: "0.775rem",
-                    padding: "0.35rem 0.65rem",
-                    minHeight: "32px",
-                    borderRadius: "6px",
-                    cursor: "pointer",
-                    transition: "all var(--transition-fast)"
-                  }}
-                >
-                  {lang.label}
-                </button>
-              );
-            })}
+            {languages.map((lang) => (
+              <button
+                key={lang.id}
+                type="button"
+                aria-pressed={language === lang.id}
+                onClick={() => onSelectLanguage(lang.id)}
+                className="lang-dock-btn"
+                data-active={language === lang.id}
+              >
+                {lang.label}
+              </button>
+            ))}
           </div>
 
-          {/* Theme Toggle Button */}
           <div className="tooltip-container">
             <button
+              type="button"
               onClick={onToggleTheme}
-              className="btn btn-ghost btn-icon"
-              style={{
-                borderRadius: "10px",
-                border: "1px solid var(--border-subtle)",
-                background: theme === "light" ? "rgba(245, 158, 11, 0.15)" : "rgba(99, 102, 241, 0.15)",
-                color: theme === "light" ? "var(--amber-500)" : "var(--indigo-400)",
-                transition: "all var(--transition-fast)"
-              }}
-              aria-label="Toggle Theme Pilot"
+              className="btn btn-ghost btn-icon theme-toggle"
+              data-theme={theme}
+              style={{ borderRadius: "10px", border: "1px solid var(--border-subtle)" }}
+              aria-label={theme === "light" ? "Switch to dark theme" : "Switch to light theme"}
+              aria-pressed={theme === "light"}
             >
               {theme === "light" ? <Sun size={18} /> : <Moon size={18} />}
             </button>
             <span className="tooltip-text">
-              {theme === "light" ? "Switch to Night Mode 🌙" : "Switch to Day Mode ☀️"}
+              {theme === "light" ? "Switch to Night Mode" : "Switch to Day Mode"}
             </span>
           </div>
         </div>

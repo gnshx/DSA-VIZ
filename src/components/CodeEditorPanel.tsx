@@ -13,7 +13,6 @@ export const CodeEditorPanel: React.FC<CodeEditorPanelProps> = ({
   code,
   language,
   activeLine,
-  onLanguageChange
 }) => {
   const [copied, setCopied] = useState(false);
   const lines = code.split("\n");
@@ -38,29 +37,11 @@ export const CodeEditorPanel: React.FC<CodeEditorPanelProps> = ({
   };
 
   return (
-    <div
-      className="glass-panel"
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        height: "100%",
-        overflow: "hidden"
-      }}
-    >
-      {/* Editor Header */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "0.6rem 1rem",
-          background: "var(--panel-header-bg)",
-          borderBottom: "1px solid var(--border-subtle)"
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+    <div className="glass-panel editor">
+      <div className="editor-header">
+        <div className="editor-file">
           <FileCode2 size={16} color="var(--indigo-400)" />
-          <span style={{ fontSize: "0.8rem", fontFamily: "var(--font-mono)", color: "var(--text-secondary)" }}>
+          <span className="editor-filename">
             solution{getLanguageExtension(language)}
           </span>
           <span className="badge badge-indigo" style={{ fontSize: "0.65rem" }}>
@@ -68,12 +49,13 @@ export const CodeEditorPanel: React.FC<CodeEditorPanelProps> = ({
           </span>
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+        <div>
           <button
+            type="button"
             onClick={handleCopy}
-            className="btn btn-ghost"
-            style={{ padding: "0.25rem 0.5rem", fontSize: "0.75rem", height: "28px" }}
-            title="Copy Code"
+            className="btn btn-ghost editor-copy-btn"
+            title="Copy code"
+            aria-live="polite"
           >
             {copied ? <Check size={13} color="var(--emerald-400)" /> : <Copy size={13} />}
             <span>{copied ? "Copied" : "Copy"}</span>
@@ -81,18 +63,7 @@ export const CodeEditorPanel: React.FC<CodeEditorPanelProps> = ({
         </div>
       </div>
 
-      {/* Code Text Area with Line Number Sync */}
-      <div
-        style={{
-          flex: 1,
-          overflowY: "auto",
-          padding: "0.75rem 0",
-          background: "var(--bg-code)",
-          fontFamily: "var(--font-mono)",
-          fontSize: "0.85rem",
-          lineHeight: "1.6"
-        }}
-      >
+      <div className="editor-body" role="log" aria-label={`Active line ${activeLine}`}>
         {lines.map((lineText, index) => {
           const lineNumber = index + 1;
           const isActive = lineNumber === activeLine;
@@ -100,54 +71,18 @@ export const CodeEditorPanel: React.FC<CodeEditorPanelProps> = ({
           return (
             <div
               key={lineNumber}
-              className={isActive ? "code-active-line" : ""}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                padding: "0 1rem",
-                position: "relative",
-                background: isActive ? "var(--code-active-bg)" : "transparent",
-                transition: "background var(--transition-fast)"
-              }}
+              className={isActive ? "editor-line code-active-line" : "editor-line"}
+              data-active={isActive}
             >
-              {/* Line Number */}
-              <span
-                style={{
-                  width: "36px",
-                  userSelect: "none",
-                  textAlign: "right",
-                  paddingRight: "1rem",
-                  color: isActive ? "var(--cyan-400)" : "var(--text-dim)",
-                  fontWeight: isActive ? 700 : 400,
-                  fontSize: "0.75rem"
-                }}
-              >
+              <span className="editor-gutter">
                 {lineNumber}
               </span>
 
-              {/* Active Marker Arrow */}
-              <span
-                style={{
-                  width: "14px",
-                  color: "var(--cyan-400)",
-                  fontSize: "0.85rem",
-                  fontWeight: "bold",
-                  visibility: isActive ? "visible" : "hidden"
-                }}
-              >
+              <span className="editor-marker" aria-hidden="true">
                 ➔
               </span>
 
-              {/* Code Line Content */}
-              <pre
-                style={{
-                  margin: 0,
-                  whiteSpace: "pre",
-                  color: isActive ? "var(--code-active-text)" : "var(--text-primary)",
-                  fontWeight: isActive ? 600 : 400,
-                  overflowX: "auto"
-                }}
-              >
+              <pre className="editor-code">
                 {lineText || " "}
               </pre>
             </div>

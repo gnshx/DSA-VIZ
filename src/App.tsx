@@ -4,12 +4,12 @@ import { SupportedLanguage } from "./types/algorithm";
 import { LearnView } from "./views/LearnView";
 import { VisualizeView } from "./views/VisualizeView";
 import { PredictView } from "./views/PredictView";
-import { Code2, Sparkles, Terminal } from "lucide-react";
+import { Sparkles, Terminal } from "lucide-react";
 
 export function App() {
   const [currentMode, setCurrentMode] = useState<AppMode>("visualize");
   const [language, setLanguage] = useState<SupportedLanguage>("python");
-  const [selectedAlgorithmId, setSelectedAlgorithmId] = useState<string>("binary_search");
+  const [selectedAlgorithmId] = useState<string>("binary_search");
 
   // Day/Night Theme Pilot State
   const [theme, setTheme] = useState<"dark" | "light">(() => {
@@ -27,13 +27,9 @@ export function App() {
     setTheme((prev) => (prev === "dark" ? "light" : "dark"));
   };
 
-  const handleSelectAlgorithm = (algoId: string) => {
-    setSelectedAlgorithmId(algoId);
-    setCurrentMode("visualize");
-  };
-
   return (
-    <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh", backgroundColor: "var(--bg-primary)", transition: "background-color var(--transition-normal)" }}>
+    <div className="app-shell">
+      <a href="#main-content" className="skip-link">Skip to content</a>
       {/* Navbar with mode routing, multi-language switch, and theme pilot */}
       <Navbar
         currentMode={currentMode}
@@ -45,7 +41,7 @@ export function App() {
       />
 
       {/* Main View Container */}
-      <main style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+      <main id="main-content" className="app-main">
         {currentMode === "learn" && (
           <LearnView />
         )}
@@ -60,43 +56,23 @@ export function App() {
       </main>
 
       {/* Global Status Footer */}
-      <footer
-        style={{
-          borderTop: "1px solid var(--border-subtle)",
-          background: "var(--nav-bg)",
-          padding: "1rem 1.5rem",
-          marginTop: "auto",
-          transition: "background var(--transition-normal)"
-        }}
-      >
-        <div
-          style={{
-            maxWidth: "1800px",
-            margin: "0 auto",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            flexWrap: "wrap",
-            gap: "1rem",
-            fontSize: "0.8rem",
-            color: "var(--text-muted)"
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
-            <span style={{ fontWeight: 700, color: "var(--text-primary)" }}>DSA-VIZ</span>
-            <span>•</span>
-            <span style={{ color: "var(--cyan-400)" }}>
-              "Don't visualize code. Visualize the state changes caused by code."
+      <footer className="app-footer">
+        <div className="app-footer-inner">
+          <div className="app-footer-brand">
+            <strong>DSA-VIZ</strong>
+            <span aria-hidden="true">•</span>
+            <span className="app-footer-tagline">
+              &quot;Don&apos;t visualize code. Visualize the state changes caused by code.&quot;
             </span>
           </div>
 
-          <div style={{ display: "flex", alignItems: "center", gap: "1.25rem" }}>
-            <span style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}>
+          <div className="app-footer-meta">
+            <span className="app-footer-item">
               <Terminal size={14} color="var(--indigo-400)" />
               Languages: Python • JavaScript • C++ • Java
             </span>
-            <span>•</span>
-            <span style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}>
+            <span aria-hidden="true">•</span>
+            <span className="app-footer-item">
               <Sparkles size={14} color="var(--emerald-400)" />
               Deterministic Execution Traces
             </span>

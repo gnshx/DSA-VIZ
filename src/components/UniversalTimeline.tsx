@@ -61,18 +61,8 @@ export const UniversalTimeline: React.FC<UniversalTimelineProps> = ({
   const speeds = [0.5, 1, 2, 5];
 
   return (
-    <div
-      className="glass-panel"
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: "0.75rem",
-        padding: "0.85rem 1.25rem",
-        background: "var(--bg-card)"
-      }}
-    >
-      {/* Scrubber Bar */}
-      <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+    <div className="glass-panel timeline">
+      <div className="timeline-row">
         <input
           type="range"
           min="1"
@@ -80,108 +70,92 @@ export const UniversalTimeline: React.FC<UniversalTimelineProps> = ({
           value={currentStep}
           onChange={(e) => onStepChange(Number(e.target.value))}
           className="timeline-slider"
+          aria-label={`Step ${currentStep} of ${totalSteps}`}
+          aria-valuetext={`Step ${currentStep} of ${totalSteps}`}
         />
-        <span
-          style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: "0.775rem",
-            color: "var(--text-secondary)",
-            whiteSpace: "nowrap",
-            minWidth: "90px",
-            textAlign: "right"
-          }}
-        >
+        <span className="timeline-count">
           {currentStep} / {totalSteps} steps
         </span>
       </div>
 
-      {/* Control Buttons & Speed */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "0.5rem" }}>
-        {/* Playback Controls */}
-        <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-          {/* Jump to start */}
+      <div className="timeline-controls">
+        <div className="timeline-buttons">
           <button
+            type="button"
             onClick={() => onStepChange(1)}
             disabled={currentStep <= 1}
             className="btn btn-secondary btn-icon"
             title="Jump to Start (Home)"
+            aria-label="Jump to first step"
           >
             <ChevronsLeft size={16} />
           </button>
 
-          {/* Step back */}
           <button
+            type="button"
             onClick={() => onStepChange(Math.max(1, currentStep - 1))}
             disabled={currentStep <= 1}
             className="btn btn-secondary btn-icon"
             title="Step Backward (Left Arrow)"
+            aria-label="Previous step"
           >
             <ChevronLeft size={16} />
           </button>
 
-          {/* Play / Pause Primary */}
           <button
+            type="button"
             onClick={onTogglePlay}
-            className="btn btn-primary"
-            style={{ padding: "0.45rem 1.25rem", gap: "0.4rem" }}
+            className="btn btn-primary timeline-play"
             title="Play / Pause (Space)"
+            aria-label={isPlaying ? "Pause simulation" : "Play simulation"}
+            aria-pressed={isPlaying}
           >
             {isPlaying ? <Pause size={16} /> : <Play size={16} />}
             <span>{isPlaying ? "Pause" : "Play"}</span>
           </button>
 
-          {/* Step forward */}
           <button
+            type="button"
             onClick={() => onStepChange(Math.min(totalSteps, currentStep + 1))}
             disabled={currentStep >= totalSteps}
             className="btn btn-secondary btn-icon"
             title="Step Forward (Right Arrow)"
+            aria-label="Next step"
           >
             <ChevronRight size={16} />
           </button>
 
-          {/* Jump to end */}
           <button
+            type="button"
             onClick={() => onStepChange(totalSteps)}
             disabled={currentStep >= totalSteps}
             className="btn btn-secondary btn-icon"
             title="Jump to End (End)"
+            aria-label="Jump to last step"
           >
             <ChevronsRight size={16} />
           </button>
         </div>
 
-        {/* Speed Selector & Keyboard Hint */}
-        <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.25rem", background: "var(--bg-tertiary)", padding: "0.2rem", borderRadius: "8px" }}>
+        <div className="timeline-buttons">
+          <div className="segmented" role="group" aria-label="Playback speed">
             <Zap size={14} color="var(--amber-400)" style={{ marginLeft: "0.4rem" }} />
-            {speeds.map((s) => {
-              const isSelected = playbackSpeed === s;
-              return (
-                <button
-                  key={s}
-                  onClick={() => onSpeedChange(s)}
-                  style={{
-                    border: "none",
-                    background: isSelected ? "rgba(245, 158, 11, 0.25)" : "transparent",
-                    color: isSelected ? "var(--amber-400)" : "var(--text-muted)",
-                    fontWeight: isSelected ? 700 : 500,
-                    fontSize: "0.75rem",
-                    padding: "0.25rem 0.55rem",
-                    minHeight: "32px",
-                    minWidth: "32px",
-                    borderRadius: "6px",
-                    cursor: "pointer"
-                  }}
-                >
-                  {s}x
-                </button>
-              );
-            })}
+            {speeds.map((s) => (
+              <button
+                key={s}
+                type="button"
+                onClick={() => onSpeedChange(s)}
+                className="segmented-btn"
+                data-active={playbackSpeed === s}
+                aria-pressed={playbackSpeed === s}
+              >
+                {s}x
+              </button>
+            ))}
           </div>
 
-          <span style={{ fontSize: "0.72rem", color: "var(--text-dim)" }}>
-            Tip: Press <kbd style={{ background: "var(--bg-tertiary)", color: "var(--text-secondary)", padding: "2px 4px", borderRadius: "4px" }}>Space</kbd> or <kbd style={{ background: "var(--bg-tertiary)", color: "var(--text-secondary)", padding: "2px 4px", borderRadius: "4px" }}>←</kbd> <kbd style={{ background: "var(--bg-tertiary)", color: "var(--text-secondary)", padding: "2px 4px", borderRadius: "4px" }}>→</kbd>
+          <span className="timeline-hint">
+            Tip: Press <kbd className="kbd">Space</kbd> or <kbd className="kbd">←</kbd> <kbd className="kbd">→</kbd>
           </span>
         </div>
       </div>

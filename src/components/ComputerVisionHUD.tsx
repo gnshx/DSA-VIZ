@@ -1,6 +1,6 @@
 import React from "react";
 import { ExecutionEvent } from "../types/trace";
-import { Eye, HelpCircle } from "lucide-react";
+import { Eye } from "lucide-react";
 
 interface ComputerVisionHUDProps {
   event: ExecutionEvent;
@@ -30,82 +30,50 @@ export const ComputerVisionHUD: React.FC<ComputerVisionHUDProps> = ({ event }) =
     }
   };
 
+  const resultColor =
+    evalData == null
+      ? undefined
+      : evalData.result === true || evalData.result === "EQUAL"
+      ? "var(--emerald-400)"
+      : evalData.result === false || evalData.result === "MISMATCH"
+      ? "var(--rose-400)"
+      : "var(--amber-400)";
+
   return (
-    <div
-      className="glass-panel"
-      style={{
-        padding: "0.85rem 1rem",
-        display: "flex",
-        flexDirection: "column",
-        gap: "0.6rem"
-      }}
-    >
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.45rem" }}>
+    <div className="glass-panel inspector">
+      <div className="inspector-head">
+        <div className="inspector-title">
           <Eye size={16} color="var(--cyan-400)" />
-          <span style={{ fontSize: "0.8rem", fontWeight: 700, letterSpacing: "0.02em", color: "var(--text-secondary)", textTransform: "uppercase" }}>
-            What the Computer Sees
-          </span>
+          <span>What the Computer Sees</span>
         </div>
         {getTypeBadge(event.type)}
       </div>
 
       {evalData ? (
-        <div
-          style={{
-            background: "var(--box-bg)",
-            border: "1px solid var(--border-subtle)",
-            borderRadius: "8px",
-            padding: "0.75rem",
-            display: "flex",
-            flexDirection: "column",
-            gap: "0.45rem"
-          }}
-        >
-          {/* Expression transformation: Raw -> Substituted -> Result */}
-          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
-            <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.8rem", color: "var(--text-muted)" }}>
+        <div className="inspector-box">
+          <div className="inspector-row">
+            <span className="inspector-mono">
               {evalData.rawExpression}
             </span>
-            <span style={{ color: "var(--text-dim)" }}>➔</span>
-            <span style={{ fontFamily: "var(--font-mono)", fontSize: "0.825rem", color: "var(--cyan-400)", fontWeight: 600 }}>
+            <span style={{ color: "var(--text-dim)" }} aria-hidden="true">➔</span>
+            <span className="inspector-mono" style={{ color: "var(--cyan-400)", fontWeight: 600 }}>
               {evalData.substitutedExpression}
             </span>
-            <span style={{ color: "var(--text-dim)" }}>➔</span>
+            <span style={{ color: "var(--text-dim)" }} aria-hidden="true">➔</span>
             <span
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: "0.825rem",
-                fontWeight: 700,
-                color:
-                  evalData.result === true || evalData.result === "EQUAL"
-                    ? "var(--emerald-400)"
-                    : evalData.result === false || evalData.result === "MISMATCH"
-                    ? "var(--rose-400)"
-                    : "var(--amber-400)"
-              }}
+              className="inspector-mono"
+              style={{ fontWeight: 700, color: resultColor }}
             >
               [{String(evalData.result).toUpperCase()}]
             </span>
           </div>
 
-          {/* Concrete effect description */}
-          <div style={{ fontSize: "0.775rem", color: "var(--text-secondary)" }}>
+          <div className="inspector-effect">
             ⚡ {evalData.effectDescription}
           </div>
         </div>
       ) : (
-        <div
-          style={{
-            background: "var(--box-bg)",
-            border: "1px solid var(--border-subtle)",
-            borderRadius: "8px",
-            padding: "0.6rem 0.75rem",
-            fontSize: "0.775rem",
-            color: "var(--text-muted)",
-            fontFamily: "var(--font-mono)"
-          }}
-        >
+        <div className="inspector-box inspector-mono">
           Evaluating: {event.codeSnippet}
         </div>
       )}

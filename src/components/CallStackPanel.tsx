@@ -8,64 +8,40 @@ interface CallStackPanelProps {
 
 export const CallStackPanel: React.FC<CallStackPanelProps> = ({ callStack }) => {
   return (
-    <div
-      className="glass-panel"
-      style={{
-        padding: "0.85rem 1rem",
-        display: "flex",
-        flexDirection: "column",
-        gap: "0.6rem",
-        height: "100%",
-        overflowY: "auto"
-      }}
-    >
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid var(--border-subtle)", paddingBottom: "0.5rem" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "0.45rem" }}>
+    <div className="glass-panel inspector">
+      <div className="inspector-head">
+        <div className="inspector-title">
           <Layers size={16} color="var(--indigo-400)" />
-          <span style={{ fontSize: "0.8rem", fontWeight: 700, letterSpacing: "0.02em", color: "var(--text-secondary)", textTransform: "uppercase" }}>
-            Call Stack
-          </span>
+          <span>Call Stack</span>
         </div>
         <span className="badge badge-indigo" style={{ fontSize: "0.65rem" }}>
           DEPTH {callStack.length}
         </span>
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column-reverse", gap: "0.4rem" }}>
+      <div className="stack-list">
         {callStack.map((frame, idx) => {
           const isTop = idx === callStack.length - 1;
           return (
             <div
               key={frame.id || idx}
-              style={{
-                padding: "0.45rem 0.65rem",
-                borderRadius: "6px",
-                background: isTop ? "var(--indigo-glow)" : "var(--bg-tertiary)",
-                border: isTop ? "1px solid var(--indigo-400)" : "1px solid var(--border-subtle)",
-                display: "flex",
-                flexDirection: "column",
-                gap: "0.2rem",
-                transition: "all var(--transition-fast)"
-              }}
+              className="stack-frame"
+              data-top={isTop}
             >
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <div className="inspector-row" style={{ justifyContent: "space-between" }}>
                 <span
-                  style={{
-                    fontFamily: "var(--font-mono)",
-                    fontSize: "0.8rem",
-                    fontWeight: 700,
-                    color: isTop ? "var(--cyan-400)" : "var(--text-primary)"
-                  }}
+                  className="inspector-mono"
+                  style={{ fontWeight: 700, color: isTop ? "var(--cyan-400)" : "var(--text-primary)" }}
                 >
                   {frame.name}()
                 </span>
-                <span style={{ fontSize: "0.7rem", color: "var(--text-dim)", fontFamily: "var(--font-mono)" }}>
+                <span className="inspector-mono" style={{ fontSize: "0.7rem", color: "var(--text-dim)" }}>
                   line {frame.line}
                 </span>
               </div>
 
               {frame.args && Object.keys(frame.args).length > 0 && (
-                <div style={{ fontSize: "0.72rem", color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>
+                <div className="inspector-mono" style={{ fontSize: "0.72rem", color: "var(--text-muted)" }}>
                   args: {JSON.stringify(frame.args)}
                 </div>
               )}

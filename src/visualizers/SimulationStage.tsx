@@ -39,45 +39,24 @@ export const SimulationStage: React.FC<SimulationStageProps> = ({ event, title, 
   };
 
   return (
-    <div
-      className="glass-panel"
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        height: "100%",
-        minHeight: "420px",
-        overflow: "hidden",
-        position: "relative"
-      }}
-    >
-      {/* Top Simulation Header */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "0.85rem 1.25rem",
-          borderBottom: "1px solid var(--border-subtle)",
-          background: "var(--panel-header-bg)"
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
+    <div className="glass-panel stage">
+      <div className="stage-header">
+        <div className="stage-title">
           <Sparkles size={18} color="var(--cyan-400)" />
-          <span style={{ fontWeight: 700, fontSize: "0.95rem", color: "var(--text-primary)" }}>
-            {title}
-          </span>
+          <h2>{title}</h2>
           <span className="badge badge-indigo" style={{ fontSize: "0.7rem" }}>
             {event.structureType.toUpperCase()}
           </span>
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+        <div>
           {onReset && (
             <button
+              type="button"
               onClick={onReset}
               className="btn btn-ghost btn-icon"
-              title="Reset View"
-              style={{ width: "32px", height: "32px" }}
+              title="Reset view"
+              aria-label="Reset simulation view"
             >
               <RotateCcw size={15} />
             </button>
@@ -85,48 +64,17 @@ export const SimulationStage: React.FC<SimulationStageProps> = ({ event, title, 
         </div>
       </div>
 
-      {/* Stage Canvas Area */}
-      <div
-        style={{
-          flex: 1,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          background: "var(--stage-bg)",
-          position: "relative",
-          overflow: "auto",
-          width: "100%"
-        }}
-      >
-        <div
-          style={{
-            margin: "auto",
-            maxWidth: "100%",
-            width: "max-content",
-            display: "flex",
-            justifyContent: "center"
-          }}
-        >
+      <div className="stage-canvas">
+        <div className="stage-canvas-inner">
           {renderVisualizer()}
         </div>
       </div>
 
-      {/* Explanation Banner */}
-      <div
-        style={{
-          padding: "0.85rem 1.25rem",
-          borderTop: "1px solid var(--border-subtle)",
-          background: "var(--bg-tertiary)",
-          display: "flex",
-          alignItems: "center",
-          gap: "0.75rem"
-        }}
-      >
+      <div className="stage-footer">
         <span className="badge badge-cyan" style={{ flexShrink: 0 }}>
           STEP {event.step}
         </span>
-        <p style={{ margin: 0, fontSize: "0.875rem", color: "var(--text-primary)", lineHeight: 1.4 }}>
+        <p className="stage-explanation" aria-live="polite">
           {event.explanation}
         </p>
       </div>
