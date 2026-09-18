@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { ALL_ALGORITHMS } from "../engine/algorithms";
 import { ALL_PATTERN_FAMILIES } from "../engine/patterns";
 import { AlgorithmDefinition, SupportedLanguage } from "../types/algorithm";
@@ -30,16 +30,21 @@ export const VisualizeView: React.FC<VisualizeViewProps> = ({ language, onSelect
   const [showDirectory, setShowDirectory] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
 
+  // Sync only when the incoming prop itself changes — never snap back
+  // to it after the user picks a different algorithm locally.
+  const lastInitialIdRef = useRef(initialAlgorithmId);
   useEffect(() => {
+    if (initialAlgorithmId === lastInitialIdRef.current) return;
+    lastInitialIdRef.current = initialAlgorithmId;
     const next = ALL_ALGORITHMS.find((algo) => algo.id === initialAlgorithmId);
-    if (next && next.id !== selectedAlgo.id) {
+    if (next) {
       setSelectedAlgo(next);
       setCustomInputText("");
       setAppliedInput("");
       setCurrentStep(1);
       setIsPlaying(false);
     }
-  }, [initialAlgorithmId, selectedAlgo.id]);
+  }, [initialAlgorithmId]);
 
   const parsedInput = useMemo(
     () => (appliedInput ? parseUserInput(appliedInput, selectedAlgo.structureType) : undefined),
@@ -65,7 +70,10 @@ export const VisualizeView: React.FC<VisualizeViewProps> = ({ language, onSelect
 
   const selectAlgorithm = (id: string) => {
     const next = ALL_ALGORITHMS.find((algo) => algo.id === id);
-    if (!next) return;
+    if (!next) {
+      console.warn(`[VisualizeView] Unknown algorithm id: ${id}`);
+      return;
+    }
     setSelectedAlgo(next);
     setCustomInputText("");
     setAppliedInput("");

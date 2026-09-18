@@ -602,7 +602,7 @@ export const MASTER_PATTERN_FAMILIES: PatternFamilyDefinition[] = [
       {
         id: "str_substr_vs_subseq",
         subcaseTitle: "4. Substrings vs Subsequences (Contiguous vs Ordered Subset)",
-        algorithmId: "two_pointers_two_sequences",
+        algorithmId: "lcs_string_dp",
         topology: "two_sequences",
         pointerRoles: { sPtr: "Pointer on target sequence", subPtr: "Pointer on pattern candidate" },
         coreMechanism: "Substrings are contiguous slices (n*(n+1)/2 total). Subsequences preserve relative order without requiring contiguity (2^n total). Subsequence matching uses two pointers advancing subPtr only on character match.",
@@ -1409,7 +1409,7 @@ export const MASTER_PATTERN_FAMILIES: PatternFamilyDefinition[] = [
       {
         id: "recursion_call_stack",
         subcaseTitle: "2. Call Stack & Recursion Tree (Visualizing Recursive Frames)",
-        algorithmId: "invert_tree",
+        algorithmId: "invert_binary_tree",
         topology: "tree_dfs",
         pointerRoles: { frame: "Activation record (local vars + return address)", depth: "Maximum stack height" },
         coreMechanism: "Each call pushes a stack frame with its local state onto OS stack memory. Max depth determines space complexity. Branching factor b and depth d produce O(b^d) recursion tree leaves.",
@@ -1554,7 +1554,7 @@ export const MASTER_PATTERN_FAMILIES: PatternFamilyDefinition[] = [
       {
         id: "tree_reduction",
         subcaseTitle: "1. Subtree Reduction (Invert Tree / Mirroring)",
-        algorithmId: "invert_tree",
+        algorithmId: "invert_binary_tree",
         topology: "tree_reduction",
         pointerRoles: { root: "Subtree root", left: "Left branch", right: "Right branch" },
         coreMechanism: "Recursively invert subtrees post-order, then swap root.left and root.right.",
@@ -1585,7 +1585,7 @@ export const MASTER_PATTERN_FAMILIES: PatternFamilyDefinition[] = [
       {
         id: "tree_traversals",
         subcaseTitle: "3. DFS Traversals (Pre / In / Post Order)",
-        algorithmId: "invert_tree",
+        algorithmId: "invert_binary_tree",
         topology: "tree_dfs",
         pointerRoles: { node: "Current tree node", left: "Left subtree", right: "Right subtree" },
         coreMechanism: "Preorder: root-left-right (copy, serialize). Inorder: left-root-right (BST sorted order). Postorder: left-right-root (delete, evaluate). All O(n) time.",
@@ -1617,7 +1617,7 @@ export const MASTER_PATTERN_FAMILIES: PatternFamilyDefinition[] = [
       {
         id: "tree_path_sum",
         subcaseTitle: "5. Path-Based Problems (Root-to-Leaf Path Sum)",
-        algorithmId: "invert_tree",
+        algorithmId: "invert_binary_tree",
         topology: "tree_path_sum",
         pointerRoles: { curr: "Active node", remaining: "Target - path sum so far", path: "Accumulated path list" },
         coreMechanism: "DFS with running sum: subtract node.val from target. At a leaf, check if remaining == 0. Backtrack path list on return. For max path sum, return max(left, right) + node.val.",
@@ -1633,7 +1633,7 @@ export const MASTER_PATTERN_FAMILIES: PatternFamilyDefinition[] = [
       {
         id: "tree_lca",
         subcaseTitle: "6. Lowest Common Ancestor (General Binary Tree)",
-        algorithmId: "invert_tree",
+        algorithmId: "invert_binary_tree",
         topology: "tree_lca",
         pointerRoles: { left: "LCA result from left subtree", right: "LCA result from right subtree", node: "Current node" },
         coreMechanism: "Recursive postorder: if node == p or q, return node. If left and right both non-null, current node is LCA. Else propagate the non-null result upward.",
@@ -1648,7 +1648,7 @@ export const MASTER_PATTERN_FAMILIES: PatternFamilyDefinition[] = [
       {
         id: "tree_construct",
         subcaseTitle: "7. Constructing Tree from Traversal Arrays",
-        algorithmId: "invert_tree",
+        algorithmId: "invert_binary_tree",
         topology: "tree_dfs",
         pointerRoles: { preIdx: "Current preorder root index", inLeft: "Inorder left bound", inRight: "Inorder right bound" },
         coreMechanism: "Preorder[0] is always the root. Find root in inorder to split into left/right subtrees. Recurse with adjusted bounds. HashMap maps inorder values to indices for O(1) lookup.",
@@ -1678,7 +1678,7 @@ export const MASTER_PATTERN_FAMILIES: PatternFamilyDefinition[] = [
       {
         id: "tree_recursion_properties",
         subcaseTitle: "9. Tree Recursion Properties (Height, Diameter & Balance Check)",
-        algorithmId: "invert_tree",
+        algorithmId: "invert_binary_tree",
         topology: "tree_reduction",
         pointerRoles: { node: "Active subtree root", leftH: "Left subtree height", rightH: "Right subtree height", maxDiameter: "Global path tracker" },
         coreMechanism: "Height = 1 + max(leftH, rightH). Balanced if |leftH - rightH| <= 1 for all nodes (return -1 early on imbalance). Diameter through node = leftH + rightH; maximize across all nodes via bottom-up postorder traversal.",
@@ -2416,7 +2416,7 @@ export const MASTER_PATTERN_FAMILIES: PatternFamilyDefinition[] = [
       {
         id: "complexity_cases_amortized",
         subcaseTitle: "3. Best / Average / Worst Case & Amortized Analysis",
-        algorithmId: "quick_sort",
+        algorithmId: "bubble_sort",
         topology: "complexity_analysis",
         pointerRoles: { worstCase: "Adversarial input trigger", amortized: "Average cost across sequence" },
         coreMechanism: "Best case (e.g. sorted input for Insertion Sort: O(n)). Worst case (e.g. Quicksort with bad pivot: O(n²)). Amortized analysis: cost averaged over a sequence of N operations. Example: dynamic array doubling costs O(N) once, but amortizes to O(1) per append.",

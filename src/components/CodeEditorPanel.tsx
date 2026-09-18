@@ -16,6 +16,9 @@ export const CodeEditorPanel: React.FC<CodeEditorPanelProps> = ({
 }) => {
   const [copied, setCopied] = useState(false);
   const lines = code.split("\n");
+  // Clamp: some traces emit a terminal line past the snippet (e.g. COMPLETE
+  // at n+1). Never leave the highlight blank — pin to the last line.
+  const safeActiveLine = Math.min(Math.max(activeLine, 1), lines.length);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(code);
@@ -63,10 +66,10 @@ export const CodeEditorPanel: React.FC<CodeEditorPanelProps> = ({
         </div>
       </div>
 
-      <div className="editor-body" role="log" aria-label={`Active line ${activeLine}`}>
+      <div className="editor-body" role="log" aria-label={`Active line ${safeActiveLine}`}>
         {lines.map((lineText, index) => {
           const lineNumber = index + 1;
-          const isActive = lineNumber === activeLine;
+          const isActive = lineNumber === safeActiveLine;
 
           return (
             <div
